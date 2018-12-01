@@ -2,11 +2,11 @@
   <div>
     <div class="calendar mb-5">
       <header>
-        <v-btn fab dark small color="grey">
+        <v-btn fab dark small color="grey" @click="lastMonth()">
           <v-icon dark>remove</v-icon>
         </v-btn>&nbsp;
-        <h1>{{now}} {{startDayNumber}}</h1>&nbsp;
-        <v-btn fab dark small color="grey">
+        <h1>{{now}}</h1>&nbsp;
+        <v-btn fab dark small color="grey" @click="nextMonth()">
           <v-icon dark>add</v-icon>
         </v-btn>
       </header>
@@ -36,41 +36,143 @@
       </ul>
 
       <ul class="day-grid">
-        <div v-for="i in 35" :key="`1${i}`">
-          <li></li>
-        </div>
+        <!-- <li>{{getDayMeta(i)}}</li> -->
+        <li v-for="i in gridSize" :key="`1${i}`" v-html="getDayMeta(i)"></li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-function dayofyear(d) {
-  // d is a Date object
-  var yn = d.getFullYear();
-  var mn = d.getMonth();
-  var dn = d.getDate();
-  var d1 = new Date(yn, 0, 1, 12, 0, 0); // noon on Jan. 1
-  var d2 = new Date(yn, mn, dn, 12, 0, 0); // noon on input date
-  var ddiff = Math.round((d2 - d1) / 864e5);
-  return ddiff + 1;
-}
+
 const moment = require("moment");
-var d = new Date(2018, 9, 28);
+function findDayOfYear (date) {
+  var oneDay = 1000 * 60 * 60 * 24; // A day in milliseconds
+  var og = {                        // Saving original data
+    ts: date.getTime(),
+    dom: date.getDate(),            // We don't need to save hours/minutes because DST is never at 12am.
+    month: date.getMonth()
+  }
+  date.setDate(1);                  // Sets Date of the Month to the 1st.
+  date.setMonth(0);                 // Months are zero based in JS's Date object
+  var start_ts = date.getTime();    // New Year's Midnight JS Timestamp
+  var diff = og.ts - start_ts;
+
+  date.setDate(og.dom);             // Revert back to original date object
+  date.setMonth(og.month);          // This method does preserve timezone
+  return Math.round(diff / oneDay) + 1; // Deals with DST globally. Ceil fails in Australia. Floor Fails in US.
+}
 export default {
   data() {
     return {
-      currentMonth: 11
+      currentMonth: 5,
+      currentYear: 2018,
+      debug: true,
+      calendarHelper: []
     };
   },
-  mounted() {},
+  created() {
+    // get day of week for 1/1/2018
+
+let calendarHelper = {}
+    let startYear = 2017
+    let endYear = 2020
+    let totalDays
+     
+    for (let y = startYear; y<=endYear; y++) {
+      let isLeapYear = moment([y]).isLeapYear()
+     
+      let gridSize
+      let gridLayout=[]
+
+      for (let i=0; i < 12; i++) {
+      let obj = {}
+
+      if (isLeapYear) {
+        totalDays = 366
+      } else {
+        totalDays = 365
+      }
+   
+      obj.firstDayOfTheMonth = new Date(y, i, 1)
+      obj.dayNumber = findDayOfYear(obj.firstDayOfTheMonth)
+      obj.startDayOfWeek = obj.firstDayOfTheMonth.getDay()
+      let startGridNumber = (obj.dayNumber - obj.startDayOfWeek) -1
+      if (startGridNumber < 0) {
+        startGridNumber = startGridNumber + totalDays
+      }
+      obj.startGridNumber = startGridNumber
+      if (obj.startDayOfWeek > 3) {
+        gridSize = 42
+      } else {
+        gridSize = 35
+      }
+      obj.gridSize = gridSize
+      gridLayout.push(obj)
+
+     }
+   
+  
+    
+    calendarHelper[y] = gridLayout
+      }
+      this.calendarHelper = calendarHelper
+    
+   // console.log(this.calendarHelper[this.currentYear][this.currentMonth-1].gridSize)
+  },
+  methods: {
+    getDayMeta(gridID) {
+      let backgroundStyle
+      let dayObj = {}
+      dayObj.gridID = gridID
+      dayObj.dayOfYear = this.calendarHelper[this.currentYear][this.currentMonth -1].startGridNumber+ gridID
+      dayObj.fullDate = moment().dayOfYear(dayObj.dayOfYear);
+      dayObj.day = moment(dayObj.fullDate).format('DD')
+      dayObj.month = moment(dayObj.fullDate).format('MM')
+      // console.log(dayObj.month - 1, this.currentMonth)
+      if (dayObj.month - 1 === this.currentMonth -1) {
+          backgroundStyle="background-color: #fff; width: 100%"
+      } else {
+        backgroundStyle="background-color: #ccc; width: 100%"
+      }
+      
+      let html = `<span style="${backgroundStyle}; padding-left: 2px; padding-right: 2px;">${dayObj.day}`
+      if (this.$store.state.debug) {
+        html = html + `<div style="font-weight: bold">`
+        html = html + `<div style="font-size: 12px">Day: ${dayObj.dayOfYear}</div>`
+        html = html + `<div style="font-size: 12px">gridID: ${dayObj.gridID}</div>`
+        html = html + `<div style="font-size: 12px">${dayObj.fullDate}</div>`
+        html = html + `</div>`
+      }
+      html = html + `</span>`
+      return html
+    },
+    nextMonth() {
+      if (this.currentMonth === 12) {
+        this.currentMonth = 1
+         this.currentYear++
+      } else {
+        this.currentMonth++
+      }
+    },
+    lastMonth() {
+      if (this.currentMonth === 1) {
+        this.currentMonth = 12
+        this.currentYear--
+      } else {
+        this.currentMonth--
+      }
+    }
+  },
   computed: {
     now() {
-      return moment().format("MMMM YYYY");
+      let date = new Date (this.currentYear, this.currentMonth-1, 1)
+      return moment(date).format("MMMM YYYY");
     },
-    startDayNumber() {
-      return dayofyear(d);
+    gridSize() {
+      return this.calendarHelper[this.currentYear][this.currentMonth-1].gridSize
     }
+   
   }
 };
 </script>
@@ -93,17 +195,19 @@ ul {
   grid-template-columns: repeat(7, 1fr);
   grid-gap: 0.5em;
   margin: 0 auto;
-  max-width: 99%;
+  max-width: 95%;
   padding: 0;
 }
 
 li {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   list-style: none;
   margin-left: 0;
+  padding: 0px;
   font-size: calc(16px + (21 - 16) * ((100vw - 300px) / (1600 - 300)));
+  
 }
 
 ul.weekdays {
@@ -115,10 +219,11 @@ ul.weekdays li {
 }
 
 ul.day-grid li {
-  background-color: #eaeaea;
+  background-color: #fff;
   border: 1px solid #eaeaea;
   height: 12vw;
-  max-height: 125px;
+  max-height: 250px;
+  
 }
 
 ul.weekdays abbr[title] {
@@ -126,6 +231,7 @@ ul.weekdays abbr[title] {
   font-weight: 800;
   text-decoration: none;
 }
+
 
 /* ul.day-grid li:nth-child(1),
 ul.day-grid li:nth-child(2),

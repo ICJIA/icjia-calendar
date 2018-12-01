@@ -6,9 +6,9 @@
         <span class="font-weight-light">&nbsp;Calendar Test</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn flat href="https://github.com/vuetifyjs/vuetify/releases/latest" target="_blank">
-        <span class="mr-2">Latest Release</span>
-        <v-icon>open_in_new</v-icon>
+
+      <v-btn flat @click="debugApp">
+        <v-switch label="Debug"></v-switch>
       </v-btn>
     </v-toolbar>
 
@@ -19,12 +19,27 @@
 </template>
 
 <script>
+
 export default {
   name: "App",
+  methods: {
+    debugApp() {
+      this.$store.commit('TOGGLE_DEBUG', this.isDebug)
+    }
+  },
+  computed: {
+    isDebug() {
+      return this.$store.getters.debug
+    }
+  },
   data() {
     return {
-      //
+      
     };
   }
 };
 </script>
+
+<style>
+
+</style>
