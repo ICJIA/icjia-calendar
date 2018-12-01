@@ -1,45 +1,52 @@
 <template>
   <div>
-    <div class="calendar mb-5">
-      <header>
-        <v-btn fab dark small color="grey" @click="lastMonth()">
-          <v-icon dark>remove</v-icon>
-        </v-btn>&nbsp;
-        <h1>{{now}}</h1>&nbsp;
-        <v-btn fab dark small color="grey" @click="nextMonth()">
-          <v-icon dark>add</v-icon>
-        </v-btn>
-      </header>
+    <v-layout row wrap>
+      <v-flex xs12>
+        <header>
+          <v-btn fab dark small color="grey" @click="lastMonth()">
+            <v-icon dark>remove</v-icon>
+          </v-btn>&nbsp;
+          <h1>{{currentDate}}</h1>&nbsp;
+          <v-btn fab dark small color="grey" @click="nextMonth()">
+            <v-icon dark>add</v-icon>
+          </v-btn>
+        </header>
+      </v-flex>
 
-      <ul class="weekdays">
-        <li>
-          <abbr title="S">Sunday</abbr>
-        </li>
-        <li>
-          <abbr title="M">Monday</abbr>
-        </li>
-        <li>
-          <abbr title="T">Tuesday</abbr>
-        </li>
-        <li>
-          <abbr title="W">Wednesday</abbr>
-        </li>
-        <li>
-          <abbr title="T">Thursday</abbr>
-        </li>
-        <li>
-          <abbr title="F">Friday</abbr>
-        </li>
-        <li>
-          <abbr title="S">Saturday</abbr>
-        </li>
-      </ul>
+      <v-flex xs12 sm9>
+        <div class="calendar">
+          <ul class="weekdays">
+            <li>
+              <abbr title="S">Sunday</abbr>
+            </li>
+            <li>
+              <abbr title="M">Monday</abbr>
+            </li>
+            <li>
+              <abbr title="T">Tuesday</abbr>
+            </li>
+            <li>
+              <abbr title="W">Wednesday</abbr>
+            </li>
+            <li>
+              <abbr title="T">Thursday</abbr>
+            </li>
+            <li>
+              <abbr title="F">Friday</abbr>
+            </li>
+            <li>
+              <abbr title="S">Saturday</abbr>
+            </li>
+          </ul>
 
-      <ul class="day-grid">
-        <!-- <li>{{getDayMeta(i)}}</li> -->
-        <li v-for="i in gridSize" :key="`1${i}`" v-html="getDayMeta(i)"></li>
-      </ul>
-    </div>
+          <ul class="day-grid">
+            <!-- <li>{{getDayMeta(i)}}</li> -->
+            <li v-for="i in gridSize" :key="`1${i}`" v-html="getDayMeta(i)"></li>
+          </ul>
+        </div>
+      </v-flex xs12 sm3>
+      <v-flex>Second column</v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -65,7 +72,7 @@ function findDayOfYear (date) {
 export default {
   data() {
     return {
-      currentMonth: 5,
+      currentMonth: 12,
       currentYear: 2018,
       debug: true,
       calendarHelper: []
@@ -95,6 +102,8 @@ let calendarHelper = {}
       }
    
       obj.firstDayOfTheMonth = new Date(y, i, 1)
+       obj.isLeapYear = isLeapYear
+       
       obj.dayNumber = findDayOfYear(obj.firstDayOfTheMonth)
       obj.startDayOfWeek = obj.firstDayOfTheMonth.getDay()
       let startGridNumber = (obj.dayNumber - obj.startDayOfWeek) -1
@@ -125,23 +134,61 @@ let calendarHelper = {}
       let backgroundStyle
       let dayObj = {}
       dayObj.gridID = gridID
-      dayObj.dayOfYear = this.calendarHelper[this.currentYear][this.currentMonth -1].startGridNumber+ gridID
-      dayObj.fullDate = moment().dayOfYear(dayObj.dayOfYear);
+      let year = this.currentYear
+      let dayOfYear
+      let splitYear = false;
+      let totalDays
+      if (this.calendarHelper[this.currentYear][this.currentMonth -1].isLeapYear) {
+        totalDays = 366
+      } else {
+        totalDays = 365
+      }
+      if (this.calendarHelper[this.currentYear][this.currentMonth -1].startGridNumber +  dayObj.gridID > totalDays) {
+        dayOfYear = this.calendarHelper[this.currentYear][this.currentMonth -1].startGridNumber +  dayObj.gridID - totalDays
+        splitYear = true
+      } else {
+        dayOfYear = this.calendarHelper[this.currentYear][this.currentMonth -1].startGridNumber +  dayObj.gridID
+        splitYear = false;
+      }
+      
+      
+      console.log(year)
+
+
+      dayObj.dayOfYear = dayOfYear
+
+      // pad December with next month's dates / January with previous month's dates
+      if (splitYear && this.currentMonth === 12) {
+        year = year + 1
+      }
+
+      if (this.currentMonth === 1 && dayObj.dayOfYear > 335) {
+        year = year - 1
+      }
+
+       
+
+      
+     
+      
+      dayObj.fullDate = moment([year]).dayOfYear(dayObj.dayOfYear);
       dayObj.day = moment(dayObj.fullDate).format('DD')
       dayObj.month = moment(dayObj.fullDate).format('MM')
-      // console.log(dayObj.month - 1, this.currentMonth)
+      dayObj.year = moment(dayObj.fullDate).format('YYYY')
+     
       if (dayObj.month - 1 === this.currentMonth -1) {
-          backgroundStyle="background-color: #fff; width: 100%"
+          backgroundStyle="background-color: #fff; width: 100%; color: #333;"
       } else {
-        backgroundStyle="background-color: #ccc; width: 100%"
+        backgroundStyle="background-color: #eee; width: 100%; color: #555"
       }
       
       let html = `<span style="${backgroundStyle}; padding-left: 2px; padding-right: 2px;">${dayObj.day}`
       if (this.$store.state.debug) {
-        html = html + `<div style="font-weight: bold">`
-        html = html + `<div style="font-size: 12px">Day: ${dayObj.dayOfYear}</div>`
-        html = html + `<div style="font-size: 12px">gridID: ${dayObj.gridID}</div>`
-        html = html + `<div style="font-size: 12px">${dayObj.fullDate}</div>`
+        html = html + `<div style="font-weight: bold; font-size: 12px;">`
+        
+        html = html + `<div >Day: ${dayObj.dayOfYear}</div>`
+        html = html + `<div >gridID: ${dayObj.gridID}</div>`
+        html = html + `<div >${dayObj.fullDate}</div>`
         html = html + `</div>`
       }
       html = html + `</span>`
@@ -165,7 +212,7 @@ let calendarHelper = {}
     }
   },
   computed: {
-    now() {
+    currentDate() {
       let date = new Date (this.currentYear, this.currentMonth-1, 1)
       return moment(date).format("MMMM YYYY");
     },
