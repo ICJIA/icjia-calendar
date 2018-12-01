@@ -40,12 +40,25 @@
           </ul>
 
           <ul class="day-grid">
-            <!-- <li>{{getDayMeta(i)}}</li> -->
             <li v-for="i in gridSize" :key="`1${i}`" v-html="getDayMeta(i)"></li>
           </ul>
         </div>
       </v-flex>
-      <v-flex xs12 sm3>Second column</v-flex>
+      <v-flex xs12 sm3>
+        <v-switch :label="`Red: ${red.toString()}`" v-model="red" @click="switchEvents('red')"></v-switch>
+        <v-switch
+          :label="`Yellow: ${yellow.toString()}`"
+          v-model="yellow"
+          @click="switchEvents('yellow')"
+        ></v-switch>
+        <v-switch
+          :label="`Green: ${green.toString()}`"
+          v-model="green"
+          @click="switchEvents('green')"
+        ></v-switch>
+        <v-switch :label="`Blue: ${blue.toString()}`" v-model="blue" @click="switchEvents('blue')"></v-switch>
+        <v-switch :label="`Pink: ${pink.toString()}`" v-model="pink" @click="switchEvents('pink')"></v-switch>
+      </v-flex>
     </v-layout>
   </div>
 </template>
@@ -53,79 +66,28 @@
 <script>
 
 const moment = require("moment");
-function findDayOfYear (date) {
-  var oneDay = 1000 * 60 * 60 * 24; // A day in milliseconds
-  var og = {                        // Saving original data
-    ts: date.getTime(),
-    dom: date.getDate(),            // We don't need to save hours/minutes because DST is never at 12am.
-    month: date.getMonth()
-  }
-  date.setDate(1);                  // Sets Date of the Month to the 1st.
-  date.setMonth(0);                 // Months are zero based in JS's Date object
-  var start_ts = date.getTime();    // New Year's Midnight JS Timestamp
-  var diff = og.ts - start_ts;
-
-  date.setDate(og.dom);             // Revert back to original date object
-  date.setMonth(og.month);          // This method does preserve timezone
-  return Math.round(diff / oneDay) + 1; // Deals with DST globally. Ceil fails in Australia. Floor Fails in US.
-}
+import {findDayOfYear, createCalendarHelper} from '@/utils'
+import _ from 'lodash'
+const data = require('@/api/index.json')
 export default {
   data() {
     return {
       currentMonth: 12,
       currentYear: 2018,
       debug: true,
-      calendarHelper: []
+      calendarHelper: [],
+      red: true,
+      green: true,
+      yellow: true,
+      blue: true,
+      pink: true,
+      isVisible: ['red', 'yellow','green','pink','blue']
     };
   },
   created() {
-    // get day of week for 1/1/2018
-
-let calendarHelper = {}
-    let startYear = 2017
-    let endYear = 2020
-    let totalDays
-     
-    for (let y = startYear; y<=endYear; y++) {
-      let isLeapYear = moment([y]).isLeapYear()
-     
-      let gridSize
-      let gridLayout=[]
-
-      for (let i=0; i < 12; i++) {
-      let obj = {}
-
-      if (isLeapYear) {
-        totalDays = 366
-      } else {
-        totalDays = 365
-      }
    
-      obj.firstDayOfTheMonth = new Date(y, i, 1)
-       obj.isLeapYear = isLeapYear
-       
-      obj.dayNumber = findDayOfYear(obj.firstDayOfTheMonth)
-      obj.startDayOfWeek = obj.firstDayOfTheMonth.getDay()
-      let startGridNumber = (obj.dayNumber - obj.startDayOfWeek) -1
-      if (startGridNumber < 0) {
-        startGridNumber = startGridNumber + totalDays
-      }
-      obj.startGridNumber = startGridNumber
-      if (obj.startDayOfWeek > 3) {
-        gridSize = 42
-      } else {
-        gridSize = 35
-      }
-      obj.gridSize = gridSize
-      gridLayout.push(obj)
-
-     }
-   
-  
-    
-    calendarHelper[y] = gridLayout
-      }
-      this.calendarHelper = calendarHelper
+      this.calendarHelper = createCalendarHelper(2017, 2019)
+     
     
    // console.log(this.calendarHelper[this.currentYear][this.currentMonth-1].gridSize)
   },
@@ -154,20 +116,15 @@ let calendarHelper = {}
 
       dayObj.dayOfYear = dayOfYear
 
-      // pad December with next month's dates / January with previous month's dates
+      // pad December with next month 
       if (splitYear && this.currentMonth === 12) {
         year = year + 1
       }
-
+      // pad January with previous month 
       if (this.currentMonth === 1 && dayObj.dayOfYear > 335) {
         year = year - 1
       }
 
-       
-
-      
-     
-      
       dayObj.fullDate = moment([year]).dayOfYear(dayObj.dayOfYear);
       dayObj.day = moment(dayObj.fullDate).format('DD')
       dayObj.month = moment(dayObj.fullDate).format('MM')
@@ -178,14 +135,42 @@ let calendarHelper = {}
       } else {
         backgroundStyle="background-color: #eee; width: 100%; color: #555"
       }
+
+    
+    let dayEvents = ''
+    if (data[year]) {
+      if (data[year][dayObj.dayOfYear]) {
+        
+        dayEvents = (data[year][dayObj.dayOfYear])
+       
+        
+      }
+        
+    }
+    
+    
+    
+     
       
       let html = `<span style="${backgroundStyle}; padding-left: 2px; padding-right: 2px;">${dayObj.day}`
+        if (dayEvents) {
+            dayEvents.forEach((x) => {
+              if (this.isVisible.includes(x.color)) {
+                html = html + `<div style="font-size: 12px; background: ${x.color}" >${x.description}</div>`
+              }
+              
+            })
+           
+        }
+      
       if (this.$store.state.debug) {
         html = html + `<div style="font-weight: bold; font-size: 12px;">`
         
         html = html + `<div >Day: ${dayObj.dayOfYear}</div>`
         html = html + `<div >gridID: ${dayObj.gridID}</div>`
         html = html + `<div >${dayObj.fullDate}</div>`
+        html = html + `<div >${dayObj.year}</div>`
+       
         html = html + `</div>`
       }
       html = html + `</span>`
@@ -206,7 +191,18 @@ let calendarHelper = {}
       } else {
         this.currentMonth--
       }
-    }
+     
+    },
+     switchEvents(color) {
+        if (this.isVisible.includes(color)) {
+         this.isVisible = _.remove(this.isVisible, function(n) {
+            return n !==color
+          });
+        } else {
+          this.isVisible.push(color)
+        }
+      // console.log(isVisible)
+      }
   },
   computed: {
     currentDate() {
@@ -266,7 +262,7 @@ ul.day-grid li {
   background-color: #fff;
   border: 1px solid #eaeaea;
   height: 12vw;
-  max-height: 250px;
+  max-height: 200px;
   
 }
 
