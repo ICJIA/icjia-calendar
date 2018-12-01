@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-layout row wrap>
+    <v-layout row wrap class="mb-5">
       <v-flex xs12>
         <header>
           <v-btn fab dark small color="grey" @click="lastMonth()">
@@ -60,6 +60,23 @@
         <v-switch :label="`Pink: ${pink.toString()}`" v-model="pink" @click="switchEvents('pink')"></v-switch>
       </v-flex>
     </v-layout>
+    <div v-if="this.$store.state.debug">
+      <v-layout row wrap class="pl-5 pr-5">
+        <v-flex xs12>
+          <div>
+            <h2
+              style="border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 15px;"
+            >Debug:</h2>
+            <h4>isVisible:</h4>
+            <div>{{this.isVisible}}</div>
+            <h4>calendarHelper:</h4>
+            <div>{{this.calendarHelper}}</div>
+            <h4>api:</h4>
+            <div>{{this.data}}</div>
+          </div>
+        </v-flex>
+      </v-layout>
+    </div>
   </div>
 </template>
 
@@ -81,7 +98,8 @@ export default {
       yellow: true,
       blue: true,
       pink: true,
-      isVisible: ['red', 'yellow','green','pink','blue']
+      isVisible: ['red', 'yellow','green','pink','blue'],
+      data: data
     };
   },
   created() {
