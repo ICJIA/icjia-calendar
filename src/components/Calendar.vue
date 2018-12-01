@@ -44,8 +44,8 @@
             <li v-for="i in gridSize" :key="`1${i}`" v-html="getDayMeta(i)"></li>
           </ul>
         </div>
-      </v-flex xs12 sm3>
-      <v-flex>Second column</v-flex>
+      </v-flex>
+      <v-flex xs12 sm3>Second column</v-flex>
     </v-layout>
   </div>
 </template>
