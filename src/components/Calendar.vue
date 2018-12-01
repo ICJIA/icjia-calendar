@@ -150,9 +150,6 @@ let calendarHelper = {}
         dayOfYear = this.calendarHelper[this.currentYear][this.currentMonth -1].startGridNumber +  dayObj.gridID
         splitYear = false;
       }
-      
-      
-      console.log(year)
 
 
       dayObj.dayOfYear = dayOfYear
