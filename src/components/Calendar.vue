@@ -1,5 +1,33 @@
 <template>
   <div>
+    <v-bottom-sheet v-model="sheet">
+      <v-layout>
+        <v-flex xs12>
+          <v-card>
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0">Lorem ipsum dolor sit amet</h3>
+              </div>
+            </v-card-title>
+            <v-card-text>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et purus nec nunc vestibulum mattis nec quis quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam a sodales lacus, ac imperdiet orci. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla sit amet lacus et elit pellentesque dignissim. Curabitur nec imperdiet dui, vel venenatis libero. Duis posuere diam in magna convallis, sit amet dictum nulla posuere. Nulla ut aliquet erat. Quisque eget convallis ex, et egestas augue. Donec sit amet velit sodales, tincidunt metus ac, posuere nulla. Quisque eu dolor sit amet ex viverra sagittis. Phasellus eget dolor enim. Duis ante ante, elementum nec sagittis quis, malesuada eget velit.
+                Mauris sit amet vulputate sapien. Sed laoreet luctus dignissim. Sed sollicitudin, ligula et elementum accumsan, arcu felis placerat tellus, ac dapibus orci sapien porttitor lacus. Nulla fermentum tincidunt porta. Pellentesque tincidunt dui sit amet risus sollicitudin interdum in nec nisl. Donec aliquam nisi quis orci tincidunt viverra. Proin non maximus diam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam vitae pharetra massa. Mauris ac venenatis dui. Proin tellus tellus, lobortis vel eros a, semper interdum mauris. Aliquam erat volutpat. Donec eu lectus quis ligula scelerisque vehicula quis ultricies nunc. Vestibulum mi elit, faucibus non leo sed, volutpat iaculis tortor. Suspendisse pretium lacinia egestas.
+              </p>
+              <h2>Lorem ipsum dolor sit amet</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et purus nec nunc vestibulum mattis nec quis quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam a sodales lacus, ac imperdiet orci. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla sit amet lacus et elit pellentesque dignissim. Curabitur nec imperdiet dui, vel venenatis libero. Duis posuere diam in magna convallis, sit amet dictum nulla posuere. Nulla ut aliquet erat. Quisque eget convallis ex, et egestas augue. Donec sit amet velit sodales, tincidunt metus ac, posuere nulla. Quisque eu dolor sit amet ex viverra sagittis. Phasellus eget dolor enim. Duis ante ante, elementum nec sagittis quis, malesuada eget velit.
+                Mauris sit amet vulputate sapien. Sed laoreet luctus dignissim. Sed sollicitudin, ligula et elementum accumsan, arcu felis placerat tellus, ac dapibus orci sapien porttitor lacus. Nulla fermentum tincidunt porta. Pellentesque tincidunt dui sit amet risus sollicitudin interdum in nec nisl. Donec aliquam nisi quis orci tincidunt viverra. Proin non maximus diam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam vitae pharetra massa. Mauris ac venenatis dui. Proin tellus tellus, lobortis vel eros a, semper interdum mauris. Aliquam erat volutpat. Donec eu lectus quis ligula scelerisque vehicula quis ultricies nunc. Vestibulum mi elit, faucibus non leo sed, volutpat iaculis tortor. Suspendisse pretium lacinia egestas.
+              </p>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn flat color="orange" @click="sheet=false">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-bottom-sheet>
     <v-layout row wrap class="mb-5">
       <v-flex xs12>
         <header>
@@ -13,7 +41,7 @@
         </header>
       </v-flex>
 
-      <v-flex xs12 sm9>
+      <v-flex xs12 sm10>
         <div class="calendar">
           <ul class="weekdays">
             <li>
@@ -41,19 +69,20 @@
 
           <ul class="day-grid">
             <div v-for="i in gridSize" :key="`1${i}`">
-              <li v-html="getDayMeta(i)"></li>
+              <li v-html="getDayMeta(i)" @click="sheet = true"></li>
               <!-- <day-meta :gridID="i"/> -->
             </div>
           </ul>
         </div>
       </v-flex>
-      <v-flex xs12 sm3 class="pl-5 mt-5">
+      <v-flex xs12 sm2 class="pl-5 mt-5">
         <div v-for="color in this.$store.state.eventColors" :key="color">
           <v-switch
             :label="color"
             :v-model="color"
             input-value="true"
             @click.native="toggleEvents(color)"
+            style="font-weight: 900;"
           ></v-switch>
         </div>
       </v-flex>
@@ -99,7 +128,8 @@ export default {
       isVisible: [],
       truncateAfter: 15,
       colors: this.$store.state.eventColors,
-      data: data
+      data: data,
+      sheet: false
     };
   },
   created() {
@@ -207,7 +237,7 @@ export default {
               html +
               `<div style="font-size: 12px; background: ${
                 x.color
-              }; color: #fff; margin-bottom: 2px; font-size: 8px; padding: 5px 3px; font-weight: 900; text-transform: uppercase; margin-left: ${marginLeft};margin-right: ${marginRight};" class="event">${text}</div>`;
+              }; color: #fff; margin-bottom: 2px; font-size: 8px; padding: 2px; font-weight: 900; text-transform: uppercase; margin-left: ${marginLeft};margin-right: ${marginRight};" class="event">${text}</div>`;
           }
         });
       }
