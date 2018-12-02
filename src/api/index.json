@@ -54,13 +54,15 @@
         "title": "test event 2",
         "description": "Event description here",
 
-        "color": "red"
+        "color": "red",
+        "isFinish": true
       },
       {
         "title": "test event 2",
         "description": "Event description here",
 
-        "color": "blue"
+        "color": "blue",
+        "isFinish": true
       }
     ],
     "341": [
@@ -77,7 +79,8 @@
         "title": "test event 2",
         "description": "Event description here",
 
-        "color": "gold"
+        "color": "gold",
+        "isFinish": true
       }
     ],
     "365": [
@@ -85,7 +88,8 @@
         "title": "test event 3",
         "description": "Event description here",
         "isStart": true,
-        "color": "blue"
+        "color": "blue",
+        "isFinish": true
       }
     ]
   },
@@ -111,7 +115,8 @@
         "title": "test event 3",
         "description": "Event description here",
 
-        "color": "red"
+        "color": "red",
+        "isFinish": true
       }
     ],
     "5": [
@@ -120,7 +125,8 @@
         "description": "Event description here",
 
         "color": "gold",
-        "isStart": true
+        "isStart": true,
+        "isFinish": true
       }
     ],
     "12": [
@@ -176,7 +182,8 @@
         "title": "test event 4",
         "description": "Event description here",
 
-        "color": "midnightblue"
+        "color": "midnightblue",
+        "isFinish": true
       }
     ]
   }

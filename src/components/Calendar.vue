@@ -185,21 +185,29 @@ export default {
       let html = `<span style="${backgroundStyle}; ">${dayObj.day}`;
       if (dayEvents) {
         dayEvents.forEach(x => {
-          let text, filler, length;
+          let text, filler, length, marginLeft, marginRight;
           if (this.isVisible.includes(x.color)) {
             if (x.isStart) {
               text = stringTruncate(x.description, this.truncateAfter);
+              marginLeft = "15px";
             } else {
               length = x.description.length;
               filler = `&nbsp`;
               text = filler.repeat(this.truncateAfter);
+              marginLeft = "0px";
+            }
+
+            if (x.isFinish) {
+              marginRight = "15px";
+            } else {
+              marginRight = "0px";
             }
 
             html =
               html +
               `<div style="font-size: 12px; background: ${
                 x.color
-              }; color: #fff; margin-bottom: 2px;" >${text}</div>`;
+              }; color: #fff; margin-bottom: 2px; margin-left: ${marginLeft};margin-right: ${marginRight};" >${text}</div>`;
           }
         });
       }

@@ -2,10 +2,13 @@
   <v-app>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span>ICJIA |</span>
-        <span class="font-weight-light">&nbsp;Calendar Test</span>
+        <router-link to="/">
+          <span class="header-link">ICJIA |</span>
+          <span class="font-weight-light subheader-link">&nbsp;Calendar Test</span>
+        </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-btn flat to="/sandbox" style="color: #333 !important">Sandbox</v-btn>
 
       <v-btn flat @click.native="debugApp">
         <v-switch label="Debug"></v-switch>
@@ -38,4 +41,19 @@ export default {
 </script>
 
 <style>
+a {
+  color: #aaa !important;
+}
+
+.header-link {
+  color: #222;
+}
+
+.subheader-link {
+  color: #222;
+}
+
+a {
+  text-decoration: none;
+}
 </style>
