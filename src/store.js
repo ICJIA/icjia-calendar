@@ -6,7 +6,13 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     debug: false,
-    eventColors: ["firebrick", "orange", "mediumseagreen", "royalblue"],
+    eventColors: [
+      "firebrick",
+      "orange",
+      "mediumseagreen",
+      "royalblue",
+      "darkslategray"
+    ],
     calendarMeta: []
   },
   mutations: {
