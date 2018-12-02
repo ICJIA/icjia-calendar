@@ -7,7 +7,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-btn flat @click="debugApp">
+      <v-btn flat @click.native="debugApp">
         <v-switch label="Debug"></v-switch>
       </v-btn>
     </v-toolbar>

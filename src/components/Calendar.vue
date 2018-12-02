@@ -44,20 +44,15 @@
           </ul>
         </div>
       </v-flex>
-      <v-flex xs12 sm3>
-        <v-switch :label="`Red: ${red.toString()}`" v-model="red" @click="switchEvents('red')"></v-switch>
-        <v-switch
-          :label="`Yellow: ${yellow.toString()}`"
-          v-model="yellow"
-          @click="switchEvents('yellow')"
-        ></v-switch>
-        <v-switch
-          :label="`Green: ${green.toString()}`"
-          v-model="green"
-          @click="switchEvents('green')"
-        ></v-switch>
-        <v-switch :label="`Blue: ${blue.toString()}`" v-model="blue" @click="switchEvents('blue')"></v-switch>
-        <v-switch :label="`Pink: ${pink.toString()}`" v-model="pink" @click="switchEvents('pink')"></v-switch>
+      <v-flex xs12 sm3 class="pl-5 mt-5">
+        <div v-for="color in this.$store.state.eventColors" :key="color">
+          <v-switch
+            :label="color"
+            :v-model="color"
+            input-value="true"
+            @click.native="switchEvents(color)"
+          ></v-switch>
+        </div>
       </v-flex>
     </v-layout>
     <div v-if="this.$store.state.debug">
@@ -91,6 +86,8 @@ export default {
     return {
       currentMonth: 12,
       currentYear: 2018,
+      minYear: 2018,
+      maxYear: 2020,
       debug: true,
       calendarHelper: [],
       red: true,
@@ -98,14 +95,15 @@ export default {
       yellow: true,
       blue: true,
       pink: true,
-      isVisible: ['red', 'yellow','green','pink','blue'],
+      isVisible: [],
+      colors: this.$store.state.eventColors,
       data: data
     };
   },
   created() {
    
-      this.calendarHelper = createCalendarHelper(2017, 2019)
-     
+      this.calendarHelper = createCalendarHelper(this.minYear, this.maxYear)
+      this.isVisible = this.$store.state.eventColors.map((x)=>{return x})
     
    // console.log(this.calendarHelper[this.currentYear][this.currentMonth-1].gridSize)
   },
@@ -170,11 +168,11 @@ export default {
     
      
       
-      let html = `<span style="${backgroundStyle}; padding-left: 2px; padding-right: 2px;">${dayObj.day}`
+      let html = `<span style="${backgroundStyle}; ">${dayObj.day}`
         if (dayEvents) {
             dayEvents.forEach((x) => {
               if (this.isVisible.includes(x.color)) {
-                html = html + `<div style="font-size: 12px; background: ${x.color}" >${x.description}</div>`
+                html = html + `<div style="font-size: 12px; background: ${x.color}; color: #fff; margin-bottom: 2px;" >${x.description}</div>`
               }
               
             })
@@ -183,32 +181,37 @@ export default {
       
       if (this.$store.state.debug) {
         html = html + `<div style="font-weight: bold; font-size: 12px;">`
-        
         html = html + `<div >Day: ${dayObj.dayOfYear}</div>`
         html = html + `<div >gridID: ${dayObj.gridID}</div>`
         html = html + `<div >${dayObj.fullDate}</div>`
         html = html + `<div >${dayObj.year}</div>`
-       
         html = html + `</div>`
       }
       html = html + `</span>`
       return html
     },
     nextMonth() {
-      if (this.currentMonth === 12) {
-        this.currentMonth = 1
-         this.currentYear++
-      } else {
-        this.currentMonth++
-      }
+     
+     if (this.currentMonth === 12 && this.currentYear === this.maxYear) {
+       this.currentMonth = 12
+       this.currentYear = this.maxYear
+     } else if (this.currentMonth === 12) {
+       this.currentMonth=1
+       this.currentYear++
+     } else {
+       this.currentMonth++
+     }
     },
     lastMonth() {
-      if (this.currentMonth === 1) {
-        this.currentMonth = 12
-        this.currentYear--
-      } else {
-        this.currentMonth--
-      }
+      if (this.currentMonth === 1 && this.currentYear === this.minYear) {
+       this.currentMonth = 1
+       this.currentYear = this.minYear
+     } else if (this.currentMonth === 1) {
+       this.currentMonth=12
+       this.currentYear--
+     } else {
+       this.currentMonth--
+     }
      
     },
      switchEvents(color) {
@@ -219,7 +222,7 @@ export default {
         } else {
           this.isVisible.push(color)
         }
-      // console.log(isVisible)
+      
       }
   },
   computed: {
@@ -231,7 +234,10 @@ export default {
       return this.calendarHelper[this.currentYear][this.currentMonth-1].gridSize
     }
    
-  }
+  },
+  watch: {
+    
+  },
 };
 </script>
 
@@ -251,7 +257,7 @@ header {
 ul {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  grid-gap: 0.5em;
+  /* grid-gap: 0.1em; */
   margin: 0 auto;
   max-width: 95%;
   padding: 0;

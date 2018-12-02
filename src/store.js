@@ -5,7 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    debug: false
+    debug: false,
+    eventColors: ["red", "gold", "green", "midnightblue", "blue"]
   },
   mutations: {
     TOGGLE_DEBUG(state, debug) {
