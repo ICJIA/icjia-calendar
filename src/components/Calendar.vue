@@ -207,7 +207,7 @@ export default {
               html +
               `<div style="font-size: 12px; background: ${
                 x.color
-              }; color: #fff; margin-bottom: 2px; font-size: 10px; padding: 5px 3px; font-weight: 900; text-transform: uppercase; margin-left: ${marginLeft};margin-right: ${marginRight};" class="event">${text}</div>`;
+              }; color: #fff; margin-bottom: 2px; font-size: 8px; padding: 5px 3px; font-weight: 900; text-transform: uppercase; margin-left: ${marginLeft};margin-right: ${marginRight};" class="event">${text}</div>`;
           }
         });
       }

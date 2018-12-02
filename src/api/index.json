@@ -6,7 +6,7 @@
         "description": "Event description here",
         "start": "Sat Dec 01 2018 00:00:00 GMT-0600 (Central Standard Time)",
         "end": "Sunday Dec 02 2018 00:00:00 GMT-0600 (Central Standard Time)",
-        "color": "indianred",
+        "color": "firebrick",
         "isStart": true
       },
       {
@@ -24,7 +24,7 @@
         "title": "test event",
         "description": "Event description here",
 
-        "color": "indianred"
+        "color": "firebrick"
       }
     ],
     "337": [
@@ -32,7 +32,7 @@
         "title": "test event",
         "description": "Event description here",
 
-        "color": "indianred"
+        "color": "firebrick"
       }
     ],
     "338": [
@@ -40,7 +40,7 @@
         "title": "test event 2",
         "description": "Event description here",
 
-        "color": "indianred"
+        "color": "firebrick"
       },
       {
         "title": "test event 2",
@@ -55,7 +55,7 @@
         "title": "test event 2",
         "description": "Event description here",
 
-        "color": "indianred",
+        "color": "firebrick",
         "isFinish": true
       },
       {
@@ -100,7 +100,7 @@
         "title": "test event 3",
         "description": "Event description here",
         "isStart": true,
-        "color": "indianred"
+        "color": "firebrick"
       }
     ],
     "3": [
@@ -108,7 +108,7 @@
         "title": "test event 3",
         "description": "Event description here",
 
-        "color": "indianred"
+        "color": "firebrick"
       }
     ],
     "4": [
@@ -116,7 +116,7 @@
         "title": "test event 3",
         "description": "Event description here",
 
-        "color": "indianred",
+        "color": "firebrick",
         "isFinish": true
       }
     ],
