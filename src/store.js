@@ -6,15 +6,24 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     debug: false,
-    eventColors: ["red", "gold", "green", "midnightblue", "blue"]
+    eventColors: ["red", "gold", "green", "midnightblue", "blue"],
+    calendarMeta: []
   },
   mutations: {
     TOGGLE_DEBUG(state, debug) {
       state.debug = !debug;
+    },
+    SET_CALENDAR_META(state, calendarMeta) {
+      state.calendarMeta = calendarMeta;
     }
   },
-  actions: {},
+  actions: {
+    setCalendarMeta({ commit, state }, calendarMeta) {
+      commit("SET_CALENDAR_META", calendarMeta);
+    }
+  },
   getters: {
-    debug: state => state.debug
+    debug: state => state.debug,
+    calendarMeta: state => state.calendarMeta
   }
 });

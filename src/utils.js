@@ -38,7 +38,7 @@ const createCalendarHelper = function(startYear, endYear) {
 
       obj.firstDayOfTheMonth = new Date(y, i, 1);
       obj.isLeapYear = isLeapYear;
-
+      obj.totalDays = totalDays;
       obj.dayNumber = findDayOfYear(obj.firstDayOfTheMonth);
       obj.startDayOfWeek = obj.firstDayOfTheMonth.getDay();
       let startGridNumber = obj.dayNumber - obj.startDayOfWeek - 1;
@@ -60,4 +60,9 @@ const createCalendarHelper = function(startYear, endYear) {
   return calendarHelper;
 };
 
-export { findDayOfYear, createCalendarHelper };
+const stringTruncate = function(str, length) {
+  var dots = str.length > length ? "..." : "";
+  return str.substring(0, length) + dots;
+};
+
+export { findDayOfYear, createCalendarHelper, stringTruncate };

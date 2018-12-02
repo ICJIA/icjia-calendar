@@ -19,27 +19,23 @@
 </template>
 
 <script>
-
 export default {
   name: "App",
   methods: {
     debugApp() {
-      this.$store.commit('TOGGLE_DEBUG', this.isDebug)
+      this.$store.commit("TOGGLE_DEBUG", this.isDebug);
     }
   },
   computed: {
     isDebug() {
-      return this.$store.getters.debug
+      return this.$store.getters.debug;
     }
   },
   data() {
-    return {
-      
-    };
+    return {};
   }
 };
 </script>
 
 <style>
-
 </style>
