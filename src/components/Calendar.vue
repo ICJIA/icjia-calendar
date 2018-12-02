@@ -166,13 +166,15 @@ export default {
       dayObj.year = moment(dayObj.fullDate).format("YYYY");
 
       if (dayObj.month - 1 === this.currentMonth - 1) {
-        backgroundStyle = "background-color: #fff; width: 100%; color: #333;";
+        backgroundStyle =
+          "background-color: #fff !important; width: 100%; color: #333 !important;";
       } else {
-        backgroundStyle = "background-color: #eee; width: 100%; color: #555";
+        backgroundStyle =
+          "background-color: #ddd !important; width: 100%; color: #aaa !important";
       }
 
       if (moment().dayOfYear() === dayObj.dayOfYear) {
-        backgroundStyle = "border: 1px solid #999; width: 100%";
+        backgroundStyle = "border: 1px solid #aaa; width: 100%";
       }
 
       let dayEvents = "";
@@ -207,7 +209,7 @@ export default {
               html +
               `<div style="font-size: 12px; background: ${
                 x.color
-              }; color: #fff; margin-bottom: 2px; margin-left: ${marginLeft};margin-right: ${marginRight};" >${text}</div>`;
+              }; color: #fff; margin-bottom: 2px; font-size: 10px; padding: 5px 3px; font-weight: 900; text-transform: uppercase; margin-left: ${marginLeft};margin-right: ${marginRight};" >${text}</div>`;
           }
         });
       }
