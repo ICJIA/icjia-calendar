@@ -4,19 +4,20 @@
 
     <v-content>
       <div
-        v-if="$browserDetect.isIE"
+        v-if="!$browserDetect.isIE"
         class="text-xs-center pt-5 pb-5"
-        style="background-color: #eee"
+        style="background-color: #ddd"
       >
         <h1 style="color: firebrick">
-          Please update your browser to the latest
+          Your browser is out of date.
+          <br>Please update to the latest
           <a href="https://www.google.com/chrome/">Chrome</a>,
           <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>, or
-          <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Edge</a>.
+          <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a> to view the calendar.
         </h1>
-        <h4>
+        <h3 class="mt-4">
           <router-link to="/contact">Contact DoIT staff</router-link>&nbsp;for assistance.
-        </h4>
+        </h3>
       </div>
       <router-view/>
     </v-content>
