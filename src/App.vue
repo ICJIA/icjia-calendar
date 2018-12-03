@@ -4,7 +4,7 @@
 
     <v-content>
       <div
-        v-if="!$browserDetect.isIE"
+        v-if="$browserDetect.isIE"
         class="text-xs-center pt-5 pb-5"
         style="background-color: #eee"
       >

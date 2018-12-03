@@ -21,11 +21,15 @@ export default new Vuex.Store({
     currentYear: null,
     minYear: null,
     maxYear: null,
-    apiData: {}
+    apiData: {},
+    drawer: true
   },
   mutations: {
     TOGGLE_DEBUG(state, debug) {
       state.debug = !debug;
+    },
+    TOGGLE_DRAWER(state, drawer) {
+      state.debug = !drawer;
     },
     SET_CALENDAR_META(state, calendarMeta) {
       state.calendarMeta = calendarMeta;
@@ -83,6 +87,7 @@ export default new Vuex.Store({
     appColors: state => state.appColors,
     minYear: state => state.minYear,
     maxYear: state => state.maxYear,
-    apiData: state => state.apiData
+    apiData: state => state.apiData,
+    drawer: state => state.drawer
   }
 });
