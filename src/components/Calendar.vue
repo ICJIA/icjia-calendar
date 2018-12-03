@@ -70,20 +70,14 @@
           <ul class="day-grid">
             <div v-for="i in gridSize" :key="`1${i}`">
               <li v-html="getDayMeta(i)" @click="sheet = true"></li>
-              <!-- <day-meta :gridID="i"/> -->
+              <!-- <day-maker :gridID="i"/> -->
             </div>
           </ul>
         </div>
       </v-flex>
       <v-flex xs12 sm2 class="pl-5 mt-5">
-        <div v-for="color in this.$store.state.eventColors" :key="color">
-          <v-switch
-            :label="color"
-            :v-model="color"
-            input-value="true"
-            @click.native="toggleEvents(color)"
-            style="font-weight: 900;"
-          ></v-switch>
+        <div v-for="color in this.$store.state.appColors" :key="color">
+          <v-switch :label="`${color}`" @click.native="toggleEvents(color)" input-value="true"></v-switch>
         </div>
       </v-flex>
     </v-layout>
@@ -96,6 +90,8 @@
             >Debug:</h2>
             <h4>isVisible:</h4>
             <div>{{this.isVisible}}</div>
+            <h4>visibleEvents:</h4>
+            <div>{{this.$store.state.visibleEvents}}</div>
             <h4>calendarMeta:</h4>
             <div>{{this.calendarMeta}}</div>
             <h4>api:</h4>
@@ -109,44 +105,23 @@
 
 <script>
 const moment = require("moment");
-import { stringTruncate, findDayOfYear, createCalendarHelper } from "@/utils";
+import { createEventHTML } from "@/utils";
 import _ from "lodash";
-import DayMeta from "@/components/DayMeta";
-const data = require("@/api/index.json");
+// const eventData = require("@/api/index.json");
+
+// const data = require("@/api/index.json");
 export default {
-  components: {
-    DayMeta
-  },
+  components: {},
   data() {
     return {
-      currentMonth: 12,
-      currentYear: 2018,
-      minYear: 2018,
-      maxYear: 2020,
-      debug: true,
-      calendarMeta: [],
-      isVisible: [],
       truncateAfter: 15,
-      colors: this.$store.state.eventColors,
-      data: data,
       sheet: false
     };
   },
-  created() {
-    this.$store.dispatch(
-      "setCalendarMeta",
-      createCalendarHelper(this.minYear, this.maxYear)
-    );
-    this.calendarMeta = this.$store.state.calendarMeta;
-    this.isVisible = this.$store.state.eventColors.map(x => {
-      return x;
-    });
-
-    // console.log(this.calendarMeta[this.currentYear][this.currentMonth-1].gridSize)
-  },
+  created() {},
+  mounted() {},
   methods: {
     getDayMeta(gridID) {
-      let backgroundStyle;
       let dayObj = {};
       let year = this.currentYear;
       let dayOfYear;
@@ -195,93 +170,57 @@ export default {
       dayObj.month = moment(dayObj.fullDate).format("MM");
       dayObj.year = moment(dayObj.fullDate).format("YYYY");
 
-      if (dayObj.month - 1 === this.currentMonth - 1) {
-        backgroundStyle = "background-color: #fff ; width: 100%; color: #333 ;";
-      } else {
-        backgroundStyle = "background-color: #eee ; width: 100%; color: #aaa ";
-      }
+      let html = createEventHTML(dayObj, this.$store);
 
-      if (moment().dayOfYear() === dayObj.dayOfYear) {
-        backgroundStyle = "background-color: #999; width: 100%; color: #000 ";
-      }
-
-      let dayEvents = "";
-      if (data[year]) {
-        if (data[year][dayObj.dayOfYear]) {
-          dayEvents = data[year][dayObj.dayOfYear];
-        }
-      }
-
-      let html = `<span style="${backgroundStyle}; ">${dayObj.day}`;
-      if (dayEvents) {
-        dayEvents.forEach(x => {
-          let text, filler, length, marginLeft, marginRight;
-          if (this.isVisible.includes(x.color)) {
-            if (x.isStart) {
-              text = stringTruncate(x.description, this.truncateAfter);
-              marginLeft = "15px";
-            } else {
-              length = x.description.length;
-              filler = `&nbsp`;
-              text = filler.repeat(this.truncateAfter);
-              marginLeft = "0px";
-            }
-
-            if (x.isFinish) {
-              marginRight = "15px";
-            } else {
-              marginRight = "0px";
-            }
-
-            html =
-              html +
-              `<div style="font-size: 12px; background: ${
-                x.color
-              }; color: #fff; margin-bottom: 2px; font-size: 8px; padding: 2px; font-weight: 900; text-transform: uppercase; margin-left: ${marginLeft};margin-right: ${marginRight};" class="event">${text}</div>`;
-          }
-        });
-      }
-
-      if (this.$store.state.debug) {
-        html = html + `<div style="font-weight: bold; font-size: 12px;">`;
-        html = html + `<div >Day: ${dayObj.dayOfYear}</div>`;
-        html = html + `<div >gridID: ${dayObj.gridID}</div>`;
-        html = html + `<div >${dayObj.fullDate}</div>`;
-        html = html + `<div >${dayObj.year}</div>`;
-        html = html + `</div>`;
-      }
-      html = html + `</span>`;
       return html;
     },
     nextMonth() {
       if (this.currentMonth === 12 && this.currentYear === this.maxYear) {
-        this.currentMonth = 12;
-        this.currentYear = this.maxYear;
+        this.$store.dispatch("setCurrentMonth", 12);
+        this.$store.dispatch("setCurrentYear", this.$store.state.maxYear);
       } else if (this.currentMonth === 12) {
-        this.currentMonth = 1;
-        this.currentYear++;
+        this.$store.dispatch("setCurrentMonth", 1);
+        this.$store.dispatch(
+          "setCurrentYear",
+          this.$store.state.currentYear + 1
+        );
       } else {
-        this.currentMonth++;
+        this.$store.dispatch(
+          "setCurrentMonth",
+          this.$store.state.currentMonth + 1
+        );
       }
     },
     lastMonth() {
       if (this.currentMonth === 1 && this.currentYear === this.minYear) {
-        this.currentMonth = 1;
-        this.currentYear = this.minYear;
+        this.$store.dispatch("setCurrentMonth", 1);
+        this.$store.dispatch("setCurrentYear", this.$store.state.minYear);
       } else if (this.currentMonth === 1) {
-        this.currentMonth = 12;
-        this.currentYear--;
+        this.$store.dispatch("setCurrentMonth", 12);
+        this.$store.dispatch(
+          "setCurrentYear",
+          this.$store.state.currentYear - 1
+        );
       } else {
-        this.currentMonth--;
+        this.$store.dispatch(
+          "setCurrentMonth",
+          this.$store.state.currentMonth - 1
+        );
       }
     },
     toggleEvents(color) {
-      if (this.isVisible.includes(color)) {
-        this.isVisible = _.remove(this.isVisible, function(n) {
+      let isVisible = [];
+      if (this.$store.getters.visibleEvents.includes(color)) {
+        isVisible = _.remove(this.$store.getters.visibleEvents, function(n) {
           return n !== color;
         });
+
+        this.$store.dispatch("setVisibleEvents", isVisible);
       } else {
-        this.isVisible.push(color);
+        isVisible = this.$store.getters.visibleEvents;
+        isVisible.push(color);
+
+        this.$store.dispatch("setVisibleEvents", isVisible);
       }
     }
   },
@@ -293,9 +232,26 @@ export default {
     gridSize() {
       return this.calendarMeta[this.currentYear][this.currentMonth - 1]
         .gridSize;
+    },
+    minYear() {
+      return this.$store.getters.minYear;
+    },
+    maxYear() {
+      return this.$store.getters.maxYear;
+    },
+    currentYear() {
+      return this.$store.getters.currentYear;
+    },
+    currentMonth() {
+      return this.$store.getters.currentMonth;
+    },
+    calendarMeta() {
+      return this.$store.getters.calendarMeta;
+    },
+    eventData() {
+      return this.$store.getters.data;
     }
-  },
-  watch: {}
+  }
 };
 </script>
 
@@ -356,14 +312,6 @@ ul.weekdays abbr[title] {
   font-weight: 800;
   text-decoration: none;
 }
-
-/* ul.day-grid li:nth-child(1),
-ul.day-grid li:nth-child(2),
-ul.day-grid li:nth-child(3),
-ul.day-grid li:nth-child(34),
-ul.day-grid li:nth-child(35) {
-  background-color: #fff;
-} */
 
 @media all and (max-width: 800px) {
   ul {

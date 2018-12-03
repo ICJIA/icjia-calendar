@@ -22,8 +22,23 @@
 </template>
 
 <script>
+import { createCalendarHelper } from "@/utils";
 export default {
   name: "App",
+  created() {
+    this.$store.dispatch("setData", require("@/api/index.json"));
+    this.$store.dispatch("setCurrentYear", 2018);
+    this.$store.dispatch("setCurrentMonth", 12);
+    this.$store.dispatch("setMinYear", 2018);
+    this.$store.dispatch("setMaxYear", 2021);
+    this.$store.dispatch(
+      "setCalendarMeta",
+      createCalendarHelper(
+        this.$store.getters.minYear,
+        this.$store.getters.maxYear
+      )
+    );
+  },
   methods: {
     debugApp() {
       this.$store.commit("TOGGLE_DEBUG", this.isDebug);
