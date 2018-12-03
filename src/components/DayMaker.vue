@@ -1,14 +1,41 @@
 <template>
   <div>
-    <li v-html="getDayMeta(gridID)" @click="sheet = true"></li>
+    <v-bottom-sheet v-model="sheet">
+      <v-layout>
+        <v-flex xs12>
+          <v-card>
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0">Lorem ipsum dolor sit amet</h3>
+              </div>
+            </v-card-title>
+            <v-card-text>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et purus nec nunc vestibulum mattis nec quis quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam a sodales lacus, ac imperdiet orci. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla sit amet lacus et elit pellentesque dignissim. Curabitur nec imperdiet dui, vel venenatis libero. Duis posuere diam in magna convallis, sit amet dictum nulla posuere. Nulla ut aliquet erat. Quisque eget convallis ex, et egestas augue. Donec sit amet velit sodales, tincidunt metus ac, posuere nulla. Quisque eu dolor sit amet ex viverra sagittis. Phasellus eget dolor enim. Duis ante ante, elementum nec sagittis quis, malesuada eget velit.
+                Mauris sit amet vulputate sapien. Sed laoreet luctus dignissim. Sed sollicitudin, ligula et elementum accumsan, arcu felis placerat tellus, ac dapibus orci sapien porttitor lacus. Nulla fermentum tincidunt porta. Pellentesque tincidunt dui sit amet risus sollicitudin interdum in nec nisl. Donec aliquam nisi quis orci tincidunt viverra. Proin non maximus diam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam vitae pharetra massa. Mauris ac venenatis dui. Proin tellus tellus, lobortis vel eros a, semper interdum mauris. Aliquam erat volutpat. Donec eu lectus quis ligula scelerisque vehicula quis ultricies nunc. Vestibulum mi elit, faucibus non leo sed, volutpat iaculis tortor. Suspendisse pretium lacinia egestas.
+              </p>
+              <h2>Lorem ipsum dolor sit amet</h2>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi et purus nec nunc vestibulum mattis nec quis quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nullam a sodales lacus, ac imperdiet orci. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla sit amet lacus et elit pellentesque dignissim. Curabitur nec imperdiet dui, vel venenatis libero. Duis posuere diam in magna convallis, sit amet dictum nulla posuere. Nulla ut aliquet erat. Quisque eget convallis ex, et egestas augue. Donec sit amet velit sodales, tincidunt metus ac, posuere nulla. Quisque eu dolor sit amet ex viverra sagittis. Phasellus eget dolor enim. Duis ante ante, elementum nec sagittis quis, malesuada eget velit.
+                Mauris sit amet vulputate sapien. Sed laoreet luctus dignissim. Sed sollicitudin, ligula et elementum accumsan, arcu felis placerat tellus, ac dapibus orci sapien porttitor lacus. Nulla fermentum tincidunt porta. Pellentesque tincidunt dui sit amet risus sollicitudin interdum in nec nisl. Donec aliquam nisi quis orci tincidunt viverra. Proin non maximus diam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam vitae pharetra massa. Mauris ac venenatis dui. Proin tellus tellus, lobortis vel eros a, semper interdum mauris. Aliquam erat volutpat. Donec eu lectus quis ligula scelerisque vehicula quis ultricies nunc. Vestibulum mi elit, faucibus non leo sed, volutpat iaculis tortor. Suspendisse pretium lacinia egestas.
+              </p>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn flat color="orange" @click="sheet=false">Close</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-bottom-sheet>
+    <li v-html="createDay(gridID)" @click="sheet = true"></li>
   </div>
 </template>
 
 <script>
 const moment = require("moment");
-import { stringTruncate, createCalendarHelper } from "@/utils";
-import _ from "lodash";
-const data = require("@/api/index.json");
+import { stringTruncate } from "@/utils";
+
 export default {
   props: {
     gridID: {
@@ -17,35 +44,18 @@ export default {
   },
   data() {
     return {
-      currentMonth: 12,
-      currentYear: 2018,
-      minYear: 2018,
-      maxYear: 2020,
-      debug: true,
-      calendarMeta: [],
-      isVisible: this.$store.state.visibleEvents,
       truncateAfter: 15,
-      colors: this.$store.state.eventColors,
-      data: data,
       sheet: false
     };
   },
-  created() {
-    this.$store.dispatch(
-      "setCalendarMeta",
-      createCalendarHelper(this.minYear, this.maxYear)
-    );
-    this.calendarMeta = this.$store.state.calendarMeta;
-    this.isVisible = this.$store.state.eventColors.map(x => {
-      return x;
-    });
-    this.$store.dispatch("initVisibleEvents");
-
-    // console.log(this.calendarMeta[this.currentYear][this.currentMonth-1].gridSize)
-  },
+  created() {},
   methods: {
+    createDay(gridID) {
+      let dayMeta = this.getDayMeta(gridID);
+      let html = this.getDayHTML(dayMeta);
+      return html;
+    },
     getDayMeta(gridID) {
-      let backgroundStyle;
       let dayObj = {};
       let year = this.currentYear;
       let dayOfYear;
@@ -94,7 +104,16 @@ export default {
       dayObj.month = moment(dayObj.fullDate).format("MM");
       dayObj.year = moment(dayObj.fullDate).format("YYYY");
 
-      if (dayObj.month - 1 === this.currentMonth - 1) {
+      return dayObj;
+    },
+
+    getDayHTML(dayObj) {
+      let truncateAfter = 15;
+      let store = this.$store;
+      let eventData = store.state.apiData;
+      let year = store.state.currentYear;
+      let backgroundStyle;
+      if (dayObj.month - 1 === store.state.currentMonth - 1) {
         backgroundStyle = "background-color: #fff ; width: 100%; color: #333 ;";
       } else {
         backgroundStyle = "background-color: #eee ; width: 100%; color: #aaa ";
@@ -105,24 +124,26 @@ export default {
       }
 
       let dayEvents = "";
-      if (data[year]) {
-        if (data[year][dayObj.dayOfYear]) {
-          dayEvents = data[year][dayObj.dayOfYear];
+      if (eventData[year]) {
+        if (eventData[year][dayObj.dayOfYear]) {
+          dayEvents = eventData[year][dayObj.dayOfYear];
         }
       }
-
       let html = `<span style="${backgroundStyle}; ">${dayObj.day}`;
       if (dayEvents) {
         dayEvents.forEach(x => {
-          let text, filler, strLength, marginLeft, marginRight;
-          if (this.isVisible.includes(x.color)) {
+          /* eslint-disable no-unused-vars */
+          let strLength;
+          /* eslint-enable no-unused-vars */
+          let text, filler, marginLeft, marginRight;
+          if (store.state.visibleEvents.includes(x.color)) {
             if (x.isStart) {
-              text = stringTruncate(x.description, this.truncateAfter);
+              text = stringTruncate(x.description, truncateAfter);
               marginLeft = "15px";
             } else {
               strLength = x.description.strLength;
               filler = `&nbsp`;
-              text = filler.repeat(this.truncateAfter);
+              text = filler.repeat(truncateAfter);
               marginLeft = "0px";
             }
 
@@ -141,59 +162,38 @@ export default {
         });
       }
 
-      if (this.$store.state.debug) {
-        html = html + `<div style="font-weight: bold; font-size: 12px;">`;
-        html = html + `<div >Day: ${dayObj.dayOfYear}</div>`;
-        html = html + `<div >gridID: ${dayObj.gridID}</div>`;
-        html = html + `<div >${dayObj.fullDate}</div>`;
-        html = html + `<div >${dayObj.year}</div>`;
-        html = html + `</div>`;
+      if (store.state.debug) {
+        html =
+          html +
+          `<div style="font-weight: bold; font-size: 12px;">
+        <div >Day: ${dayObj.dayOfYear}</div>
+        <div >gridID: ${dayObj.gridID}</div><div>${
+            dayObj.fullDate
+          }</div><div >${dayObj.year}</div></div>`;
       }
       html = html + `</span>`;
+
       return html;
-    },
-    nextMonth() {
-      if (this.currentMonth === 12 && this.currentYear === this.maxYear) {
-        this.currentMonth = 12;
-        this.currentYear = this.maxYear;
-      } else if (this.currentMonth === 12) {
-        this.currentMonth = 1;
-        this.currentYear++;
-      } else {
-        this.currentMonth++;
-      }
-    },
-    lastMonth() {
-      if (this.currentMonth === 1 && this.currentYear === this.minYear) {
-        this.currentMonth = 1;
-        this.currentYear = this.minYear;
-      } else if (this.currentMonth === 1) {
-        this.currentMonth = 12;
-        this.currentYear--;
-      } else {
-        this.currentMonth--;
-      }
-    },
-    toggleEvents(color) {
-      if (this.isVisible.includes(color)) {
-        this.isVisible = _.remove(this.isVisible, function(n) {
-          return n !== color;
-        });
-        this.$store.dispatch("setVisibleEvents", this.isVisible);
-      } else {
-        this.isVisible.push(color);
-        this.$store.dispatch("setVisibleEvents", this.isVisible);
-      }
     }
   },
   computed: {
-    currentDate() {
-      let date = new Date(this.currentYear, this.currentMonth - 1, 1);
-      return moment(date).format("MMMM YYYY");
+    minYear() {
+      return this.$store.getters.minYear;
     },
-    gridSize() {
-      return this.calendarMeta[this.currentYear][this.currentMonth - 1]
-        .gridSize;
+    maxYear() {
+      return this.$store.getters.maxYear;
+    },
+    currentYear() {
+      return this.$store.getters.currentYear;
+    },
+    currentMonth() {
+      return this.$store.getters.currentMonth;
+    },
+    calendarMeta() {
+      return this.$store.getters.calendarMeta;
+    },
+    apiData() {
+      return this.$store.getters.apiData;
     }
   },
   watch: {}

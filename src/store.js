@@ -21,7 +21,7 @@ export default new Vuex.Store({
     currentYear: null,
     minYear: null,
     maxYear: null,
-    data: {}
+    apiData: {}
   },
   mutations: {
     TOGGLE_DEBUG(state, debug) {
@@ -46,8 +46,8 @@ export default new Vuex.Store({
     SET_MAX_YEAR(state, maxYear) {
       state.maxYear = maxYear;
     },
-    SET_DATA(state, data) {
-      state.data = data;
+    SET_API_DATA(state, data) {
+      state.apiData = data;
     }
   },
   actions: {
@@ -70,8 +70,8 @@ export default new Vuex.Store({
     setMaxYear({ commit }, maxYear) {
       commit("SET_MAX_YEAR", maxYear);
     },
-    setData({ commit }, data) {
-      commit("SET_DATA", data);
+    setApiData({ commit }, data) {
+      commit("SET_API_DATA", data);
     }
   },
   getters: {
@@ -83,6 +83,6 @@ export default new Vuex.Store({
     appColors: state => state.appColors,
     minYear: state => state.minYear,
     maxYear: state => state.maxYear,
-    data: state => state.data
+    apiData: state => state.apiData
   }
 });
