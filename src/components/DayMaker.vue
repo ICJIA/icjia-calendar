@@ -35,6 +35,14 @@
 <script>
 const moment = require("moment");
 import { stringTruncate } from "@/utils";
+const theme = [];
+theme["light"] = {
+  inMonthBackground: "#fff",
+  outMonthBackground: "#ccc",
+  date: "#333",
+  isTodayBackground: "#999"
+};
+console.log(theme);
 
 export default {
   props: {

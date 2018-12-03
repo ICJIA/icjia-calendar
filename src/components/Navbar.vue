@@ -16,8 +16,7 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <v-btn flat to="/sandbox" style="color: #333 !important">Sandbox</v-btn>
-
+      <!-- <v-btn flat to="/sandbox" style="color: #333 !important">Sandbox</v-btn> -->
       <v-btn flat @click.native="debugApp">
         <v-switch label="Debug"></v-switch>
       </v-btn>
