@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-toolbar app>
+    <!-- <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <router-link to="/">
           <span class="header-link">ICJIA |</span>
@@ -13,7 +13,8 @@
       <v-btn flat @click.native="debugApp">
         <v-switch label="Debug"></v-switch>
       </v-btn>
-    </v-toolbar>
+    </v-toolbar>-->
+    <navbar/>
 
     <v-content>
       <router-view/>
@@ -23,8 +24,13 @@
 
 <script>
 import { createCalendarHelper } from "@/utils";
+
+import Navbar from "@/components/Navbar";
 export default {
   name: "App",
+  components: {
+    Navbar
+  },
   created() {
     this.$store.dispatch("setApiData", require("@/api/index.json"));
     this.$store.dispatch("setCurrentYear", 2018);
@@ -39,16 +45,8 @@ export default {
       )
     );
   },
-  methods: {
-    debugApp() {
-      this.$store.commit("TOGGLE_DEBUG", this.isDebug);
-    }
-  },
-  computed: {
-    isDebug() {
-      return this.$store.getters.debug;
-    }
-  },
+  methods: {},
+  computed: {},
   data() {
     return {};
   }

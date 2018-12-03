@@ -13,7 +13,7 @@
         </header>
       </v-flex>
 
-      <v-flex xs12 sm10>
+      <v-flex xs12>
         <div class="calendar">
           <ul class="weekdays">
             <li>
@@ -47,11 +47,11 @@
           </ul>
         </div>
       </v-flex>
-      <v-flex xs12 sm2 class="pl-5 mt-5">
+      <!-- <v-flex xs12 sm2 class="pl-5 mt-5">
         <div v-for="color in this.$store.state.appColors" :key="color">
           <v-switch :label="`${color}`" @click.native="toggleEvents(color)" input-value="true"></v-switch>
         </div>
-      </v-flex>
+      </v-flex>-->
     </v-layout>
     <div v-if="this.$store.state.debug">
       <v-layout row wrap class="pl-5 pr-5">
