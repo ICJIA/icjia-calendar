@@ -33,7 +33,7 @@ export default {
       this.$router.push({ path: route });
     },
     debugApp() {
-      this.$store.commit("TOGGLE_DEBUG", this.isDebug);
+      this.$store.commit("TOGGLE_DEBUG", this.$store.state.debug);
     },
     toggleEvents(color) {
       let isVisible = [];
