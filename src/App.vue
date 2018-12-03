@@ -1,22 +1,23 @@
 <template>
   <v-app>
-    <!-- <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <router-link to="/">
-          <span class="header-link">ICJIA |</span>
-          <span class="font-weight-light subheader-link">&nbsp;Calendar Test</span>
-        </router-link>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn flat to="/sandbox" style="color: #333 !important">Sandbox</v-btn>
-
-      <v-btn flat @click.native="debugApp">
-        <v-switch label="Debug"></v-switch>
-      </v-btn>
-    </v-toolbar>-->
     <navbar/>
 
     <v-content>
+      <div
+        v-if="!$browserDetect.isIE"
+        class="text-xs-center pt-5 pb-5"
+        style="background-color: #eee"
+      >
+        <h1 style="color: firebrick">
+          Please update your browser to the latest
+          <a href="https://www.google.com/chrome/">Chrome</a>,
+          <a href="https://www.mozilla.org/en-US/firefox/new/">Firefox</a>, or
+          <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Edge</a>.
+        </h1>
+        <h4>
+          <router-link to="/contact">Contact DoIT staff</router-link>&nbsp;for assistance.
+        </h4>
+      </div>
       <router-view/>
     </v-content>
   </v-app>
@@ -67,6 +68,6 @@ a {
 }
 
 a {
-  text-decoration: none;
+  color: #333 !important;
 }
 </style>
