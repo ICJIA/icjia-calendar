@@ -21,6 +21,9 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
+      <v-btn flat @click.native="now" style="color: #333 !important">
+        <v-icon>calendar_today</v-icon>&nbsp;Now
+      </v-btn>
 
       <v-btn flat href="https://calendar.icjia-api.cloud" style="color: #333 !important">
         <v-icon>event</v-icon>&nbsp;Add Event
@@ -54,6 +57,10 @@ export default {
 
         this.$store.dispatch("setVisibleEvents", isVisible);
       }
+    },
+    now() {
+      this.$store.dispatch("setCurrentMonth", new Date().getMonth() + 1);
+      this.$store.dispatch("setCurrentYear", new Date().getFullYear());
     }
   },
 
