@@ -85,13 +85,13 @@ export default new Vuex.Store({
       commit("SET_VISIBLE_EVENTS", events);
     },
     setCurrentYear({ commit }, currentYear) {
-      commit("SET_CURRENT_YEAR", currentYear);
+      commit("SET_CURRENT_YEAR", parseInt(currentYear));
     },
     setCurrentMonth({ commit }, currentMonth) {
-      commit("SET_CURRENT_MONTH", currentMonth);
+      commit("SET_CURRENT_MONTH", parseInt(currentMonth));
     },
     setCurrentDay({ commit }, setCurrentDay) {
-      commit("SET_CURRENT_DAY", setCurrentDay);
+      commit("SET_CURRENT_DAY", parseInt(setCurrentDay));
     },
     setMinYear({ commit }, minYear) {
       commit("SET_MIN_YEAR", minYear);
@@ -123,6 +123,6 @@ export default new Vuex.Store({
     drawer: state => state.drawer,
     dayEvents: state => state.dayEvents,
     dayMeta: state => state.dayMeta,
-    eventDrawer: state => state.eventDrawer
+    eventDrawer: state => state
   }
 });

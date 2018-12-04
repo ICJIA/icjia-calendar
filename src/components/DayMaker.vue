@@ -33,7 +33,6 @@
 </template>
 
 <script>
-const moment = require("moment");
 import { stringTruncate, getDayMeta } from "@/utils";
 import { EventBus } from "../event-bus.js";
 export default {
@@ -51,7 +50,7 @@ export default {
   },
   created() {},
   mounted() {
-    EventBus.$on("setTodayEvents", () => {});
+    // EventBus.$on("setTodayEvents", () => {});
   },
   methods: {
     createDay(gridID) {
