@@ -23,23 +23,32 @@
     >
       <v-list class>
         <div style="background-color: #fff" class="text-xs-center">
-          <h1 style="font-size: 22px;">{{selectedDate}}</h1>
+          <h1
+            style="font-size: 22px; border-bottom: 1px solid #ccc; padding-bottom: 8px;"
+          >{{selectedDate}}</h1>
         </div>
         <div v-if="!eventStatus" class="text-xs-center">
-          <h3 style="color: #888; text-transform: uppercase;" class="mt-2">No Events Scheduled</h3>
+          <h3 style="color: #888; text-transform: uppercase;" class="mt-3">No Events Scheduled</h3>
         </div>
 
-        <div v-else class="pl-4 pr-3 mt-3 pr-4">
+        <div v-else class="pl-3 pr-3 mt-4 pr-3">
           <div v-for="(event, index) in this.$store.state.dayMeta.dayEvents" :key="index">
             <h2 style="color: #666; text-transform: uppercase">{{event.title}}</h2>
             <p>{{event.description}}</p>
           </div>
         </div>
 
-        <!-- <div class="pl-3 pr-3 mt-4">
+        <div v-if="debug" class="pl-3 pr-3 mt-4">
           <strong>Day Meta:</strong>
           {{this.$store.state.dayMeta}}
-        </div>-->
+          <strong>Store data:</strong>
+          <br>
+          currentYear: {{this.$store.state.currentYear}}
+          <br>
+          currentMonth: {{this.$store.state.currentMonth}}
+          <br>
+          currentDay: {{this.$store.state.currentDay}}
+        </div>
       </v-list>
       <div class="text-xs-center mt-5">
         <v-btn
@@ -116,6 +125,9 @@ export default {
       } else {
         return "Criminal Justice Information Authority";
       }
+    },
+    debug() {
+      return this.$store.state.debug;
     },
     currentDate() {
       return moment().format("MMMM YYYY");
