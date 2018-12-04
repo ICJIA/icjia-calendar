@@ -41,13 +41,18 @@
         <div v-if="debug" class="pl-3 pr-3 mt-4">
           <strong>Day Meta:</strong>
           {{this.$store.state.dayMeta}}
-          <strong>Store data:</strong>
           <br>
-          currentYear: {{this.$store.state.currentYear}}
-          <br>
-          currentMonth: {{this.$store.state.currentMonth}}
-          <br>
-          currentDay: {{this.$store.state.currentDay}}
+          <div class="mt-3">
+            <strong>Vuex data:</strong>
+            <br>
+            currentYear: {{this.$store.state.currentYear}}
+            <br>
+            currentMonth: {{this.$store.state.currentMonth}}
+            <br>
+            currentDay: {{this.$store.state.currentDay}}
+            <br>
+            debug: {{this.$store.state.debug}}
+          </div>
         </div>
       </v-list>
       <div class="text-xs-center mt-5">
