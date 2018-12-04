@@ -5,6 +5,11 @@
         <v-list-tile v-for="color in this.$store.state.appColors" :key="color">
           <v-switch :label="`${color}`" @click.native="toggleEvents(color)" input-value="true"></v-switch>
         </v-list-tile>
+        <v-divider></v-divider>
+
+        <v-list-tile>
+          <v-switch label="Show Debug Info" @click.native="debugApp" class="debug"></v-switch>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar app>
@@ -16,9 +21,9 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <!-- <v-btn flat to="/sandbox" style="color: #333 !important">Sandbox</v-btn> -->
-      <v-btn flat @click.native="debugApp">
-        <v-switch label="Debug"></v-switch>
+
+      <v-btn flat href="https://calendar.icjia-api.cloud" style="color: #333 !important">
+        <v-icon>event</v-icon>&nbsp;Add Event
       </v-btn>
     </v-toolbar>
   </div>
@@ -78,4 +83,10 @@ export default {
 a {
   text-decoration: none;
 }
+
+/* .debug.v-input--selection-controls.v-input .v-label {
+  font-weight: 900;
+
+  font-size: 12px;
+} */
 </style>

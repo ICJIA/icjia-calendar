@@ -2,14 +2,14 @@
   <div>
     <v-layout row wrap class="mb-5">
       <v-flex xs12>
-        <header>
+        <header class="pl-3">
           <v-btn fab dark small color="grey" @click="getPreviousMonth()">
-            <v-icon dark>remove</v-icon>
-          </v-btn>&nbsp;
-          <h1>{{currentDate}}</h1>&nbsp;
-          <v-btn fab dark small color="grey" @click="getNextMonth()">
-            <v-icon dark>add</v-icon>
+            <v-icon dark>arrow_back_ios</v-icon>
           </v-btn>
+          <v-btn fab dark small color="grey" @click="getNextMonth()">
+            <v-icon dark>arrow_forward_ios</v-icon>
+          </v-btn>&nbsp;&nbsp;
+          <h1 style="font-weight: 900">{{currentDate}}</h1>&nbsp;
         </header>
       </v-flex>
 
@@ -79,7 +79,7 @@ const moment = require("moment");
 
 import _ from "lodash";
 import DayMaker from "@/components/DayMaker";
-
+import config from "@/config";
 export default {
   components: {
     DayMaker
@@ -90,7 +90,9 @@ export default {
       sheet: false
     };
   },
-  created() {},
+  created() {
+    console.log("Config:", config);
+  },
   mounted() {},
   methods: {
     getNextMonth() {
@@ -179,12 +181,12 @@ header {
   display: flex;
   align-items: center;
   font-size: calc(16px + (26 - 16) * ((100vw - 300px) / (1600 - 300)));
-  justify-content: center;
+  justify-content: left;
   margin-bottom: 2em;
   background: #000;
   color: #fff;
   min-height: 10vh;
-  text-align: center;
+  text-align: left;
 }
 
 ul {
