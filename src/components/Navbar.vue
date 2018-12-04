@@ -1,5 +1,18 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snackbar"
+      :bottom="y === 'bottom'"
+      :left="x === 'left'"
+      :multi-line="mode === 'multi-line'"
+      :right="x === 'right'"
+      :timeout="4000"
+      :top="y === 'top'"
+      :vertical="mode === 'vertical'"
+    >
+      Reset to {{currentDate}}
+      <v-btn color="pink" flat @click="snackbar = false">Close</v-btn>
+    </v-snackbar>
     <v-navigation-drawer v-model="drawer" fixed clipped app disable-resize-watcher>
       <v-list class="pl-3 pr-3 mt-5">
         <v-list-tile v-for="color in this.$store.state.appColors" :key="color">
@@ -33,6 +46,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   methods: {
     pushRoute(route) {
@@ -61,6 +75,7 @@ export default {
     now() {
       this.$store.dispatch("setCurrentMonth", new Date().getMonth() + 1);
       this.$store.dispatch("setCurrentYear", new Date().getFullYear());
+      this.snackbar = true;
     }
   },
 
@@ -71,12 +86,21 @@ export default {
       } else {
         return "Criminal Justice Information Authority";
       }
+    },
+    currentDate() {
+      return moment().format("MMMM YYYY");
     }
   },
   data() {
     return {
       drawer: true,
-      expand: false
+      expand: false,
+      snackbar: false,
+      snackbar: false,
+      y: "top",
+      x: null,
+      mode: "",
+      timeout: 3000
     };
   }
 };
