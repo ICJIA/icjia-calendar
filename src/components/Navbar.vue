@@ -22,7 +22,7 @@
         {{this.$store.state.dayEvents}}
         <br>
         <br>
-        <strong>Store:</strong>
+        <strong>Current selected:</strong>
         <br>
         Month: {{this.$store.state.currentMonth}}
         <br>
@@ -30,6 +30,11 @@
         <br>
         Year: {{this.$store.state.currentYear}}
       </v-list>
+      <div class="text-xs-center mt-5">
+        <v-btn href="https://calendar.icjia-api.cloud" style="color: #333 !important">
+          <v-icon>event</v-icon>&nbsp;Add New Event
+        </v-btn>
+      </div>
     </v-navigation-drawer>
     <v-toolbar app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
@@ -41,9 +46,9 @@
       </router-link>
       <v-spacer></v-spacer>
 
-      <v-btn flat href="https://calendar.icjia-api.cloud" style="color: #333 !important">
-        <v-icon>event</v-icon>&nbsp;Add Event
-      </v-btn>
+      <!-- <v-btn flat style="color: #333 !important" @click="refresh">
+        <v-icon>refresh</v-icon>&nbsp;Refresh
+      </v-btn>-->
       <v-toolbar-side-icon @click.stop="toggleEventDrawer"></v-toolbar-side-icon>
     </v-toolbar>
   </div>
@@ -59,6 +64,9 @@ export default {
       this.drawer = true;
       // this.expand = false
       this.$router.push({ path: route });
+    },
+    refresh() {
+      console.log("refresh API here");
     },
     debugApp() {
       this.$store.commit("TOGGLE_DEBUG", this.$store.state.debug);

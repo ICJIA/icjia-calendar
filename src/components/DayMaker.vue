@@ -28,107 +28,67 @@
         </v-flex>
       </v-layout>
     </v-bottom-sheet>
-    <li v-html="createDay(gridID)" @click="getDayInfo(gridID)"></li>
+
+    <li @click="getDayInfo(gridID)">
+      <span style="width: 100% !important;" :class="gridBackground()">
+        <div>{{dayObj.day}}</div>
+
+        <div
+          v-for="(event, index) in dayObj.dayEvents"
+          :key="index"
+          :style="eventStyle(event)"
+        >&nbsp;</div>
+        <div v-if="debug" style="font-size: 8px;">{{dayObj}}</div>
+      </span>
+    </li>
   </div>
 </template>
 
 <script>
-import { stringTruncate, getDayMeta } from "@/utils";
-import { EventBus } from "../event-bus.js";
+import { getDayMeta } from "@/utils";
+
 export default {
   props: {
     gridID: {
       type: Number
+    },
+    dayObj: {
+      type: Object
     }
   },
   data() {
     return {
       truncateAfter: 15,
       sheet: false,
-      dayMeta: null
+      dayMeta: null,
+      backgroundStyle: null,
+      dayEvents: null
     };
   },
   created() {},
-  mounted() {
-    // EventBus.$on("setTodayEvents", () => {});
-  },
+  mounted() {},
   methods: {
-    createDay(gridID) {
-      let dayMeta = getDayMeta(gridID, this.$store);
-      let html = this.getDayHTML(dayMeta);
-      return html;
-    },
-
-    getDayHTML(dayObj) {
-      let truncateAfter = 15;
-      let store = this.$store;
-      let eventData = store.state.apiData;
-      let year = store.state.currentYear;
-      let backgroundStyle;
-      if (dayObj.month - 1 === store.state.currentMonth - 1) {
-        backgroundStyle = "background-color: #fff ; width: 100%; color: #333 ;";
+    gridBackground() {
+      if (this.dayObj.month - 1 === this.$store.state.currentMonth - 1) {
+        return "white";
       } else {
-        backgroundStyle = "background-color: #eee ; width: 100%; color: #aaa ";
+        return "grey lighten-3";
       }
-
-      // if (moment().dayOfYear() === dayObj.dayOfYear) {
-      //   backgroundStyle = "background-color: #999; width: 100%; color: #000 ";
-      // }
-
-      let dayEvents = "";
-      if (eventData[year]) {
-        if (eventData[year][dayObj.dayOfYear]) {
-          dayEvents = eventData[year][dayObj.dayOfYear];
-        }
-      }
-      let html = `<span style="${backgroundStyle}; ">${dayObj.day}`;
-      if (dayEvents) {
-        dayEvents.forEach(x => {
-          /* eslint-disable no-unused-vars */
-          let strLength;
-          /* eslint-enable no-unused-vars */
-          let text, filler, marginLeft, marginRight;
-          if (store.state.visibleEvents.includes(x.color)) {
-            if (x.isStart) {
-              text = stringTruncate(x.description, truncateAfter);
-              marginLeft = "15px";
-            } else {
-              strLength = x.description.strLength;
-              filler = `&nbsp`;
-              text = filler.repeat(truncateAfter);
-              marginLeft = "0px";
-            }
-
-            if (x.isFinish) {
-              marginRight = "15px";
-            } else {
-              marginRight = "0px";
-            }
-
-            html =
-              html +
-              `<div style="font-size: 12px; background: ${
-                x.color
-              }; color: #fff; margin-bottom: 2px; font-size: 8px; padding: 2px; font-weight: 900; text-transform: uppercase; margin-left: ${marginLeft};margin-right: ${marginRight};" class="event">${text}</div>`;
-          }
-        });
-      }
-
-      if (store.state.debug) {
-        html =
-          html +
-          `<div style="font-weight: bold; font-size: 10px !important;">
-        <div >DayOfYear: ${dayObj.dayOfYear}</div>
-        <div >gridID: ${
-          dayObj.gridID
-        }</div><div>DateFromDayOfYear:<br><span class="pl-3">${
-            dayObj.fullDate
-          }</span> </div><div >Year: ${dayObj.year}</div></div>`;
-      }
-      html = html + `</span>`;
-
-      return html;
     },
+    eventStyle(event) {
+      let marginLeft = "0px";
+      let marginRight = "0px";
+      if (event.isStart) {
+        marginLeft = "20px";
+      }
+      if (event.isFinish) {
+        marginRight = "20px";
+      }
+      return `background-color: ${
+        event.color
+      }; height: 8px; margin-bottom: 2px; margin-left: ${marginLeft}; margin-right: ${marginRight}`;
+    },
+
     getDayInfo(gridID) {
       let meta = getDayMeta(gridID, this.$store);
       this.$store.dispatch("setDayMeta", meta);
@@ -144,6 +104,7 @@ export default {
       } else {
         this.$store.dispatch("setDayEvents", noEvents);
       }
+      this.$store.commit("OPEN_EVENT_DRAWER");
     }
   },
   computed: {
@@ -167,6 +128,9 @@ export default {
     },
     apiData() {
       return this.$store.getters.apiData;
+    },
+    debug() {
+      return this.$store.getters.debug;
     }
   },
   watch: {}
@@ -174,4 +138,8 @@ export default {
 </script>
 
 <style scoped>
+.event {
+  margin-bottom: 5px !important;
+  height: 8px !important;
+}
 </style>

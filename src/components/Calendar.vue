@@ -44,16 +44,11 @@
           <ul class="day-grid">
             <div v-for="i in gridSize" :key="`1${i}`">
               <!-- <li v-html="createDay(i)" @click="sheet = true"></li> -->
-              <day-maker :gridID="i"/>
+              <day-maker :gridID="i" :dayObj="generateDayMeta(i)"/>
             </div>
           </ul>
         </div>
       </v-flex>
-      <!-- <v-flex xs12 sm2 class="pl-5 mt-5">
-        <div v-for="color in this.$store.state.appColors" :key="color">
-          <v-switch :label="`${color}`" @click.native="toggleEvents(color)" input-value="true"></v-switch>
-        </div>
-      </v-flex>-->
     </v-layout>
     <div v-if="this.$store.state.debug">
       <v-layout row wrap class="pl-5 pr-5">
@@ -110,6 +105,9 @@ export default {
   },
   mounted() {},
   methods: {
+    generateDayMeta(gridID) {
+      return getDayMeta(gridID, this.$store);
+    },
     getNextMonth() {
       if (this.currentMonth === 12 && this.currentYear === this.maxYear) {
         this.$store.dispatch("setCurrentMonth", 12);
