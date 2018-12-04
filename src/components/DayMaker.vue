@@ -165,11 +165,13 @@ export default {
       if (store.state.debug) {
         html =
           html +
-          `<div style="font-weight: bold; font-size: 12px;">
-        <div >Day: ${dayObj.dayOfYear}</div>
-        <div >gridID: ${dayObj.gridID}</div><div>${
+          `<div style="font-weight: bold; font-size: 10px !important;">
+        <div >DayOfYear: ${dayObj.dayOfYear}</div>
+        <div >gridID: ${
+          dayObj.gridID
+        }</div><div>DateFromDayOfYear:<br><span class="pl-3">${
             dayObj.fullDate
-          }</div><div >${dayObj.year}</div></div>`;
+          }</span> </div><div >Year: ${dayObj.year}</div></div>`;
       }
       html = html + `</span>`;
 
