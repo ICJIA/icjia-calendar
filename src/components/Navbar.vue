@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="drawer" fixed clipped app disable-resize-watcher>
+    <v-navigation-drawer v-model="drawer" fixed clipped app disable-resize-watcher width="250">
       <v-list class="pl-3 pr-3 mt-5">
         <v-list-tile v-for="color in this.$store.state.appColors" :key="color">
           <v-switch :label="`${color}`" @click.native="toggleEvents(color)" input-value="true"></v-switch>
@@ -12,23 +12,24 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-navigation-drawer :value="eventDrawer" fixed clipped app right disable-resize-watcher>
-      <v-list class="pl-3 pr-3 mt-5">
-        <strong>Day Meta:</strong>
-        {{this.$store.state.dayMeta}}
-        <br>
-        <br>
-        <strong>Events:</strong>
-        {{this.$store.state.dayEvents}}
-        <br>
-        <br>
-        <strong>Current selected:</strong>
-        <br>
-        Month: {{this.$store.state.currentMonth}}
-        <br>
-        Day: {{this.$store.state.currentDay}}
-        <br>
-        Year: {{this.$store.state.currentYear}}
+    <v-navigation-drawer
+      :value="eventDrawer"
+      fixed
+      clipped
+      app
+      right
+      disable-resize-watcher
+      width="400"
+    >
+      <v-list class>
+        <div style="background-color: #fff" class="text-xs-center">
+          <h1 style="font-size: 22px;">{{selectedDate}}</h1>
+        </div>
+
+        <div class="pl-3 pr-3 mt-4">
+          <strong>Day Meta:</strong>
+          {{this.$store.state.dayMeta}}
+        </div>
       </v-list>
       <div class="text-xs-center mt-5">
         <v-btn href="https://calendar.icjia-api.cloud" style="color: #333 !important">
@@ -71,6 +72,9 @@ export default {
     debugApp() {
       this.$store.commit("TOGGLE_DEBUG", this.$store.state.debug);
     },
+    formattedDate() {
+      this.selectedDate = this.$store.state.dayMeta.fullDate;
+    },
     toggleEvents(color) {
       let isVisible = [];
       if (this.$store.getters.visibleEvents.includes(color)) {
@@ -104,6 +108,11 @@ export default {
     },
     eventDrawer() {
       return this.$store.state.eventDrawer;
+    },
+    selectedDate() {
+      return moment(this.$store.state.dayMeta.fullDate).format(
+        "dddd, MMMM DD, YYYY"
+      );
     }
   },
 

@@ -29,7 +29,7 @@
       </v-layout>
     </v-bottom-sheet>
 
-    <li @click="getDayInfo(gridID)">
+    <li @click="getDayInfo(gridID)" class="grid">
       <span style="width: 100% !important;" :class="gridBackground()">
         <div>{{dayObj.day}}</div>
 
@@ -38,7 +38,8 @@
           :key="index"
           :style="eventStyle(event)"
         >&nbsp;</div>
-        <div v-if="debug" style="font-size: 8px;">{{dayObj}}</div>
+
+        <div v-if="debug" style="font-size: 10px;">{{dayObj}}</div>
       </span>
     </li>
   </div>
@@ -141,5 +142,8 @@ export default {
 .event {
   margin-bottom: 5px !important;
   height: 8px !important;
+}
+.grid:hover {
+  cursor: pointer;
 }
 </style>
