@@ -14,6 +14,7 @@ const colors = [
 export default new Vuex.Store({
   state: {
     debug: false,
+    eventDrawer: true,
     visibleEvents: colors.map(x => x),
     appColors: colors.map(x => x),
     calendarMeta: [],
@@ -30,6 +31,15 @@ export default new Vuex.Store({
   mutations: {
     TOGGLE_DEBUG(state, debug) {
       state.debug = !debug;
+    },
+    OPEN_EVENT_DRAWER(state) {
+      state.eventDrawer = true;
+    },
+    CLOSE_EVENT_DRAWER(state) {
+      state.eventDrawer = false;
+    },
+    TOGGLE_EVENT_DRAWER(state) {
+      state.eventDrawer = !state.eventDrawer;
     },
     TOGGLE_DRAWER(state, drawer) {
       state.debug = !drawer;
@@ -112,6 +122,7 @@ export default new Vuex.Store({
     apiData: state => state.apiData,
     drawer: state => state.drawer,
     dayEvents: state => state.dayEvents,
-    dayMeta: state => state.dayMeta
+    dayMeta: state => state.dayMeta,
+    eventDrawer: state => state.eventDrawer
   }
 });

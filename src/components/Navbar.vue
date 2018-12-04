@@ -12,7 +12,7 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
-    <v-navigation-drawer v-model="eventDrawer" fixed clipped app right disable-resize-watcher>
+    <v-navigation-drawer :value="eventDrawer" fixed clipped app right disable-resize-watcher>
       <v-list class="pl-3 pr-3 mt-5">
         <strong>Day Meta:</strong>
         {{this.$store.state.dayMeta}}
@@ -44,7 +44,7 @@
       <v-btn flat href="https://calendar.icjia-api.cloud" style="color: #333 !important">
         <v-icon>event</v-icon>&nbsp;Add Event
       </v-btn>
-      <v-toolbar-side-icon @click.stop="eventDrawer = !eventDrawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="toggleEventDrawer"></v-toolbar-side-icon>
     </v-toolbar>
   </div>
 </template>
@@ -53,6 +53,7 @@
 import moment from "moment";
 import { EventBus } from "../event-bus.js";
 export default {
+  mounted() {},
   methods: {
     pushRoute(route) {
       this.drawer = true;
@@ -76,6 +77,9 @@ export default {
 
         this.$store.dispatch("setVisibleEvents", isVisible);
       }
+    },
+    toggleEventDrawer() {
+      this.$store.commit("TOGGLE_EVENT_DRAWER");
     }
   },
 
@@ -89,13 +93,16 @@ export default {
     },
     currentDate() {
       return moment().format("MMMM YYYY");
+    },
+    eventDrawer() {
+      return this.$store.state.eventDrawer;
     }
   },
+
   data() {
     return {
       drawer: false,
-      expand: false,
-      eventDrawer: true
+      expand: false
     };
   }
 };

@@ -86,6 +86,7 @@ import _ from "lodash";
 import DayMaker from "@/components/DayMaker";
 import config from "@/config";
 import { getDayMeta } from "@/utils";
+import { EventBus } from "../event-bus.js";
 
 export default {
   components: {
@@ -179,6 +180,7 @@ export default {
       } else {
         this.$store.dispatch("setDayEvents", noEvents);
       }
+      this.$store.commit("OPEN_EVENT_DRAWER");
     }
   },
   computed: {
