@@ -35,9 +35,10 @@
         <div v-for="(event, index) in dayObj.dayEvents" :key="index">
           <div v-for="(isVisible, index) in visibleEvents" :key="index">
             <div v-if="event.color === isVisible">
-              <v-tooltip bottom open-delay="50">
+              <v-tooltip top open-delay="50">
                 <div :style="eventStyle(event)" slot="activator">&nbsp;</div>
-                <span>{{event.title}}</span>
+                <h2 style="text-transform: uppercase;">{{event.title}}</h2>
+                <p>{{event.description}}</p>
               </v-tooltip>
             </div>
           </div>
