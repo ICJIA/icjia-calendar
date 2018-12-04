@@ -32,13 +32,16 @@
     <li @click="getDayInfo(gridID)" class="grid">
       <span style="width: 100% !important;" :class="gridBackground()">
         <div>{{dayObj.day}}</div>
-
-        <div
-          v-for="(event, index) in dayObj.dayEvents"
-          :key="index"
-          :style="eventStyle(event)"
-        >&nbsp;</div>
-
+        <div v-for="(event, index) in dayObj.dayEvents" :key="index">
+          <div v-for="(isVisible, index) in visibleEvents" :key="index">
+            <div v-if="event.color === isVisible">
+              <v-tooltip bottom open-delay="50">
+                <div :style="eventStyle(event)" slot="activator">&nbsp;</div>
+                <span>{{event.title}}</span>
+              </v-tooltip>
+            </div>
+          </div>
+        </div>
         <div v-if="debug" style="font-size: 10px;">{{dayObj}}</div>
       </span>
     </li>
@@ -87,7 +90,7 @@ export default {
       }
       return `background-color: ${
         event.color
-      }; height: 8px; margin-bottom: 2px; margin-left: ${marginLeft}; margin-right: ${marginRight}`;
+      }; height: 12px; margin-bottom: 5px; margin-left: ${marginLeft}; margin-right: ${marginRight}`;
     },
 
     getDayInfo(gridID) {
@@ -132,6 +135,9 @@ export default {
     },
     debug() {
       return this.$store.getters.debug;
+    },
+    visibleEvents() {
+      return this.$store.getters.visibleEvents;
     }
   },
   watch: {}

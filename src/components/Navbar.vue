@@ -19,7 +19,7 @@
       app
       right
       disable-resize-watcher
-      width="400"
+      width="325"
     >
       <v-list class>
         <div style="background-color: #fff" class="text-xs-center">
