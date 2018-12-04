@@ -10,6 +10,8 @@
             <v-icon dark>arrow_forward_ios</v-icon>
           </v-btn>&nbsp;&nbsp;
           <h1 style="font-weight: 900">{{currentDate}}</h1>&nbsp;
+          <v-spacer></v-spacer>
+          <v-btn dark @click.native="today" style="color: #eee !important">TODAY</v-btn>&nbsp;
         </header>
       </v-flex>
 
@@ -63,8 +65,11 @@
 
             <h4>visibleEvents:</h4>
             <div>{{this.$store.state.visibleEvents}}</div>
+            <h4>dayEvents:</h4>
+            <div>{{$store.getters.dayEvents}}</div>
             <h4>calendarMeta:</h4>
             <div>{{this.calendarMeta}}</div>
+
             <h4>api:</h4>
             <div>{{$store.getters.apiData}}</div>
           </div>
@@ -80,6 +85,8 @@ const moment = require("moment");
 import _ from "lodash";
 import DayMaker from "@/components/DayMaker";
 import config from "@/config";
+import { getDayMeta } from "@/utils";
+
 export default {
   components: {
     DayMaker
@@ -87,11 +94,18 @@ export default {
   data() {
     return {
       truncateAfter: 15,
-      sheet: false
+      sheet: false,
+
+      snackbar: false,
+      y: "top",
+      x: null,
+      mode: "",
+      timeout: 3000,
+      now: null
     };
   },
   created() {
-    console.log("Config:", config);
+    // console.log("Config:", config);
   },
   mounted() {},
   methods: {
@@ -143,11 +157,33 @@ export default {
 
         this.$store.dispatch("setVisibleEvents", isVisible);
       }
+    },
+    today() {
+      this.$store.dispatch("setCurrentMonth", new Date().getMonth() + 1);
+      this.$store.dispatch("setCurrentYear", new Date().getFullYear());
+      this.$store.dispatch("setCurrentDay", new Date().getUTCDate());
+      this.now = moment().format("MMMM DD, YYYY");
+      let gridID =
+        this.calendarMeta[this.currentYear][this.currentMonth - 1]
+          .startDayOfWeek + this.currentDay;
+
+      let meta = getDayMeta(gridID, this.$store);
+      this.$store.dispatch("setDayMeta", meta);
+
+      let noEvents = [];
+      if (this.apiData[meta.year][meta.dayOfYear]) {
+        this.$store.dispatch(
+          "setDayEvents",
+          this.apiData[meta.year][meta.dayOfYear]
+        );
+      } else {
+        this.$store.dispatch("setDayEvents", noEvents);
+      }
     }
   },
   computed: {
     currentDate() {
-      let date = new Date(this.currentYear, this.currentMonth - 1, 1);
+      let date = new Date(this.currentYear, this.currentMonth - 1);
       return moment(date).format("MMMM YYYY");
     },
     gridSize() {
@@ -163,6 +199,9 @@ export default {
     currentYear() {
       return this.$store.getters.currentYear;
     },
+    currentDay() {
+      return this.$store.getters.currentDay;
+    },
     currentMonth() {
       return this.$store.getters.currentMonth;
     },
@@ -171,6 +210,9 @@ export default {
     },
     eventData() {
       return this.$store.getters.data;
+    },
+    apiData() {
+      return this.$store.getters.apiData;
     }
   }
 };

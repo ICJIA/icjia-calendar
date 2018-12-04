@@ -28,14 +28,14 @@
         </v-flex>
       </v-layout>
     </v-bottom-sheet>
-    <li v-html="createDay(gridID)" @click="sheet = true"></li>
+    <li v-html="createDay(gridID)" @click="getDayInfo(gridID)"></li>
   </div>
 </template>
 
 <script>
 const moment = require("moment");
-import { stringTruncate } from "@/utils";
-
+import { stringTruncate, getDayMeta } from "@/utils";
+import { EventBus } from "../event-bus.js";
 export default {
   props: {
     gridID: {
@@ -45,66 +45,19 @@ export default {
   data() {
     return {
       truncateAfter: 15,
-      sheet: false
+      sheet: false,
+      dayMeta: null
     };
   },
   created() {},
+  mounted() {
+    EventBus.$on("setTodayEvents", () => {});
+  },
   methods: {
     createDay(gridID) {
-      let dayMeta = this.getDayMeta(gridID);
+      let dayMeta = getDayMeta(gridID, this.$store);
       let html = this.getDayHTML(dayMeta);
       return html;
-    },
-    getDayMeta(gridID) {
-      let dayObj = {};
-      let year = this.currentYear;
-      let dayOfYear;
-      let splitYear = false;
-      let totalDays;
-      dayObj.gridID = gridID;
-
-      if (
-        this.calendarMeta[this.currentYear][this.currentMonth - 1].isLeapYear
-      ) {
-        totalDays = 366;
-      } else {
-        totalDays = 365;
-      }
-      if (
-        this.calendarMeta[this.currentYear][this.currentMonth - 1]
-          .startGridNumber +
-          dayObj.gridID >
-        totalDays
-      ) {
-        dayOfYear =
-          this.calendarMeta[this.currentYear][this.currentMonth - 1]
-            .startGridNumber +
-          dayObj.gridID -
-          totalDays;
-        splitYear = true;
-      } else {
-        dayOfYear =
-          this.calendarMeta[this.currentYear][this.currentMonth - 1]
-            .startGridNumber + dayObj.gridID;
-        splitYear = false;
-      }
-
-      dayObj.dayOfYear = dayOfYear;
-
-      // pad December with next month
-      if (splitYear && this.currentMonth === 12) {
-        year = year + 1;
-      }
-      // pad January with previous month
-      if (this.currentMonth === 1 && dayObj.dayOfYear > 335) {
-        year = year - 1;
-      }
-      dayObj.fullDate = moment([year]).dayOfYear(dayObj.dayOfYear);
-      dayObj.day = moment(dayObj.fullDate).format("DD");
-      dayObj.month = moment(dayObj.fullDate).format("MM");
-      dayObj.year = moment(dayObj.fullDate).format("YYYY");
-
-      return dayObj;
     },
 
     getDayHTML(dayObj) {
@@ -119,9 +72,9 @@ export default {
         backgroundStyle = "background-color: #eee ; width: 100%; color: #aaa ";
       }
 
-      if (moment().dayOfYear() === dayObj.dayOfYear) {
-        backgroundStyle = "background-color: #999; width: 100%; color: #000 ";
-      }
+      // if (moment().dayOfYear() === dayObj.dayOfYear) {
+      //   backgroundStyle = "background-color: #999; width: 100%; color: #000 ";
+      // }
 
       let dayEvents = "";
       if (eventData[year]) {
@@ -176,6 +129,22 @@ export default {
       html = html + `</span>`;
 
       return html;
+    },
+    getDayInfo(gridID) {
+      let meta = getDayMeta(gridID, this.$store);
+      this.$store.dispatch("setDayMeta", meta);
+      this.$store.dispatch("setCurrentDay", meta.day);
+      this.$store.dispatch("setCurrentMonth", meta.month);
+      this.$store.dispatch("setCurrentYear", meta.year);
+      let noEvents = [];
+      if (this.apiData[meta.year][meta.dayOfYear]) {
+        this.$store.dispatch(
+          "setDayEvents",
+          this.apiData[meta.year][meta.dayOfYear]
+        );
+      } else {
+        this.$store.dispatch("setDayEvents", noEvents);
+      }
     }
   },
   computed: {
@@ -190,6 +159,9 @@ export default {
     },
     currentMonth() {
       return this.$store.getters.currentMonth;
+    },
+    currentDay() {
+      return this.$store.getters.currentDay;
     },
     calendarMeta() {
       return this.$store.getters.calendarMeta;

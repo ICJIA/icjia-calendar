@@ -66,4 +66,58 @@ const stringTruncate = function(str, length) {
   return str.substring(0, length) + dots;
 };
 
-export { findDayOfYear, createCalendarHelper, stringTruncate };
+const getDayMeta = function(gridID, store) {
+  let state = store.state;
+  let dayObj = {};
+  let year = state.currentYear;
+  let dayOfYear;
+  let splitYear = false;
+  let totalDays;
+
+  dayObj.gridID = gridID;
+
+  if (
+    state.calendarMeta[state.currentYear][state.currentMonth - 1].isLeapYear
+  ) {
+    totalDays = 366;
+  } else {
+    totalDays = 365;
+  }
+  if (
+    state.calendarMeta[state.currentYear][state.currentMonth - 1]
+      .startGridNumber +
+      dayObj.gridID >
+    totalDays
+  ) {
+    dayOfYear =
+      state.calendarMeta[state.currentYear][state.currentMonth - 1]
+        .startGridNumber +
+      dayObj.gridID -
+      totalDays;
+    splitYear = true;
+  } else {
+    dayOfYear =
+      state.calendarMeta[state.currentYear][state.currentMonth - 1]
+        .startGridNumber + dayObj.gridID;
+    splitYear = false;
+  }
+
+  dayObj.dayOfYear = dayOfYear;
+
+  // pad December with next month
+  if (splitYear && state.currentMonth === 12) {
+    year = year + 1;
+  }
+  // pad January with previous month
+  if (state.currentMonth === 1 && dayObj.dayOfYear > 335) {
+    year = year - 1;
+  }
+  dayObj.fullDate = moment([year]).dayOfYear(dayObj.dayOfYear);
+  dayObj.day = moment(dayObj.fullDate).format("DD");
+  dayObj.month = moment(dayObj.fullDate).format("MM");
+  dayObj.year = moment(dayObj.fullDate).format("YYYY");
+
+  return dayObj;
+};
+
+export { getDayMeta, findDayOfYear, createCalendarHelper, stringTruncate };

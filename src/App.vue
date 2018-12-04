@@ -28,6 +28,7 @@
 import { createCalendarHelper } from "@/utils";
 
 import Navbar from "@/components/Navbar";
+import { getDayMeta } from "@/utils";
 export default {
   name: "App",
   components: {
@@ -35,20 +36,60 @@ export default {
   },
   created() {
     this.$store.dispatch("setApiData", require("@/api/index.json"));
-    this.$store.dispatch("setCurrentYear", 2018);
-    this.$store.dispatch("setCurrentMonth", 12);
+    this.$store.dispatch("setCurrentYear", parseInt(new Date().getFullYear()));
+    this.$store.dispatch(
+      "setCurrentMonth",
+      parseInt(new Date().getMonth()) + 1
+    );
+    this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
     this.$store.dispatch("setMinYear", 2018);
     this.$store.dispatch("setMaxYear", 2021);
     this.$store.dispatch(
       "setCalendarMeta",
-      createCalendarHelper(
-        this.$store.getters.minYear,
-        this.$store.getters.maxYear
-      )
+      createCalendarHelper(this.minYear, this.maxYear)
     );
+    // auto-populate eventDrawer with today's info
+    let gridID =
+      this.calendarMeta[this.currentYear][this.currentMonth - 1]
+        .startDayOfWeek + this.currentDay;
+
+    let meta = getDayMeta(gridID, this.$store);
+    this.$store.dispatch("setDayMeta", meta);
+
+    let noEvents = [];
+    if (this.apiData[meta.year][meta.dayOfYear]) {
+      this.$store.dispatch(
+        "setDayEvents",
+        this.apiData[meta.year][meta.dayOfYear]
+      );
+    } else {
+      this.$store.dispatch("setDayEvents", noEvents);
+    }
   },
   methods: {},
-  computed: {},
+  computed: {
+    minYear() {
+      return this.$store.getters.minYear;
+    },
+    maxYear() {
+      return this.$store.getters.maxYear;
+    },
+    currentYear() {
+      return this.$store.getters.currentYear;
+    },
+    currentMonth() {
+      return this.$store.getters.currentMonth;
+    },
+    currentDay() {
+      return this.$store.getters.currentDay;
+    },
+    calendarMeta() {
+      return this.$store.getters.calendarMeta;
+    },
+    apiData() {
+      return this.$store.getters.apiData;
+    }
+  },
   data() {
     return {};
   }

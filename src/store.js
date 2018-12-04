@@ -19,10 +19,13 @@ export default new Vuex.Store({
     calendarMeta: [],
     currentMonth: null,
     currentYear: null,
+    currentDay: null,
     minYear: null,
     maxYear: null,
     apiData: {},
-    drawer: true
+    drawer: true,
+    dayEvents: [],
+    dayMeta: {}
   },
   mutations: {
     TOGGLE_DEBUG(state, debug) {
@@ -44,6 +47,9 @@ export default new Vuex.Store({
     SET_CURRENT_MONTH(state, currentMonth) {
       state.currentMonth = currentMonth;
     },
+    SET_CURRENT_DAY(state, currentDay) {
+      state.currentDay = currentDay;
+    },
     SET_MIN_YEAR(state, minYear) {
       state.minYear = minYear;
     },
@@ -52,6 +58,12 @@ export default new Vuex.Store({
     },
     SET_API_DATA(state, data) {
       state.apiData = data;
+    },
+    SET_DAY_EVENTS(state, dayEvents) {
+      state.dayEvents = dayEvents;
+    },
+    SET_DAY_META(state, dayMeta) {
+      state.dayMeta = dayMeta;
     }
   },
   actions: {
@@ -68,6 +80,9 @@ export default new Vuex.Store({
     setCurrentMonth({ commit }, currentMonth) {
       commit("SET_CURRENT_MONTH", currentMonth);
     },
+    setCurrentDay({ commit }, setCurrentDay) {
+      commit("SET_CURRENT_DAY", setCurrentDay);
+    },
     setMinYear({ commit }, minYear) {
       commit("SET_MIN_YEAR", minYear);
     },
@@ -76,6 +91,12 @@ export default new Vuex.Store({
     },
     setApiData({ commit }, data) {
       commit("SET_API_DATA", data);
+    },
+    setDayEvents({ commit }, dayEvents) {
+      commit("SET_DAY_EVENTS", dayEvents);
+    },
+    setDayMeta({ commit }, dayMeta) {
+      commit("SET_DAY_META", dayMeta);
     }
   },
   getters: {
@@ -84,10 +105,13 @@ export default new Vuex.Store({
     visibleEvents: state => state.visibleEvents,
     currentYear: state => state.currentYear,
     currentMonth: state => state.currentMonth,
+    currentDay: state => state.currentDay,
     appColors: state => state.appColors,
     minYear: state => state.minYear,
     maxYear: state => state.maxYear,
     apiData: state => state.apiData,
-    drawer: state => state.drawer
+    drawer: state => state.drawer,
+    dayEvents: state => state.dayEvents,
+    dayMeta: state => state.dayMeta
   }
 });

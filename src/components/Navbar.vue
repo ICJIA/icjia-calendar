@@ -1,18 +1,5 @@
 <template>
   <div>
-    <v-snackbar
-      v-model="snackbar"
-      :bottom="y === 'bottom'"
-      :left="x === 'left'"
-      :multi-line="mode === 'multi-line'"
-      :right="x === 'right'"
-      :timeout="4000"
-      :top="y === 'top'"
-      :vertical="mode === 'vertical'"
-    >
-      Reset to {{currentDate}}
-      <v-btn color="pink" flat @click="snackbar = false">Close</v-btn>
-    </v-snackbar>
     <v-navigation-drawer v-model="drawer" fixed clipped app disable-resize-watcher>
       <v-list class="pl-3 pr-3 mt-5">
         <v-list-tile v-for="color in this.$store.state.appColors" :key="color">
@@ -25,6 +12,25 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+    <v-navigation-drawer v-model="eventDrawer" fixed clipped app right disable-resize-watcher>
+      <v-list class="pl-3 pr-3 mt-5">
+        <strong>Day Meta:</strong>
+        {{this.$store.state.dayMeta}}
+        <br>
+        <br>
+        <strong>Events:</strong>
+        {{this.$store.state.dayEvents}}
+        <br>
+        <br>
+        <strong>Store:</strong>
+        <br>
+        Month: {{this.$store.state.currentMonth}}
+        <br>
+        Day: {{this.$store.state.currentDay}}
+        <br>
+        Year: {{this.$store.state.currentYear}}
+      </v-list>
+    </v-navigation-drawer>
     <v-toolbar app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <router-link to="/" class="nav">
@@ -34,19 +40,18 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <v-btn flat @click.native="now" style="color: #333 !important">
-        <v-icon>calendar_today</v-icon>&nbsp;Now
-      </v-btn>
 
       <v-btn flat href="https://calendar.icjia-api.cloud" style="color: #333 !important">
         <v-icon>event</v-icon>&nbsp;Add Event
       </v-btn>
+      <v-toolbar-side-icon @click.stop="eventDrawer = !eventDrawer"></v-toolbar-side-icon>
     </v-toolbar>
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import { EventBus } from "../event-bus.js";
 export default {
   methods: {
     pushRoute(route) {
@@ -71,11 +76,6 @@ export default {
 
         this.$store.dispatch("setVisibleEvents", isVisible);
       }
-    },
-    now() {
-      this.$store.dispatch("setCurrentMonth", new Date().getMonth() + 1);
-      this.$store.dispatch("setCurrentYear", new Date().getFullYear());
-      this.snackbar = true;
     }
   },
 
@@ -93,14 +93,9 @@ export default {
   },
   data() {
     return {
-      drawer: true,
+      drawer: false,
       expand: false,
-      snackbar: false,
-      snackbar: false,
-      y: "top",
-      x: null,
-      mode: "",
-      timeout: 3000
+      eventDrawer: true
     };
   }
 };
