@@ -55,14 +55,6 @@
           </div>
         </div>
       </v-list>
-      <!-- <div class="text-xs-center mt-5">
-        <v-btn
-          href="https://calendar.icjia-api.cloud"
-          style="color: #333 !important; font-size: 12px;"
-        >
-          <v-icon>event</v-icon>&nbsp;Add New Event
-        </v-btn>
-      </div> -->
     </v-navigation-drawer>
     <v-toolbar app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
@@ -77,6 +69,14 @@
       <!-- <v-btn flat style="color: #333 !important" @click="refresh">
         <v-icon>refresh</v-icon>&nbsp;Refresh
       </v-btn>-->
+      <v-btn
+        flat
+        href="https://calendar.icjia-api.cloud/admin"
+        target="_blank"
+        style="color: #333 !important; font-size: 12px;"
+      >
+        <v-icon>event</v-icon>&nbsp;Add New Event
+      </v-btn>
       <v-toolbar-side-icon @click.stop="toggleEventDrawer"></v-toolbar-side-icon>
     </v-toolbar>
   </div>

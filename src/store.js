@@ -14,7 +14,7 @@ const colors = [
 export default new Vuex.Store({
   state: {
     debug: false,
-    eventDrawer: true,
+    eventDrawer: false,
     visibleEvents: colors.map(x => x),
     appColors: colors.map(x => x),
     calendarMeta: [],
@@ -24,7 +24,7 @@ export default new Vuex.Store({
     minYear: null,
     maxYear: null,
     apiData: {},
-    drawer: true,
+    drawer: false,
     dayEvents: [],
     dayMeta: {}
   },
