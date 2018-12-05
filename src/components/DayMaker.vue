@@ -36,7 +36,7 @@
           <div v-for="(isVisible, index) in visibleEvents" :key="index">
             <div v-if="event.color === isVisible">
               <v-tooltip top open-delay="50">
-                <div :style="eventStyle(event)" class="event" slot="activator">&nbsp;</div>
+                <div :style="eventStyle(event)" class="event" slot="activator">{{event.title}}</div>
                 <h2 style="text-transform: uppercase;">{{event.title}}</h2>
                 <p>{{event.description}}</p>
               </v-tooltip>
@@ -83,15 +83,15 @@ export default {
     eventStyle(event) {
       let marginLeft = "0px";
       let marginRight = "0px";
-      if (event.isStart) {
-        marginLeft = "20px";
-      }
-      if (event.isFinish) {
-        marginRight = "20px";
-      }
+      // if (event.isStart) {
+      //   marginLeft = "20px";
+      // }
+      // if (event.isFinish) {
+      //   marginRight = "20px";
+      // }
       return `background-color: ${
         event.color
-      }; height: 14px; margin-bottom: 5px; margin-left: ${marginLeft}; margin-right: ${marginRight}`;
+      }; font-size: 11px; text-transform: uppercase; color: #fff; padding: 4px 4px; font-weight: bold; margin-bottom: 5px; margin-left: ${marginLeft}; margin-right: ${marginRight}`;
     },
 
     getDayInfo(gridID) {
@@ -150,6 +150,7 @@ export default {
   cursor: pointer;
 }
 .event:hover {
-  background-color: #aaa !important;
+  background-color: #bbb !important;
+  color: #222 !important;
 }
 </style>

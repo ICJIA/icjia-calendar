@@ -117,7 +117,9 @@ const getDayMeta = function(gridID, store) {
   dayObj.day = moment(dayObj.fullDate).format("DD");
   dayObj.month = moment(dayObj.fullDate).format("MM");
   dayObj.year = moment(dayObj.fullDate).format("YYYY");
+  // add events
   dayObj.dayEvents = eventData[state.currentYear][dayOfYear];
+  // dayObj.dayEvents = [];
 
   return dayObj;
 };
