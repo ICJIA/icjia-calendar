@@ -26,6 +26,7 @@
       <div v-else style="height: 4px;"></div>
       <router-view/>
     </v-content>
+    <my-footer/>
   </v-app>
 </template>
 
@@ -33,11 +34,13 @@
 import { createCalendarHelper } from "@/utils";
 
 import Navbar from "@/components/Navbar";
+import MyFooter from "@/components/MyFooter";
 import { getDayMeta } from "@/utils";
 export default {
   name: "App",
   components: {
-    Navbar
+    Navbar,
+    MyFooter
   },
   created() {
     this.$store.dispatch("setApiData", require("@/api/index.json"));

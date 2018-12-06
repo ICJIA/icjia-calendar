@@ -97,7 +97,7 @@
             </v-list-tile-title>
           </v-list-tile>
           <v-list-tile>
-            <v-list-tile-title>
+            <v-list-tile-title @click="closeEventDrawer">
               <router-link to="/contact" class="link">Contact Support</router-link>
             </v-list-tile-title>
           </v-list-tile>
@@ -148,6 +148,9 @@ export default {
     },
     toggleEventDrawer() {
       this.$store.commit("TOGGLE_EVENT_DRAWER");
+    },
+    closeEventDrawer() {
+      this.$store.commit("CLOSE_EVENT_DRAWER");
     }
   },
 
