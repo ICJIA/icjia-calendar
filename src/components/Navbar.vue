@@ -75,7 +75,10 @@
       >
         <v-icon>event</v-icon>&nbsp;Add New Event
       </v-btn>-->
-      <v-btn icon>
+      <!-- <div v-if="isLoading">
+        <v-progress-circular indeterminate color="primary"></v-progress-circular>
+      </div>-->
+      <v-btn icon @click="reload">
         <v-icon>refresh</v-icon>
       </v-btn>
       <v-menu offset-y nudge-left="100">
@@ -125,6 +128,9 @@ export default {
     refresh() {
       console.log("refresh API here");
     },
+    reload() {
+      this.$store.dispatch("startLoader");
+    },
     debugApp() {
       this.$store.commit("TOGGLE_DEBUG", this.$store.state.debug);
     },
@@ -171,6 +177,9 @@ export default {
     },
     eventDrawer() {
       return this.$store.state.eventDrawer;
+    },
+    isLoading() {
+      return this.$store.getters.isLoading;
     },
     eventStatus() {
       if (this.$store.state.dayMeta.dayEvents.length > 0) {

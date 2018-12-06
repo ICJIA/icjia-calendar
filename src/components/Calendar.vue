@@ -9,7 +9,10 @@
           <v-btn fab dark small color="grey" @click="getNextMonth()">
             <v-icon dark>arrow_forward_ios</v-icon>
           </v-btn>&nbsp;&nbsp;
-          <h1 style="font-weight: 900">{{currentDate}}</h1>&nbsp;
+          <h1 style="font-weight: 900">{{currentDate}}</h1>
+
+          &nbsp;
+          &nbsp;&nbsp;
           <v-spacer></v-spacer>
           <v-btn dark @click="today" style="color: #eee !important">TODAY</v-btn>&nbsp;
         </header>
@@ -215,6 +218,9 @@ export default {
     },
     apiData() {
       return this.$store.getters.apiData;
+    },
+    isLoading() {
+      return this.$store.getters.isLoading;
     }
   }
 };
