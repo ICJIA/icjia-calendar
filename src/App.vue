@@ -43,7 +43,7 @@ export default {
       parseInt(new Date().getMonth()) + 1
     );
     this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
-    this.$store.dispatch("setMinYear", 2018);
+    this.$store.dispatch("setMinYear", 2014);
     this.$store.dispatch("setMaxYear", 2099);
     this.$store.dispatch(
       "setCalendarMeta",
