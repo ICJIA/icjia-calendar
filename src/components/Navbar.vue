@@ -66,17 +66,44 @@
       </router-link>
       <v-spacer></v-spacer>
 
-      <!-- <v-btn flat style="color: #333 !important" @click="refresh">
-        <v-icon>refresh</v-icon>&nbsp;Refresh
-      </v-btn>-->
-      <v-btn
+      <!-- <v-btn
         flat
         href="https://calendar.icjia-api.cloud/admin"
         target="_blank"
         style="color: #333 !important; font-size: 12px;"
       >
         <v-icon>event</v-icon>&nbsp;Add New Event
+      </v-btn>-->
+      <v-btn icon>
+        <v-icon>refresh</v-icon>
       </v-btn>
+      <v-menu offset-y nudge-left="100">
+        <v-btn icon slot="activator">
+          <v-icon>more_vert</v-icon>
+        </v-btn>
+        <v-list light>
+          <v-list-tile>
+            <v-list-tile-title>
+              <router-link to="/" class="link">View Calendar</router-link>
+            </v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-title>
+              <a
+                href="https://calendar.icjia-api.cloud/admin"
+                target="_blank"
+                class="link"
+              >Add New Event</a>
+            </v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-title>
+              <router-link to="/contact" class="link">Contact Support</router-link>
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+
       <v-toolbar-side-icon @click.stop="toggleEventDrawer"></v-toolbar-side-icon>
     </v-toolbar>
   </div>
@@ -171,6 +198,14 @@ export default {
 
 a {
   text-decoration: none;
+}
+
+a.link {
+  color: #333 !important;
+}
+
+a.link:hover {
+  color: #666 !important;
 }
 
 /* .debug.v-input--selection-controls.v-input .v-label {

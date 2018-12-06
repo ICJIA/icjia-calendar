@@ -17,9 +17,13 @@
           <a href="https://www.microsoft.com/en-us/windows/microsoft-edge">Microsoft Edge</a>.
         </h1>
         <h3 class="mt-4">Need help with the update?
-          <router-link to="/contact">Contact DoIT staff</router-link>&nbsp;for assistance.
+          <router-link to="/contact">Contact ICJIA Tecnical Support</router-link>&nbsp;for assistance.
         </h3>
       </div>
+      <div v-if="isLoading">
+        <v-progress-linear :indeterminate="true" style="padding: 0; margin: 0" height="4"></v-progress-linear>
+      </div>
+      <div v-else style="height: 4px;"></div>
       <router-view/>
     </v-content>
   </v-app>
@@ -89,6 +93,9 @@ export default {
     },
     apiData() {
       return this.$store.getters.apiData;
+    },
+    isLoading() {
+      return this.$store.getters.isLoading;
     }
   },
   data() {
@@ -111,6 +118,6 @@ a {
 }
 
 a {
-  color: #333 !important;
+  color: #ddd !important;
 }
 </style>

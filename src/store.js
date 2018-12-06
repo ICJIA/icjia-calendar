@@ -26,7 +26,8 @@ export default new Vuex.Store({
     apiData: {},
     drawer: false,
     dayEvents: [],
-    dayMeta: {}
+    dayMeta: {},
+    isLoading: false
   },
   mutations: {
     TOGGLE_DEBUG(state, debug) {
@@ -46,6 +47,12 @@ export default new Vuex.Store({
     },
     SET_CALENDAR_META(state, calendarMeta) {
       state.calendarMeta = calendarMeta;
+    },
+    START_LOADER(state) {
+      state.isLoading = true;
+    },
+    STOP_LOADER(state) {
+      state.isLoading = false;
     },
 
     SET_VISIBLE_EVENTS(state, visibleEvents) {
@@ -107,6 +114,12 @@ export default new Vuex.Store({
     },
     setDayMeta({ commit }, dayMeta) {
       commit("SET_DAY_META", dayMeta);
+    },
+    startLoader({ commit }) {
+      commit("START_LOADER");
+    },
+    stopLoader({ commit }) {
+      commit("STOP_LOADER");
     }
   },
   getters: {
@@ -123,6 +136,7 @@ export default new Vuex.Store({
     drawer: state => state.drawer,
     dayEvents: state => state.dayEvents,
     dayMeta: state => state.dayMeta,
-    eventDrawer: state => state
+    eventDrawer: state => state.eventDrawer,
+    isLoading: state => state.isLoading
   }
 });

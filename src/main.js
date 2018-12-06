@@ -9,8 +9,16 @@ Vue.use(browserDetect);
 
 Vue.config.productionTip = false;
 
-new Vue({
+const vm = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount("#app");
+
+router.beforeEach((routeTo, routeFrom, next) => {
+  vm.$store.dispatch("startLoader");
+  next();
+});
+router.afterEach(() => {
+  vm.$store.dispatch("stopLoader");
+});
