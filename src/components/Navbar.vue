@@ -83,6 +83,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import moment from "moment";
 import { EventBus } from "../event-bus.js";
 export default {
@@ -141,7 +142,7 @@ export default {
       return this.$store.state.eventDrawer;
     },
     eventStatus() {
-      if (this.$store.state.dayMeta.dayEvents) {
+      if (this.$store.state.dayMeta.dayEvents.length > 0) {
         return true;
       } else {
         return false;

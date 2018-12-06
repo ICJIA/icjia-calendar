@@ -44,7 +44,7 @@ export default {
     );
     this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
     this.$store.dispatch("setMinYear", 2018);
-    this.$store.dispatch("setMaxYear", 2021);
+    this.$store.dispatch("setMaxYear", 2099);
     this.$store.dispatch(
       "setCalendarMeta",
       createCalendarHelper(this.minYear, this.maxYear)

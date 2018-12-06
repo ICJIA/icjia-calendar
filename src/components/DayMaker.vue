@@ -28,29 +28,36 @@
         </v-flex>
       </v-layout>
     </v-bottom-sheet>
-
-    <li @click="getDayInfo(gridID)" class="grid">
-      <span style="width: 100% !important;" :class="gridBackground()">
-        <div>{{dayObj.day}}</div>
-        <div v-for="(event, index) in dayObj.dayEvents" :key="index">
-          <div v-for="(isVisible, index) in visibleEvents" :key="index">
-            <div v-if="event.color === isVisible">
-              <v-tooltip top open-delay="50">
-                <div :style="eventStyle(event)" class="event" slot="activator">{{event.title}}</div>
-                <h2 style="text-transform: uppercase;">{{event.title}}</h2>
-                <p>{{event.description}}</p>
-              </v-tooltip>
+    <div v-if="dayObj.year >=this.minYear && dayObj.year <= this.maxYear">
+      <li @click="getDayInfo(gridID)" class="grid">
+        <span style="width: 100% !important;" :class="gridBackground()">
+          <div>{{dayObj.day}}</div>
+          <div v-for="(event, index) in dayObj.dayEvents" :key="index">
+            <div v-for="(isVisible, index) in visibleEvents" :key="index">
+              <div v-if="event.color === isVisible">
+                <v-tooltip top open-delay="50">
+                  <div :style="eventStyle(event)" class="event" slot="activator">{{event.title}}</div>
+                  <h2 style="text-transform: uppercase;">{{event.title}}</h2>
+                  <p>{{event.description}}</p>
+                </v-tooltip>
+              </div>
             </div>
           </div>
-        </div>
-        <div v-if="debug" style="font-size: 10px;">{{dayObj}}</div>
-      </span>
-    </li>
+          <div v-if="debug" style="font-size: 10px;">{{dayObj}}</div>
+        </span>
+      </li>
+    </div>
+    <div v-else>
+      <li>
+        <span style="width: 100% !important; background-color: #888"></span>
+      </li>
+    </div>
   </div>
 </template>
 
 <script>
 import { getDayMeta } from "@/utils";
+import _ from "lodash";
 
 export default {
   props: {
@@ -101,7 +108,11 @@ export default {
       this.$store.dispatch("setCurrentMonth", meta.month);
       this.$store.dispatch("setCurrentYear", meta.year);
       let noEvents = [];
-      if (this.apiData[meta.year][meta.dayOfYear]) {
+
+      if (
+        _.has(this.apiData, this.currentYear) &&
+        _.has(this.apiData[this.currentYear], meta.dayOfYear)
+      ) {
         this.$store.dispatch(
           "setDayEvents",
           this.apiData[meta.year][meta.dayOfYear]
@@ -139,6 +150,13 @@ export default {
     },
     visibleEvents() {
       return this.$store.getters.visibleEvents;
+    },
+    isWithinMinMax() {
+      if (this.currentYear >= this.minYear) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   watch: {}

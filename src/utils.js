@@ -1,4 +1,5 @@
 import moment from "moment";
+import _ from "lodash";
 
 const findDayOfYear = function(date) {
   var oneDay = 1000 * 60 * 60 * 24; // A day in milliseconds
@@ -118,7 +119,22 @@ const getDayMeta = function(gridID, store) {
   dayObj.month = moment(dayObj.fullDate).format("MM");
   dayObj.year = moment(dayObj.fullDate).format("YYYY");
   // add events
-  dayObj.dayEvents = eventData[state.currentYear][dayOfYear];
+
+  // console.log(
+  //   "has day: ",
+  //   dayOfYear,
+  //   _.has(eventData[state.currentYear], dayOfYear)
+  // );
+
+  if (
+    _.has(eventData, state.currentYear) &&
+    _.has(eventData[state.currentYear], dayOfYear)
+  ) {
+    dayObj.dayEvents = eventData[state.currentYear][dayOfYear];
+  } else {
+    dayObj.dayEvents = [];
+  }
+
   // dayObj.dayEvents = [];
 
   return dayObj;

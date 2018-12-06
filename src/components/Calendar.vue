@@ -75,6 +75,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 const moment = require("moment");
 
 import _ from "lodash";
@@ -175,10 +176,11 @@ export default {
           "setDayEvents",
           this.apiData[meta.year][meta.dayOfYear]
         );
+        this.$store.commit("OPEN_EVENT_DRAWER");
       } else {
         this.$store.dispatch("setDayEvents", noEvents);
+        this.$store.commit("OPEN_EVENT_DRAWER");
       }
-      this.$store.commit("OPEN_EVENT_DRAWER");
     }
   },
   computed: {
