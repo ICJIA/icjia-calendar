@@ -48,7 +48,7 @@ const createCalendarHelper = function(startYear, endYear) {
         startGridNumber = startGridNumber + totalDays;
       }
       obj.startGridNumber = startGridNumber;
-      if (obj.startDayOfWeek > 3) {
+      if (obj.startDayOfWeek > 4) {
         gridSize = 42;
       } else {
         gridSize = 35;

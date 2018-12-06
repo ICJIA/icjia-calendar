@@ -11,7 +11,7 @@
           </v-btn>&nbsp;&nbsp;
           <h1 style="font-weight: 900">{{currentDate}}</h1>&nbsp;
           <v-spacer></v-spacer>
-          <v-btn dark @click.native="today" style="color: #eee !important">TODAY</v-btn>&nbsp;
+          <v-btn dark @click="today" style="color: #eee !important">TODAY</v-btn>&nbsp;
         </header>
       </v-flex>
 
@@ -176,10 +176,10 @@ export default {
           "setDayEvents",
           this.apiData[meta.year][meta.dayOfYear]
         );
-        this.$store.commit("OPEN_EVENT_DRAWER");
+        this.$store.commit("TOGGLE_EVENT_DRAWER");
       } else {
         this.$store.dispatch("setDayEvents", noEvents);
-        this.$store.commit("OPEN_EVENT_DRAWER");
+        this.$store.commit("TOGGLE_EVENT_DRAWER");
       }
     }
   },

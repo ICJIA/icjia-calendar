@@ -17,6 +17,7 @@
       fixed
       clipped
       app
+      stateless
       right
       disable-resize-watcher
       width="325"
