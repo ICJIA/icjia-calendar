@@ -179,24 +179,6 @@ export default {
       "setCalendarMeta",
       createCalendarHelper(this.minYear, this.maxYear)
     );
-
-    // auto-populate eventDrawer with today's info
-    // let gridID =
-    //   this.calendarMeta[this.currentYear][this.currentMonth - 1]
-    //     .startDayOfWeek + this.currentDay;
-
-    // let meta = getDayMeta(gridID, this.$store);
-    // this.$store.dispatch("setDayMeta", meta);
-    // let noEvents = [];
-
-    // if (this.apiData["2018"]["341"]) {
-    //   this.$store.dispatch(
-    //     "setDayEvents",
-    //     this.apiData[meta.year][meta.dayOfYear]
-    //   );
-    // } else {
-    //   this.$store.dispatch("setDayEvents", noEvents);
-    // }
   },
   methods: {},
   computed: {
@@ -224,9 +206,6 @@ export default {
     isLoading() {
       return this.$store.getters.isLoading;
     }
-  },
-  data() {
-    return {};
   }
 };
 </script>

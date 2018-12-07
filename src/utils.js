@@ -118,13 +118,6 @@ const getDayMeta = function(gridID, store) {
   dayObj.day = moment(dayObj.fullDate).format("DD");
   dayObj.month = moment(dayObj.fullDate).format("MM");
   dayObj.year = moment(dayObj.fullDate).format("YYYY");
-  // add events
-
-  // console.log(
-  //   "has day: ",
-  //   dayOfYear,
-  //   _.has(eventData[state.currentYear], dayOfYear)
-  // );
 
   if (
     _.has(eventData, dayObj.year) &&
@@ -134,8 +127,6 @@ const getDayMeta = function(gridID, store) {
   } else {
     dayObj.dayEvents = [];
   }
-
-  // dayObj.dayEvents = [];
 
   return dayObj;
 };
