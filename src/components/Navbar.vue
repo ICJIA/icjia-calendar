@@ -182,7 +182,7 @@ export default {
       return this.$store.getters.isLoading;
     },
     eventStatus() {
-      if (this.$store.state.dayMeta.dayEvents.length > 0) {
+      if (this.$store.state.dayMeta.dayEvents) {
         return true;
       } else {
         return false;

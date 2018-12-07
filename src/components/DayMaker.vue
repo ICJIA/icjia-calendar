@@ -38,7 +38,7 @@
                 <v-tooltip top open-delay="50" max-width="400">
                   <div :style="eventStyle(event)" class="event" slot="activator">{{event.title}}</div>
                   <h2 style="text-transform: uppercase;">{{event.title}}</h2>
-                  <div>{{event.description}}</div>
+                  <div v-html="event.excerpt"></div>
                 </v-tooltip>
               </div>
             </div>
@@ -68,6 +68,7 @@ export default {
       type: Object
     }
   },
+
   data() {
     return {
       truncateAfter: 15,
@@ -87,6 +88,7 @@ export default {
         return "grey lighten-3";
       }
     },
+
     eventStyle(event) {
       let marginLeft = "0px";
       let marginRight = "0px";

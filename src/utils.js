@@ -63,7 +63,7 @@ const createCalendarHelper = function(startYear, endYear) {
 };
 
 const stringTruncate = function(str, length) {
-  var dots = str.length > length ? "..." : "";
+  let dots = str.length > length ? "..." : "";
   return str.substring(0, length) + dots;
 };
 
