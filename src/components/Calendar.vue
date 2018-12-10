@@ -9,9 +9,7 @@
           <v-btn fab dark small color="grey" @click="getNextMonth()">
             <v-icon dark>arrow_forward_ios</v-icon>
           </v-btn>&nbsp;&nbsp;
-          <h1 style="font-weight: 900">{{currentDate}}</h1>
-
-          &nbsp;
+          <h1 style="font-weight: 900">{{currentDate}}</h1>&nbsp;
           &nbsp;&nbsp;
           <v-spacer></v-spacer>
           <v-btn dark @click="today" style="color: #eee !important">TODAY</v-btn>&nbsp;
@@ -61,15 +59,19 @@
               style="border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 15px;"
             >Debug:</h2>
 
-            <h4>visibleEvents:</h4>
-            <div>{{this.$store.state.visibleEvents}}</div>
-            <h4>dayEvents:</h4>
-            <div>{{$store.getters.dayEvents}}</div>
-            <h4>calendarMeta:</h4>
-            <div>{{this.calendarMeta}}</div>
-
+            <!-- <h4>visibleEvents:</h4>
+            <div>
+              <tree-view :data="this.$store.state.visibleEvents" :options="{maxDepth: 3}"></tree-view>
+            </div>-->
+            <!-- <h4>dayEvents:</h4>
+            <div>
+              <tree-view :data="$store.getters.dayEvents" :options="{maxDepth: 3}"></tree-view>
+            </div>-->
             <h4>api:</h4>
-            <div>{{$store.getters.apiData}}</div>
+
+            <div>
+              <tree-view :data="$store.getters.apiData" :options="{maxDepth: 3}"></tree-view>
+            </div>
           </div>
         </v-flex>
       </v-layout>

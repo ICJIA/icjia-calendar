@@ -7,6 +7,9 @@ import store from "./store";
 import browserDetect from "vue-browser-detect-plugin";
 Vue.use(browserDetect);
 
+import TreeView from "vue-json-tree-view";
+Vue.use(TreeView);
+
 Vue.config.productionTip = false;
 
 const vm = new Vue({

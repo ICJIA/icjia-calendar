@@ -43,7 +43,12 @@
               </div>
             </div>
           </div>
-          <div v-if="debug" style="font-size: 10px;">{{dayObj}}</div>
+          <div v-if="debug" style="font-size: 10px;">
+            Day: {{dayObj.gridID}}
+            <br>
+
+            Day of Year: {{dayObj.dayOfYear}}
+          </div>
         </span>
       </li>
     </div>
@@ -92,12 +97,7 @@ export default {
     eventStyle(event) {
       let marginLeft = "0px";
       let marginRight = "0px";
-      // if (event.isStart) {
-      //   marginLeft = "20px";
-      // }
-      // if (event.isFinish) {
-      //   marginRight = "20px";
-      // }
+
       return `background-color: ${
         event.color
       }; font-size: 11px; text-transform: uppercase; color: #fff; padding: 4px 4px; font-weight: bold; margin-bottom: 5px; margin-left: ${marginLeft}; margin-right: ${marginRight}`;

@@ -2,8 +2,13 @@
   <div>
     <v-navigation-drawer v-model="drawer" fixed clipped app disable-resize-watcher width="250">
       <v-list class="pl-3 pr-3 mt-5">
-        <v-list-tile v-for="color in this.$store.state.appColors" :key="color">
-          <v-switch :label="`${color}`" @click.native="toggleEvents(color)" input-value="true"></v-switch>
+        <v-list-tile v-for="(category, index) in config.categories" :key="index">
+          <!-- <v-switch :label="`${color}`" @click.native="toggleEvents(color)" input-value="true"></v-switch> -->
+          <v-switch
+            :label="`${category.name}`"
+            @click.native="toggleEvents(category.color)"
+            input-value="true"
+          ></v-switch>
         </v-list-tile>
         <v-divider></v-divider>
 
@@ -41,19 +46,9 @@
 
         <div v-if="debug" class="pl-3 pr-3 mt-4">
           <strong>Day Meta:</strong>
-          {{this.$store.state.dayMeta}}
+          <tree-view :data="this.$store.state.dayMeta" :options="{maxDepth: 3}"></tree-view>
+
           <br>
-          <div class="mt-3">
-            <strong>Vuex data:</strong>
-            <br>
-            currentYear: {{this.$store.state.currentYear}}
-            <br>
-            currentMonth: {{this.$store.state.currentMonth}}
-            <br>
-            currentDay: {{this.$store.state.currentDay}}
-            <br>
-            debug: {{this.$store.state.debug}}
-          </div>
         </div>
       </v-list>
     </v-navigation-drawer>
@@ -117,8 +112,11 @@
 /* eslint-disable */
 import moment from "moment";
 import { EventBus } from "../event-bus.js";
+import { config } from "@/config";
 export default {
-  mounted() {},
+  mounted() {
+    console.log(this.config);
+  },
   methods: {
     pushRoute(route) {
       this.drawer = true;
@@ -198,7 +196,8 @@ export default {
   data() {
     return {
       drawer: false,
-      expand: false
+      expand: false,
+      config: config
     };
   }
 };

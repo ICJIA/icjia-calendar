@@ -48,105 +48,89 @@ export default {
   },
   data() {
     return {
-      events: null
+      events: {}
     };
   },
   created() {
-    //this.$store.dispatch("setApiData", require("@/api/index.json"));
-    let events = {};
-    this.$store.dispatch("startLoader");
-    console.log(config);
-    EventService.getEvents().then(response => {
-      response.data.forEach(x => {
-        let endYear,
-          isLeapYear,
-          startYear,
-          dayOfYearStart,
-          dayOfYearEnd,
-          duration,
-          startDate,
-          endDate,
-          modifier;
+    this.init();
+    this.getEvents();
+  },
+  methods: {
+    init() {
+      this.$store.dispatch("startLoader");
+      this.$store.dispatch(
+        "setCurrentYear",
+        parseInt(new Date().getFullYear())
+      );
+      this.$store.dispatch(
+        "setCurrentMonth",
+        parseInt(new Date().getMonth()) + 1
+      );
+      this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
+      this.$store.dispatch("setMinYear", 2014);
+      this.$store.dispatch("setMaxYear", 2099);
+      this.$store.dispatch(
+        "setCalendarMeta",
+        createCalendarHelper(this.minYear, this.maxYear)
+      );
+    },
+    getEvents() {
+      EventService.getEvents().then(response => {
+        this.createEvents(response);
+        this.$store.dispatch("setApiData", this.events);
+        this.$store.dispatch("stopLoader");
+      });
+    },
+    createEvents(response) {
+      response.data.forEach(e => {
+        let eventObj = {};
+        let start, end, duration;
+        start = moment(e.start);
+        end = moment(e.end);
 
-        startYear = moment(x.start).year();
-        startDate = moment(x.start).format("YYYY-MM-DD");
-        endDate = moment(x.end).format("YYYY-MM-DD");
+        duration = end.diff(start, "days");
+        eventObj.title = e.title.trim();
+        eventObj.start = e.start;
+        eventObj.end = e.end;
+        eventObj.duration = duration;
+        eventObj.description = e.description;
+        eventObj.excerpt = stringTruncate(e.description, 150);
+        let colorIndex = _.findIndex(config.categories, {
+          name: e.category.trim()
+        });
 
-        dayOfYearStart = moment(startDate).dayOfYear() + 1;
-        isLeapYear = moment(startDate).isLeapYear();
-        isLeapYear ? (modifier = 366) : (modifier = 365);
-        if (x.end) {
-          endYear = moment(endDate).year();
-          dayOfYearEnd = moment(endDate).dayOfYear() + 1;
-        } else {
-          endYear = moment(startDate).year();
-          dayOfYearEnd = moment(startDate).dayOfYear() + 1;
-          endDate = moment(x.start).format("YYYY-MM-DD");
-        }
-        duration = dayOfYearEnd - dayOfYearStart;
-        if (isLeapYear && duration < 0) {
-          duration = duration + 366;
-        }
+        eventObj.color = config.categories[colorIndex].color;
 
-        if (!isLeapYear && duration < 0) {
-          duration = duration + 365;
-        }
-        // console.log(
-        //   `${
-        //     x.title
-        //   } --  start: year: ${startYear} // day ${dayOfYearStart} // isLeapYear: ${isLeapYear} // end: year: ${endYear} //day ${dayOfYearEnd} // duration: ${duration} // category: ${
-        //     x.category
-        //   } // ${startDate}`
-        // );
-
-        // console.log(x.start, dayOfYearStart, x.end, dayOfYearEnd);
-        if (!_.has(events, startYear)) {
-          events[startYear] = {};
-        }
-
-        if (!_.has(events, endYear)) {
-          events[endYear] = {};
-        }
-
-        if (!_.has(events[startYear], dayOfYearStart)) {
-          events[startYear][dayOfYearStart] = [];
-        }
-
-        if (!_.has(events[endYear], dayOfYearEnd)) {
-          events[endYear][dayOfYearEnd] = [];
-        }
-
-        let event = {};
-        event.title = x.title.trim();
-        event.start = startDate;
-        event.end = endDate;
-        event.category = x.category.trim();
-        event.description = x.description;
-        event.dayOfYearStart = dayOfYearStart;
-        event.dayOfYearEnd = dayOfYearEnd;
-        event.color = config.categories[event.category].color;
-        event.excerpt = stringTruncate(x.description, 250);
-
+        eventObj.category = e.category.trim();
         if (duration === 0) {
-          event.duration = 1;
-          events[startYear][dayOfYearStart].push(event);
+          eventObj.duration = 1;
+          let dayOfYear = start.dayOfYear();
+          if (!_.has(this.events, start.format("YYYY"))) {
+            this.events[start.format("YYYY")] = {};
+          }
+          if (!_.has(this.events[start.format("YYYY")], dayOfYear)) {
+            this.events[start.format("YYYY")][dayOfYear] = [];
+          }
+          this.events[start.format("YYYY")][dayOfYear].push(eventObj);
         } else {
           for (let d = 0; d <= duration; d++) {
-            event.duration = duration;
-            let day = dayOfYearStart + d;
-            if (!_.has(events[startYear], dayOfYearStart + d)) {
-              events[startYear][day] = [];
-              events[startYear][day].push(event);
-            } else {
-              events[startYear][day].push(event);
+            let workingDate = start.add(1, "days");
+            let dayOfYear = moment(workingDate).dayOfYear();
+
+            eventObj.duration = duration + 1;
+            eventObj.year = moment(workingDate).format("YYYY");
+            if (!_.has(this.events, eventObj.year)) {
+              this.events[eventObj.year] = {};
             }
-            //TODO: Events that span years
+            if (!_.has(this.events[eventObj.year], dayOfYear)) {
+              this.events[eventObj.year][dayOfYear] = [];
+            }
+            this.events[eventObj.year][dayOfYear].push(eventObj);
           }
         }
       });
-
-      this.$store.dispatch("setApiData", events);
-
+    },
+    setToday() {
       // auto-populate eventDrawer with today's info
       let gridID =
         this.calendarMeta[this.currentYear][this.currentMonth - 1]
@@ -156,7 +140,7 @@ export default {
       this.$store.dispatch("setDayMeta", meta);
       let noEvents = [];
 
-      if (events[meta.year][meta.dayOfYear]) {
+      if (this.events[meta.year][meta.dayOfYear]) {
         this.$store.dispatch(
           "setDayEvents",
           this.apiData[meta.year][meta.dayOfYear]
@@ -164,23 +148,8 @@ export default {
       } else {
         this.$store.dispatch("setDayEvents", noEvents);
       }
-      this.$store.dispatch("stopLoader");
-    });
-
-    this.$store.dispatch("setCurrentYear", parseInt(new Date().getFullYear()));
-    this.$store.dispatch(
-      "setCurrentMonth",
-      parseInt(new Date().getMonth()) + 1
-    );
-    this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
-    this.$store.dispatch("setMinYear", 2014);
-    this.$store.dispatch("setMaxYear", 2099);
-    this.$store.dispatch(
-      "setCalendarMeta",
-      createCalendarHelper(this.minYear, this.maxYear)
-    );
+    }
   },
-  methods: {},
   computed: {
     minYear() {
       return this.$store.getters.minYear;

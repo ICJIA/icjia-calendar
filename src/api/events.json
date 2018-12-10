@@ -1,0 +1,110 @@
+[
+  {
+    "title": "Test event",
+    "start": "2018-12-06T00:00:00.000Z",
+    "end": "2018-12-14T00:00:00.000Z",
+    "category": "cat1",
+    "description": "## Lorem ipsum dolor sit amet\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel neque sit amet justo pulvinar molestie. Proin at tempor tortor, eu auctor libero. Pellentesque justo ante, auctor quis consectetur a, finibus imperdiet nisl. Etiam nec sagittis ante, eu feugiat est. Curabitur lobortis mollis sem, tincidunt tincidunt magna ultricies eu. Nulla at tempor ex. Sed scelerisque venenatis consequat. Proin erat justo, imperdiet ut massa sit amet, porttitor molestie risus. In pretium dolor et interdum tristique. Aenean consectetur lacus ut dolor commodo faucibus. Vestibulum et ligula sed est ullamcorper hendrerit.\n\nDonec ornare eros eu risus viverra euismod. Praesent tempor enim eu nulla feugiat, et blandit neque consectetur. Mauris non hendrerit massa. Nulla ornare felis non magna sagittis, vel dapibus justo sagittis. In fringilla efficitur rhoncus. Pellentesque posuere, nunc ac tincidunt venenatis, lacus leo tristique ex, et venenatis lectus nunc convallis odio. Proin tristique leo tortor, vel varius nisi porta ut.",
+    "_id": "5c093afbdc30205b47915ae7",
+    "createdAt": "2018-12-06T15:06:35.459Z",
+    "updatedAt": "2018-12-07T14:27:11.139Z",
+    "__v": 0,
+    "id": "5c093afbdc30205b47915ae7"
+  },
+  {
+    "title": "Event 2",
+    "start": "2018-12-17T00:00:00.000Z",
+    "end": "2018-12-20T00:00:00.000Z",
+    "category": "cat3",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel neque sit amet justo pulvinar molestie. Proin at tempor tortor, eu auctor libero. Pellentesque justo ante, auctor quis consectetur a, finibus imperdiet nisl. Etiam nec sagittis ante, eu feugiat est. Curabitur lobortis mollis sem, tincidunt tincidunt magna ultricies eu. Nulla at tempor ex. Sed scelerisque venenatis consequat. Proin erat justo, imperdiet ut massa sit amet, porttitor molestie risus. In pretium dolor et interdum tristique. Aenean consectetur lacus ut dolor commodo faucibus. Vestibulum et ligula sed est ullamcorper hendrerit.\n\nDonec ornare eros eu risus viverra euismod. Praesent tempor enim eu nulla feugiat, et blandit neque consectetur. Mauris non hendrerit massa. Nulla ornare felis non magna sagittis, vel dapibus justo sagittis. In fringilla efficitur rhoncus. Pellentesque posuere, nunc ac tincidunt venenatis, lacus leo tristique ex, et venenatis lectus nunc convallis odio. Proin tristique leo tortor, vel varius nisi porta ut.",
+    "_id": "5c093b6fdc30205b47915ae8",
+    "createdAt": "2018-12-06T15:08:31.296Z",
+    "updatedAt": "2018-12-07T14:27:17.360Z",
+    "__v": 0,
+    "id": "5c093b6fdc30205b47915ae8"
+  },
+  {
+    "title": "Event 3",
+    "start": "2018-12-13T00:00:00.000Z",
+    "end": "2018-12-13T00:00:00.000Z",
+    "category": "cat4",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pretium, nisi vel gravida ornare, magna turpis tincidunt urna, eu lobortis erat massa eget libero. Nullam vel suscipit erat. Fusce ac nunc congue ligula eleifend sagittis quis eget nisl. Proin rutrum est eros, vitae facilisis dui ultrices vel. Aenean non velit id eros finibus varius bibendum sed arcu. Integer blandit ultrices mi, non gravida mauris. Nulla leo nisl, dictum condimentum nunc eget, congue gravida quam. Phasellus vel posuere libero. Vestibulum nec ornare nunc. Nam eu diam neque. Maecenas rutrum neque eget neque efficitur, sit amet lacinia mauris semper. Praesent sodales purus vitae facilisis eleifend. Phasellus maximus lectus vestibulum lacus fermentum ultrices. Cras rutrum non ex sed rhoncus.\n\nCras blandit in nisl nec commodo. Donec vehicula mauris in lorem sagittis eleifend. Duis nec elit tempor, congue elit a, tristique mi. Quisque euismod lectus a odio gravida dapibus ut quis ligula. Cras pulvinar tellus facilisis sapien imperdiet gravida. Nulla pretium lorem felis, sit amet egestas tellus iaculis ut. Sed dolor mauris, pretium sed dapibus vehicula, scelerisque eget velit. Integer a tortor sed ipsum vulputate sagittis. Morbi aliquet diam commodo ex pretium tincidunt. In hac habitasse platea dictumst.\n\nMorbi ut lacinia turpis. Nunc volutpat hendrerit fermentum. Mauris commodo quam erat, nec vehicula purus malesuada sollicitudin. Maecenas tempus molestie sem. Sed elit mi, vestibulum vitae eleifend sed, venenatis non elit. Integer elementum diam id est mollis varius. Aenean pulvinar, est quis euismod tincidunt, magna leo molestie turpis, et egestas tortor lorem eu ligula. Proin porta elit ut enim convallis mattis. Sed maximus mattis magna eget euismod. Ut porta placerat nibh, et pellentesque lectus rutrum sed. Donec id tempor orci. Aliquam fermentum, enim a malesuada fermentum, dui odio congue libero, quis auctor nibh metus quis leo. Maecenas non nisl ac libero tincidunt viverra in vitae enim. Praesent auctor, libero eget consequat finibus, lacus orci vulputate odio, eu accumsan nulla neque condimentum magna.",
+    "_id": "5c09757014c0035bce5aeb46",
+    "createdAt": "2018-12-06T19:16:00.946Z",
+    "updatedAt": "2018-12-07T14:35:45.890Z",
+    "__v": 0,
+    "id": "5c09757014c0035bce5aeb46"
+  },
+  {
+    "title": "Event 4",
+    "start": "2018-12-04T00:00:00.000Z",
+    "end": "2018-12-04T00:00:00.000Z",
+    "category": "cat5",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pretium, nisi vel gravida ornare, magna turpis tincidunt urna, eu lobortis erat massa eget libero. Nullam vel suscipit erat. Fusce ac nunc congue ligula eleifend sagittis quis eget nisl. Proin rutrum est eros, vitae facilisis dui ultrices vel. Aenean non velit id eros finibus varius bibendum sed arcu. Integer blandit ultrices mi, non gravida mauris. Nulla leo nisl, dictum condimentum nunc eget, congue gravida quam. Phasellus vel posuere libero. Vestibulum nec ornare nunc. Nam eu diam neque. Maecenas rutrum neque eget neque efficitur, sit amet lacinia mauris semper. Praesent sodales purus vitae facilisis eleifend. Phasellus maximus lectus vestibulum lacus fermentum ultrices. Cras rutrum non ex sed rhoncus.\n\nCras blandit in nisl nec commodo. Donec vehicula mauris in lorem sagittis eleifend. Duis nec elit tempor, congue elit a, tristique mi. Quisque euismod lectus a odio gravida dapibus ut quis ligula. Cras pulvinar tellus facilisis sapien imperdiet gravida. Nulla pretium lorem felis, sit amet egestas tellus iaculis ut. Sed dolor mauris, pretium sed dapibus vehicula, scelerisque eget velit. Integer a tortor sed ipsum vulputate sagittis. Morbi aliquet diam commodo ex pretium tincidunt. In hac habitasse platea dictumst.\n\nMorbi ut lacinia turpis. Nunc volutpat hendrerit fermentum. Mauris commodo quam erat, nec vehicula purus malesuada sollicitudin. Maecenas tempus molestie sem. Sed elit mi, vestibulum vitae eleifend sed, venenatis non elit. Integer elementum diam id est mollis varius. Aenean pulvinar, est quis euismod tincidunt, magna leo molestie turpis, et egestas tortor lorem eu ligula. Proin porta elit ut enim convallis mattis. Sed maximus mattis magna eget euismod. Ut porta placerat nibh, et pellentesque lectus rutrum sed. Donec id tempor orci. Aliquam fermentum, enim a malesuada fermentum, dui odio congue libero, quis auctor nibh metus quis leo. Maecenas non nisl ac libero tincidunt viverra in vitae enim. Praesent auctor, libero eget consequat finibus, lacus orci vulputate odio, eu accumsan nulla neque condimentum magna.",
+    "_id": "5c0975bf14c0035bce5aeb47",
+    "createdAt": "2018-12-06T19:17:19.760Z",
+    "updatedAt": "2018-12-07T14:35:37.186Z",
+    "__v": 0,
+    "id": "5c0975bf14c0035bce5aeb47"
+  },
+  {
+    "title": "Test Event 7",
+    "start": "2018-12-21T00:00:00.000Z",
+    "end": "2018-12-21T00:00:00.000Z",
+    "category": "cat4",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi faucibus risus elit, vitae rutrum justo congue mattis. Donec non semper dolor. Phasellus tempus nisl sed odio cursus pellentesque. Morbi congue lorem odio, sed eleifend magna vehicula non. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam auctor laoreet nunc, eget elementum tortor viverra at. Sed dignissim dictum tortor et vulputate. Fusce nec velit tellus. Sed luctus posuere nulla, eu aliquam neque pellentesque id. Sed nec sapien vehicula, ultricies ligula ut, varius lectus. Phasellus quis tortor laoreet, placerat lacus tincidunt, venenatis justo. Morbi semper ut augue et elementum. Suspendisse potenti. Mauris sit amet diam sapien.\n\nUt et purus nisi. Cras condimentum eleifend lacus nec viverra. Vivamus vehicula dolor non tincidunt tempor. Donec vehicula orci dui, eu pharetra massa consequat eget. Fusce condimentum nunc nec tincidunt vestibulum. Cras non laoreet ipsum. Sed eu porta leo, ut placerat risus. Mauris cursus urna id suscipit mollis. Donec dignissim feugiat odio eget sagittis.",
+    "_id": "5c0a8f98b2750308e6e890fa",
+    "createdAt": "2018-12-07T15:19:52.187Z",
+    "updatedAt": "2018-12-07T15:19:52.197Z",
+    "__v": 0,
+    "id": "5c0a8f98b2750308e6e890fa"
+  },
+  {
+    "title": "Small conference room",
+    "start": "2018-12-04T00:00:00.000Z",
+    "end": "2018-12-05T00:00:00.000Z",
+    "category": " cat3",
+    "description": "## header 1\nsad.aksdsaldkadd\n- sdf\n- sdfsdf",
+    "_id": "5c0aa4b7b2750308e6e890fb",
+    "createdAt": "2018-12-07T16:49:59.398Z",
+    "updatedAt": "2018-12-07T16:49:59.402Z",
+    "__v": 0,
+    "id": "5c0aa4b7b2750308e6e890fb"
+  },
+  {
+    "title": "Small conference room 2",
+    "start": "2019-01-06T00:00:00.000Z",
+    "end": "2019-01-06T00:00:00.000Z",
+    "category": "cat3",
+    "description": "## header 1\nsad.aksdsaldkadd\n- sdf\n- sdfsdf",
+    "_id": "5c0aa4b7b2750308e6e8ss90fb",
+    "createdAt": "2018-12-07T16:49:59.398Z",
+    "updatedAt": "2018-12-07T16:49:59.402Z",
+    "__v": 0,
+    "id": "5c0aa4b7b2750308e6e8ss90fb"
+  },
+  {
+    "title": "Small conference room 3",
+    "start": "2018-12-06T00:00:00.000Z",
+    "end": "2018-12-10T00:00:00.000Z",
+    "category": "cat2",
+    "description": "## header 1\nsad.aksdsaldkadd\n- sdf\n- sdfsdf",
+    "_id": "445c0aa4b7b2750308e6e8ss90fb",
+    "createdAt": "2018-12-07T16:49:59.398Z",
+    "updatedAt": "2018-12-07T16:49:59.402Z",
+    "__v": 0,
+    "id": "445c0aa4b7b2750308e6e8ss90fb"
+  },
+  {
+    "title": "Small conference room 33333",
+    "start": "2018-12-30T00:00:00.000Z",
+    "end": "2019-01-01T00:00:00.000Z",
+    "category": "cat2",
+    "description": "## header 1\nsad.aksdsaldkadd\n- sdf\n- sdfsdf",
+    "_id": "445c0aa4b7b2750308e6e8ss90fb",
+    "createdAt": "2018-12-07T16:49:59.398Z",
+    "updatedAt": "2018-12-07T16:49:59.402Z",
+    "__v": 0,
+    "id": "445c0aa4b7b2750308e6e8ss90fb"
+  }
+]

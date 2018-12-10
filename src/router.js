@@ -16,20 +16,23 @@ const router = new Router({
     {
       path: "/sandbox",
       name: "sandbox",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Sandbox.vue")
     },
     {
       path: "/contact",
       name: "contact",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+
       component: () =>
         import(/* webpackChunkName: "contact" */ "./views/Contact.vue")
+    },
+    {
+      path: "/sandbox-2",
+      name: "sandbox2",
+
+      component: () =>
+        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox2.vue")
     }
   ]
 });

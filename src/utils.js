@@ -123,7 +123,7 @@ const getDayMeta = function(gridID, store) {
     _.has(eventData, dayObj.year) &&
     _.has(eventData[dayObj.year], dayOfYear)
   ) {
-    dayObj.dayEvents = eventData[state.currentYear][dayOfYear];
+    dayObj.dayEvents = eventData[year][dayOfYear];
   } else {
     dayObj.dayEvents = [];
   }
