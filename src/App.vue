@@ -40,6 +40,7 @@ import EventService from "@/services/EventService.js";
 import moment from "moment";
 import _ from "lodash";
 import { config } from "@/config";
+import { EventBus } from "@/event-bus.js";
 export default {
   name: "App",
   components: {
@@ -55,6 +56,11 @@ export default {
     this.$store.dispatch("startLoader");
     this.init();
     this.getEvents();
+    EventBus.$on("refresh", () => {
+      // this.init();
+      // this.getEvents();
+      console.log("refresh here");
+    });
   },
   methods: {
     init() {

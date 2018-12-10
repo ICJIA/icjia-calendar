@@ -58,15 +58,6 @@
             <h2
               style="border-bottom: 1px solid #ccc; padding-bottom: 8px; margin-bottom: 15px;"
             >Debug:</h2>
-
-            <!-- <h4>visibleEvents:</h4>
-            <div>
-              <tree-view :data="this.$store.state.visibleEvents" :options="{maxDepth: 3}"></tree-view>
-            </div>-->
-            <!-- <h4>dayEvents:</h4>
-            <div>
-              <tree-view :data="$store.getters.dayEvents" :options="{maxDepth: 3}"></tree-view>
-            </div>-->
             <h4>api:</h4>
 
             <div>
@@ -108,6 +99,9 @@ export default {
   },
   created() {
     // console.log("Config:", config);
+    EventBus.$on("refresh", () => {
+      console.log("redraw here");
+    });
   },
   mounted() {},
   methods: {

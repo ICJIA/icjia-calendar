@@ -125,6 +125,7 @@ export default {
     },
     refresh() {
       console.log("refresh API here");
+      window.location = "/";
     },
 
     debugApp() {
