@@ -1,18 +1,18 @@
 <template>
   <div>
     <v-navigation-drawer v-model="drawer" fixed clipped app disable-resize-watcher width="250">
-      <v-list class="pl-3 pr-3 mt-5">
+      <v-list class="pl-3 pr-3 mt-5 mb-5">
         <v-list-tile v-for="(category, index) in config.categories" :key="index">
-          <!-- <v-switch :label="`${color}`" @click.native="toggleEvents(color)" input-value="true"></v-switch> -->
-          <v-switch
+          <v-checkbox
+            style="font-size: 12px !important;"
             :label="`${category.name}`"
             @click.native="toggleEvents(category.color)"
+            :color="category.color"
             input-value="true"
-          ></v-switch>
+          ></v-checkbox>
         </v-list-tile>
-        <v-divider></v-divider>
 
-        <v-list-tile>
+        <v-list-tile class="mt-5">
           <v-switch label="Show Debug Info" @click.native="debugApp" class="debug"></v-switch>
         </v-list-tile>
       </v-list>
@@ -203,7 +203,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .nav-state {
   font-weight: 900;
 }
@@ -225,4 +225,10 @@ a.link:hover {
 
   font-size: 12px;
 } */
+
+.v-label {
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  color: #666 !important;
+}
 </style>

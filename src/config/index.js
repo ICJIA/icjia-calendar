@@ -1,13 +1,13 @@
 const config = {
   categories: [
-    { name: "cat1", color: "firebrick" },
+    { name: "Out of Office", color: "#B71C1C" },
     {
-      name: "cat2",
-      color: "orange"
+      name: "Site Visits",
+      color: "#6A1B9A"
     },
-    { name: "cat3", color: "mediumseagreen" },
-    { name: "cat4", color: "royalblue" },
-    { name: "cat5", color: "darkslategray" }
+    { name: "NOFO release or close dates", color: "#0D47A1" },
+    { name: "Grant start dates", color: "#4DB6AC" },
+    { name: "Federal application due dates", color: "#1B5E20" }
   ],
   theme: {
     light: {
@@ -18,7 +18,12 @@ const config = {
     },
     dark: {}
   },
-  app: {}
+  app: {
+    minYear: 2000,
+    maxYear: 2099,
+    baseURL: "https://calendar.icjia-api.cloud",
+    eventsRoute: "/events"
+  }
 };
 
 export { config };

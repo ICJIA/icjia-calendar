@@ -52,12 +52,12 @@ export default {
     };
   },
   created() {
+    this.$store.dispatch("startLoader");
     this.init();
     this.getEvents();
   },
   methods: {
     init() {
-      this.$store.dispatch("startLoader");
       this.$store.dispatch(
         "setCurrentYear",
         parseInt(new Date().getFullYear())
@@ -67,58 +67,68 @@ export default {
         parseInt(new Date().getMonth()) + 1
       );
       this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
-      this.$store.dispatch("setMinYear", 2014);
-      this.$store.dispatch("setMaxYear", 2099);
+      this.$store.dispatch("setMinYear", config.app.minYear);
+      this.$store.dispatch("setMaxYear", config.app.maxYear);
       this.$store.dispatch(
         "setCalendarMeta",
         createCalendarHelper(this.minYear, this.maxYear)
       );
     },
     getEvents() {
-      EventService.getEvents().then(response => {
-        this.createEvents(response);
-        this.$store.dispatch("setApiData", this.events);
-        this.$store.dispatch("stopLoader");
-      });
+      EventService.getEvents()
+        .then(response => {
+          this.createEvents(response);
+          this.$store.dispatch("setApiData", this.events);
+          this.$store.dispatch("stopLoader");
+        })
+        .catch(e => console.log(e));
     },
     createEvents(response) {
       response.data.forEach(e => {
         let eventObj = {};
         let start, end, duration;
-        start = moment(e.start);
-        end = moment(e.end);
+        start = moment.utc(e.start);
+        if (e.end) {
+          end = moment.utc(e.end);
+        } else {
+          end = end = moment.utc(e.start);
+        }
 
         duration = end.diff(start, "days");
         eventObj.title = e.title.trim();
         eventObj.start = e.start;
-        eventObj.end = e.end;
+        eventObj.end = end;
         eventObj.duration = duration;
         eventObj.description = e.description;
         eventObj.excerpt = stringTruncate(e.description, 150);
         let colorIndex = _.findIndex(config.categories, {
           name: e.category.trim()
         });
-
-        eventObj.color = config.categories[colorIndex].color;
+        try {
+          eventObj.color = config.categories[colorIndex].color;
+        } catch {
+          eventObj.color = "gray";
+        }
 
         eventObj.category = e.category.trim();
-        if (duration === 0) {
-          eventObj.duration = 1;
-          let dayOfYear = start.dayOfYear();
-          if (!_.has(this.events, start.format("YYYY"))) {
-            this.events[start.format("YYYY")] = {};
-          }
-          if (!_.has(this.events[start.format("YYYY")], dayOfYear)) {
-            this.events[start.format("YYYY")][dayOfYear] = [];
-          }
-          this.events[start.format("YYYY")][dayOfYear].push(eventObj);
-        } else {
-          for (let d = 0; d <= duration; d++) {
+
+        eventObj.duration;
+        let dayOfYear = moment.utc(e.start).dayOfYear();
+        eventObj.year = moment.utc(e.start).format("YYYY");
+        if (!_.has(this.events, start.format("YYYY"))) {
+          this.events[start.format("YYYY")] = {};
+        }
+        if (!_.has(this.events[start.format("YYYY")], dayOfYear)) {
+          this.events[start.format("YYYY")][dayOfYear] = [];
+        }
+        this.events[start.format("YYYY")][dayOfYear].push(eventObj);
+        if (duration > 0) {
+          for (let d = 0; d < duration; d++) {
             let workingDate = start.add(1, "days");
-            let dayOfYear = moment(workingDate).dayOfYear();
+            let dayOfYear = moment.utc(workingDate).dayOfYear();
 
             eventObj.duration = duration + 1;
-            eventObj.year = moment(workingDate).format("YYYY");
+            eventObj.year = moment.utc(workingDate).format("YYYY");
             if (!_.has(this.events, eventObj.year)) {
               this.events[eventObj.year] = {};
             }

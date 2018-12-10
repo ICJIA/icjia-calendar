@@ -1,4 +1,5 @@
 import axios from "axios";
+import { config } from "@/config";
 
 const apiClient = axios.create({
   baseURL: `https://calendar.icjia-api.cloud`,
@@ -11,6 +12,7 @@ const apiClient = axios.create({
 
 export default {
   getEvents() {
-    return apiClient.get("/events");
+    console.log("fetching from api...");
+    return apiClient.get(config.app.eventsRoute);
   }
 };

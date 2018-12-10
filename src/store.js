@@ -1,15 +1,13 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import { config } from "@/config";
 
 Vue.use(Vuex);
 
-const colors = [
-  "firebrick",
-  "orange",
-  "mediumseagreen",
-  "royalblue",
-  "darkslategray"
-];
+const colors = config.categories.map(cat => {
+  return cat.color;
+});
+console.log(config);
 
 export default new Vuex.Store({
   state: {

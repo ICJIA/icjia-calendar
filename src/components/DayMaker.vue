@@ -46,8 +46,9 @@
           <div v-if="debug" style="font-size: 10px;">
             Day: {{dayObj.gridID}}
             <br>
-
             Day of Year: {{dayObj.dayOfYear}}
+            <br>
+            Full date: {{fullDateFromDayOfYear(dayObj.dayOfYear).format('YYYY-MM-DD')}}
           </div>
         </span>
       </li>
@@ -63,6 +64,7 @@
 <script>
 import { getDayMeta } from "@/utils";
 import _ from "lodash";
+import moment from "moment";
 
 export default {
   props: {
@@ -92,6 +94,9 @@ export default {
       } else {
         return "grey lighten-3";
       }
+    },
+    fullDateFromDayOfYear(day) {
+      return moment().dayOfYear(day);
     },
 
     eventStyle(event) {
@@ -153,6 +158,7 @@ export default {
     visibleEvents() {
       return this.$store.getters.visibleEvents;
     },
+
     isWithinMinMax() {
       if (this.currentYear >= this.minYear) {
         return true;
