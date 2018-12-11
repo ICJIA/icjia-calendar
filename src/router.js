@@ -33,6 +33,20 @@ const router = new Router({
 
       component: () =>
         import(/* webpackChunkName: "sandbox" */ "./views/Sandbox2.vue")
+    },
+    {
+      path: "/sandbox-3",
+      name: "sandbox3",
+
+      component: () =>
+        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox3.vue")
+    },
+    {
+      path: "/sandbox-4",
+      name: "sandbox4",
+
+      component: () =>
+        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox4.vue")
     }
   ]
 });

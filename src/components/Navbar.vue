@@ -52,27 +52,16 @@
         </div>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar app>
+    <v-toolbar dark app color="indigo darken-1">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <router-link to="/" class="nav">
         <v-toolbar-title class="text-uppercase">
-          <span class style="color: #111; font-weight: 900">ILLINOIS</span> |
-          <span class="font-weight: 900" style="color: #25274D">{{navTitle}}</span>
+          <span class style="color: #fff; font-weight: 900">ILLINOIS</span> |
+          <span class="font-weight: 900" style="color: #eee">{{navTitle}}</span>
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
 
-      <!-- <v-btn
-        flat
-        href="https://calendar.icjia-api.cloud/admin"
-        target="_blank"
-        style="color: #333 !important; font-size: 12px;"
-      >
-        <v-icon>event</v-icon>&nbsp;Add New Event
-      </v-btn>-->
-      <!-- <div v-if="isLoading">
-        <v-progress-circular indeterminate color="primary"></v-progress-circular>
-      </div>-->
       <v-btn icon @click="refresh">
         <v-icon>refresh</v-icon>
       </v-btn>
@@ -211,14 +200,6 @@ export default {
 
 a {
   text-decoration: none;
-}
-
-a.link {
-  color: #333 !important;
-}
-
-a.link:hover {
-  color: #666 !important;
 }
 
 /* .debug.v-input--selection-controls.v-input .v-label {

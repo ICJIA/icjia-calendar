@@ -1,38 +1,30 @@
 <template>
   <div>
-    <v-toolbar light color="blue-grey lighten-5" class="mt-1">
-      <v-btn fab dark small color="grey accent-4" @click="getPreviousMonth()">
-        <v-icon dark>remove</v-icon>
-      </v-btn>
-      <v-btn fab dark small color="grey accent-4" @click="getNextMonth()">
-        <v-icon dark>add</v-icon>
-      </v-btn>&nbsp;&nbsp;
-      <v-toolbar-title
-        class="black--text"
-        style="font-size: 24px; text-transform: uppercase;"
-      >{{currentDate}}</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-      <v-btn dark @click="today" color="grey accent-3">TODAY</v-btn>&nbsp;
-    </v-toolbar>
-
-    <div class="name-container">
-      <div class="name-element">Sunday</div>
-      <div class="name-element">Monday</div>
-      <div class="name-element">Tuesday</div>
-      <div class="name-element">Wednesday</div>
-      <div class="name-element">Thursday</div>
-      <div class="name-element">Friday</div>
-      <div class="name-element">Saturday</div>
-    </div>
-
-    <div class="wrapper with-height">
-      <div v-for="i in gridSize" :key="`1${i}`">
-        <div class="box box1" @click="getDayInfo(i)" :class="gridBackground(i)">
-          <day-maker :gridID="i" :dayObj="generateDayMeta(i)"/>
+    <v-layout row wrap class="mb-0">
+      <v-flex xs12>
+        <header class="pl-3 mb-2 mt-1" style>
+          <v-btn fab dark small color="grey" @click="getPreviousMonth()">
+            <v-icon dark>arrow_back_ios</v-icon>
+          </v-btn>
+          <v-btn fab dark small color="grey" @click="getNextMonth()">
+            <v-icon dark>arrow_forward_ios</v-icon>
+          </v-btn>&nbsp;&nbsp;
+          <h2 style="font-weight: 900">{{currentDate}}</h2>&nbsp;
+          &nbsp;&nbsp;
+          <v-spacer></v-spacer>
+          <v-btn dark @click="today" style="color: #eee !important">TODAY</v-btn>&nbsp;
+        </header>
+      </v-flex>
+      <v-flex xs-12>
+        <div class="wrapper with-height">
+          <div v-for="i in gridSize" :key="`1${i}`">
+            <div class="box box1" @click="getDayInfo(i)" :class="gridBackground(i)">
+              <day-maker :gridID="i" :dayObj="generateDayMeta(i)"/>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -130,10 +122,10 @@ export default {
           "setDayEvents",
           this.apiData[meta.year][meta.dayOfYear]
         );
-        this.$store.commit("OPEN_EVENT_DRAWER");
+        this.$store.commit("TOGGLE_EVENT_DRAWER");
       } else {
         this.$store.dispatch("setDayEvents", noEvents);
-        this.$store.commit("OPEN_EVENT_DRAWER");
+        this.$store.commit("TOGGLE_EVENT_DRAWER");
       }
     }
   },
@@ -194,22 +186,5 @@ export default {
 .box:hover {
   background-color: #ddd !important;
   cursor: pointer;
-}
-
-.name-container {
-  display: grid;
-  grid-gap: 2px;
-  grid-template-columns: repeat(7, minmax(50px, 1fr));
-  grid-auto-rows: minmax(10px, auto) !important;
-  margin-top: 2px;
-}
-.name-element {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 5px;
-  color: #222;
-  font-weight: bold;
-  min-height: 10px;
-  background-color: #bbb;
 }
 </style>
