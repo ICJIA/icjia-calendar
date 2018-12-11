@@ -26,9 +26,10 @@
       right
       disable-resize-watcher
       width="325"
+      style="background: #eee"
     >
       <v-list class>
-        <div style="background-color: #fff" class="text-xs-center">
+        <div class="text-xs-center">
           <h1
             style="font-size: 22px; border-bottom: 1px solid #ccc; padding-bottom: 8px;"
           >{{selectedDate}}</h1>
@@ -37,10 +38,23 @@
           <h3 style="color: #888; text-transform: uppercase;" class="mt-3">No Events Scheduled</h3>
         </div>
 
-        <div v-else class="pl-3 pr-3 mt-4 pr-3">
+        <div v-else class="pl-3 pr-3 mt-4 pr-3" ref="eventList">
           <div v-for="(event, index) in this.$store.state.dayMeta.dayEvents" :key="index">
-            <h2 style="color: #666; text-transform: uppercase">{{event.title}}</h2>
-            <p>{{event.description}}</p>
+            <v-layout>
+              <v-flex xs12>
+                <v-card class="mt-3">
+                  <v-card-title primary-title class="indigo darken-2">
+                    <div>
+                      <h3 style="text-transform: uppercase; color: #fff;">
+                        <v-icon dark>calendar_today</v-icon>
+                        {{event.title}}
+                      </h3>
+                    </div>
+                  </v-card-title>
+                  <div class="pt-3 pl-3 pr-2 pb-4">{{event.description}}</div>
+                </v-card>
+              </v-flex>
+            </v-layout>
           </div>
         </div>
 
@@ -65,11 +79,11 @@
       <v-btn icon @click="refresh">
         <v-icon>refresh</v-icon>
       </v-btn>
-      <v-menu offset-y nudge-left="100">
+      <v-menu offset-y nudge-left="100" transition="slide-x-transition">
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
         </v-btn>
-        <v-list light>
+        <v-list dark>
           <v-list-tile>
             <v-list-tile-title>
               <router-link to="/" class="link">View Calendar</router-link>

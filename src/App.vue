@@ -21,7 +21,7 @@
         </h3>
       </div>
       <div v-if="isLoading">
-        <v-progress-linear :indeterminate="true" style="padding: 0; margin: 0" height="4"></v-progress-linear>
+        <v-progress-linear :indeterminate="true" style="padding: 0; margin: 0" height="5"></v-progress-linear>
       </div>
       <div v-else style="height: 4px;"></div>
       <router-view/>

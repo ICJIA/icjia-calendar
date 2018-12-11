@@ -1,7 +1,7 @@
 {
   "name": "icjia-calendar",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
@@ -9,6 +9,7 @@
     "dev": "vue-cli-service serve --open",
     "test:unit": "vue-cli-service test:unit"
   },
+  "license": "MIT",
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
     "axios": "^0.18.0",
@@ -23,6 +24,7 @@
     "vuetify": "^1.3.11",
     "vuex": "^3.0.1"
   },
+  "repository": "https://github.com/ICJIA/icjia-calendar",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.0",
     "@vue/cli-plugin-eslint": "^3.2.0",

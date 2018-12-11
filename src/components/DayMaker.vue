@@ -58,13 +58,6 @@ export default {
   created() {},
   mounted() {},
   methods: {
-    gridBackground() {
-      if (this.dayObj.month - 1 === this.$store.state.currentMonth - 1) {
-        return "white";
-      } else {
-        return "white";
-      }
-    },
     fullDateFromDayOfYear(day) {
       return moment().dayOfYear(day);
     },

@@ -1,9 +1,10 @@
 <template>
   <div>
-    <v-toolbar light color="blue-grey lighten-5" class="mt-1">
+    <v-toolbar light color="blue-grey lighten-5" class="mt-2">
       <v-btn fab dark small color="grey accent-4" @click="getPreviousMonth()">
         <v-icon dark>remove</v-icon>
       </v-btn>
+      <v-btn dark @click="today" color="grey accent-3" style="font-size: 12px;">TODAY</v-btn>
       <v-btn fab dark small color="grey accent-4" @click="getNextMonth()">
         <v-icon dark>add</v-icon>
       </v-btn>&nbsp;&nbsp;
@@ -13,7 +14,18 @@
       >{{currentDate}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <v-btn dark @click="today" color="grey accent-3">TODAY</v-btn>&nbsp;
+      <!-- <v-btn dark @click="today" color="grey accent-3">
+        <v-icon dark left>today</v-icon>TODAY
+      </v-btn>&nbsp;-->
+      <v-btn
+        dark
+        color="grey accent-3"
+        href="https://calendar.icjia-api.cloud/admin"
+        target="_blank"
+        style="color: #fff !important"
+      >
+        <v-icon dark left>add_box</v-icon>Add New Event
+      </v-btn>
     </v-toolbar>
 
     <div class="name-container">
