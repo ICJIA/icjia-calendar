@@ -7,7 +7,10 @@ const config = {
     },
     { name: "NOFO release or close dates", color: "#0D47A1" },
     { name: "Grant start dates", color: "#4DB6AC" },
-    { name: "Federal application due dates", color: "#1B5E20" }
+    { name: "Federal application due dates", color: "#1B5E20" },
+    { name: "Federal reporting due dates", color: "#EC407A" },
+    { name: "Budget Committee dates", color: "#4A148C" },
+    { name: "OFM Grantee Audits", color: "#F8BBD0" }
   ],
   theme: {
     light: {

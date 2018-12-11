@@ -26,6 +26,9 @@
       >
         <v-icon dark left>add_box</v-icon>Add New Event
       </v-btn>
+      <v-btn dark color="grey accent-3" @click="refresh">
+        <v-icon>refresh</v-icon>
+      </v-btn>
     </v-toolbar>
 
     <div class="name-container">
@@ -65,6 +68,9 @@ export default {
       } else {
         return "grey lighten-4";
       }
+    },
+    refresh() {
+      window.location = "/";
     },
     generateDayMeta(gridID) {
       return getDayMeta(gridID, this.$store);

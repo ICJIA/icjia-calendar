@@ -43,15 +43,18 @@
             <v-layout>
               <v-flex xs12>
                 <v-card class="mt-3">
-                  <v-card-title primary-title class="indigo darken-2">
-                    <div>
-                      <h3 style="text-transform: uppercase; color: #fff;">
-                        <v-icon dark>calendar_today</v-icon>
-                        {{event.title}}
-                      </h3>
+                  <div
+                    class="text-xs-right pr-3 pt-3"
+                    :style="getCategoryBackgroundColor(event.color)"
+                  >{{event.category}}</div>
+                  <v-card-title primary-title :style="getBackgroundColor(event.color)">
+                    <div class="pb-3">
+                      <div
+                        style="text-transform: uppercase; color: #fff; font-size: 18px;"
+                      >{{event.title}}</div>
                     </div>
                   </v-card-title>
-                  <div class="pt-3 pl-3 pr-2 pb-4">{{event.description}}</div>
+                  <div class="pt-2 pl-3 pr-2 pb-4">{{event.description}}</div>
                 </v-card>
               </v-flex>
             </v-layout>
@@ -75,10 +78,13 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-
-      <v-btn icon @click="refresh">
-        <v-icon>refresh</v-icon>
+      <v-btn dark @click="logout" color="indigo accent-2">
+        <span class="mr-2">SIGN OUT</span>
+        <v-icon>lock_open</v-icon>
       </v-btn>
+      <!-- <v-btn icon @click="refresh">
+        <v-icon>refresh</v-icon>
+      </v-btn>-->
       <v-menu offset-y nudge-left="100" transition="slide-x-transition">
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
@@ -89,15 +95,7 @@
               <router-link to="/" class="link">View Calendar</router-link>
             </v-list-tile-title>
           </v-list-tile>
-          <v-list-tile>
-            <v-list-tile-title>
-              <a
-                href="https://calendar.icjia-api.cloud/admin"
-                target="_blank"
-                class="link"
-              >Add New Event</a>
-            </v-list-tile-title>
-          </v-list-tile>
+
           <v-list-tile>
             <v-list-tile-title @click="closeEventDrawer">
               <router-link to="/contact" class="link">Contact Support</router-link>
@@ -121,13 +119,21 @@ export default {
     console.log(this.config);
   },
   methods: {
+    getBackgroundColor(color) {
+      return `border-top: 1px solid #aaa; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
+    },
+    getCategoryBackgroundColor(color) {
+      return `padding-bottom: 12px; font-size: 10px; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
+    },
     pushRoute(route) {
       this.drawer = true;
       // this.expand = false
       this.$router.push({ path: route });
     },
+    logout() {
+      console.log("logout here");
+    },
     refresh() {
-      console.log("refresh API here");
       window.location = "/";
     },
 

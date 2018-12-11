@@ -8,7 +8,7 @@
     >
       <v-card-text class="white--text pt-2 pb-2 mt-2" style="font-size: 12px;">
         <div class="mt-1 mb-2">
-          <v-tooltip right>
+          <v-tooltip right open-delay="400">
             <v-btn
               slot="activator"
               color="grey darken-1"
