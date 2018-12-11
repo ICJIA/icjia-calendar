@@ -92,7 +92,7 @@
         <v-list dark>
           <v-list-tile>
             <v-list-tile-title>
-              <router-link to="/" class="link">View Calendar</router-link>
+              <a href="/" class="link">Refresh Calendar</a>
             </v-list-tile-title>
           </v-list-tile>
 
