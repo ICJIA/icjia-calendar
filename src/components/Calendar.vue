@@ -24,7 +24,7 @@
       <div v-if="isLoading">
         <v-progress-circular small indeterminate color="primary"></v-progress-circular>
       </div>
-      <v-btn v-if="!isCondensed" dark color="grey accent-3" @click="refresh">
+      <!-- <v-btn v-if="!isCondensed" dark color="grey accent-3" @click="refresh">
         <v-icon>refresh</v-icon>
       </v-btn>
       <v-btn
@@ -36,7 +36,7 @@
         style="color: #fff !important"
       >
         <v-icon dark left>add_box</v-icon>Add New Event
-      </v-btn>
+      </v-btn>-->
     </v-toolbar>
 
     <div class="name-container" v-if="!isCondensed">

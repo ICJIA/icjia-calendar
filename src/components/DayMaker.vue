@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-if="dayObj.year >=this.minYear && dayObj.year <= this.maxYear">
-      <div class="pl-1 pt-2">
+      <div class="pl-0 pt-2">
         <div v-if="isCondensed" class="pb-2 dayName">{{getCondensedDate(dayObj.fullDate)}}</div>
-        <div v-if="!isCondensed" class="dayNumber pb-2">{{dayObj.day}}</div>
+        <div v-if="!isCondensed" class="dayNumber pl-1 pb-2">{{dayObj.day}}</div>
         <div v-if="!debug">
           <div style class="gridElement">
             <div v-for="(event, index) in dayObj.dayEvents" :key="index">
@@ -108,6 +108,7 @@ export default {
 <style scoped>
 .dayNumber {
   font-size: 18px;
+  font-weight: bold;
 }
 
 .dayName {
@@ -116,6 +117,8 @@ export default {
 
 .gridElement {
   min-height: 100px;
+  padding: 0;
+  margin: 0;
 }
 
 @media only screen and (max-width: 960px) {

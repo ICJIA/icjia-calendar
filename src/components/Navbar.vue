@@ -20,10 +20,10 @@
     <v-navigation-drawer
       :value="eventDrawer"
       fixed
-      clipped
       app
       right
       stateless
+      floating
       disable-resize-watcher
       width="325"
       style="background: #eee"
@@ -50,17 +50,22 @@
                 <v-flex xs12>
                   <v-card class="mt-3">
                     <div
-                      class="text-xs-center pr-3 pt-3"
+                      class="text-xs-right pr-3 pt-2 pb-2"
                       :style="getCategoryBackgroundColor(event.color)"
                     >{{event.category}}</div>
-                    <v-card-title primary-title :style="getBackgroundColor(event.color)">
-                      <div class="pb-3">
-                        <div
-                          style="text-transform: uppercase; color: #fff; font-size: 18px;"
-                        >{{event.title}}</div>
-                      </div>
-                    </v-card-title>
-                    <div class="pt-2 pl-3 pr-2 pb-4">{{event.description}}</div>
+                    <div :style="getBackgroundColor(event.color)" class="pl-3 pt-2 pr-3 pb-2">
+                      <span style="text-transform: uppercase; color: #fff;">{{event.title}}</span>
+                    </div>
+                    <div class="pt-2 pl-3 pr-2 pb-4">
+                      <span>
+                        <span v-html="getEventRange(event)" class="eventRange"></span>
+                      </span>
+                      <span style="float: right">
+                        <span class="duration">{{getDuration(event.duration)}}</span>
+                      </span>
+
+                      <div v-html="markdownToHtml(event.description)" class="description mt-3"></div>
+                    </div>
                   </v-card>
                 </v-flex>
               </v-layout>
@@ -89,9 +94,9 @@
         <!-- <span class="mr-2">SIGN OUT</span> -->
         <v-icon>lock_open</v-icon>
       </v-btn>
-      <!-- <v-btn icon @click="refresh">
+      <v-btn icon @click="refresh" v-if="!isCondensed">
         <v-icon>refresh</v-icon>
-      </v-btn>-->
+      </v-btn>
       <v-menu offset-y nudge-left="100" transition="slide-x-transition">
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
@@ -104,10 +109,21 @@
           </v-list-tile>
 
           <v-list-tile>
+            <v-list-tile-title>
+              <a
+                href="https://calendar.icjia-api.cloud/admin"
+                class="link"
+                target="_blank"
+              >Add New Event</a>
+            </v-list-tile-title>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile>
             <v-list-tile-title @click="closeEventDrawer">
               <router-link to="/contact" class="link">Contact Support</router-link>
             </v-list-tile-title>
           </v-list-tile>
+
           <v-list-tile>
             <v-list-tile-title>
               <router-link to="/" class="link">Sign Out</router-link>
@@ -123,6 +139,11 @@
 
 <script>
 /* eslint-disable */
+const md = require("markdown-it")({
+  html: true,
+  linkify: true,
+  typographer: true
+});
 import moment from "moment";
 import { EventBus } from "../event-bus.js";
 import { config } from "@/config";
@@ -132,10 +153,25 @@ export default {
   },
   methods: {
     getBackgroundColor(color) {
-      return `border-top: 1px solid #aaa; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
+      return `margin: 0; padding: 0; border-top: 1px solid #aaa; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
     },
     getCategoryBackgroundColor(color) {
-      return `padding-bottom: 12px; font-size: 10px; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
+      return `padding: 0; margin: 0; font-size: 10px; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
+    },
+    getDuration(num) {
+      if (num < 1) {
+        return `1 day`;
+      }
+      return `${num} days`;
+    },
+    getEventRange({ start, end, duration }) {
+      if (duration === 0) {
+        return moment.utc(start).format("MMM DD, YYYY");
+      }
+
+      return `${moment.utc(start).format("MMM DD, YYYY")} - ${moment
+        .utc(end)
+        .format("MMM DD, YYYY")}`;
     },
     pushRoute(route) {
       this.drawer = true;
@@ -176,6 +212,10 @@ export default {
     },
     closeEventDrawer() {
       this.$store.commit("CLOSE_EVENT_DRAWER");
+    },
+    markdownToHtml(description) {
+      const html = md.render(description);
+      return html;
     }
   },
 
@@ -254,5 +294,18 @@ a {
   font-size: 12px !important;
   font-weight: 900 !important;
   color: #666 !important;
+}
+
+.duration {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #666;
+}
+.eventRange {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: #222;
 }
 </style>
