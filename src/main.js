@@ -12,6 +12,17 @@ Vue.use(TreeView);
 
 Vue.config.productionTip = false;
 
+import axios from "axios";
+
+Vue.prototype.$http = axios;
+const jwt = localStorage.getItem("jwt");
+
+if (jwt) {
+  Vue.prototype.$http.defaults.headers.common[
+    "Authorization"
+  ] = `Bearer ${jwt}`;
+}
+
 const vm = new Vue({
   router,
   store,

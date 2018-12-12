@@ -36,7 +36,6 @@ import { createCalendarHelper } from "@/utils";
 import Navbar from "@/components/Navbar";
 import MyFooter from "@/components/MyFooter";
 import { stringTruncate, getDayMeta } from "@/utils";
-import EventService from "@/services/EventService.js";
 import moment from "moment";
 import _ from "lodash";
 import { config } from "@/config";
@@ -57,8 +56,6 @@ export default {
     this.init();
     this.getEvents();
     EventBus.$on("refresh", () => {
-      // this.init();
-      // this.getEvents();
       console.log("refresh here");
     });
   },
@@ -81,7 +78,8 @@ export default {
       );
     },
     getEvents() {
-      EventService.getEvents()
+      this.$http
+        .get(`${config.app.baseURL}${config.app.eventsRoute}`)
         .then(response => {
           this.createEvents(response);
           this.$store.dispatch("setApiData", this.events);
@@ -210,5 +208,9 @@ a {
 
 a {
   color: #ddd !important;
+}
+
+.theme--light.application {
+  background: #bbb !important;
 }
 </style>

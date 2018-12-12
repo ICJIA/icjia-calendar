@@ -1,30 +1,12 @@
 import moment from "moment";
 import _ from "lodash";
 
-const findDayOfYear = function(date) {
-  var oneDay = 1000 * 60 * 60 * 24; // A day in milliseconds
-  var og = {
-    // Saving original data
-    ts: date.getTime(),
-    dom: date.getDate(), // We don't need to save hours/minutes because DST is never at 12am.
-    month: date.getMonth()
-  };
-  date.setDate(1); // Sets Date of the Month to the 1st.
-  date.setMonth(0); // Months are zero based in JS's Date object
-  var start_ts = date.getTime(); // New Year's Midnight JS Timestamp
-  var diff = og.ts - start_ts;
-
-  date.setDate(og.dom); // Revert back to original date object
-  date.setMonth(og.month); // This method does preserve timezone
-  return Math.round(diff / oneDay) + 1; // Deals with DST globally. Ceil fails in Australia. Floor Fails in US.
-};
-
 const createCalendarHelper = function(startYear, endYear) {
   let calendarHelper = {};
   let totalDays;
 
   for (let y = startYear; y <= endYear; y++) {
-    let isLeapYear = moment([y]).isLeapYear();
+    let isLeapYear = moment.utc([y]).isLeapYear();
 
     let gridSize;
     let gridLayout = [];
@@ -41,7 +23,8 @@ const createCalendarHelper = function(startYear, endYear) {
       obj.firstDayOfTheMonth = new Date(y, i, 1);
       obj.isLeapYear = isLeapYear;
       obj.totalDays = totalDays;
-      obj.dayNumber = findDayOfYear(obj.firstDayOfTheMonth);
+      obj.daysInMonth = moment.utc(obj.firstDayOfTheMonth).daysInMonth();
+      obj.dayNumber = moment.utc(obj.firstDayOfTheMonth).dayOfYear();
       obj.startDayOfWeek = obj.firstDayOfTheMonth.getDay();
       let startGridNumber = obj.dayNumber - obj.startDayOfWeek - 1;
       if (startGridNumber < 0) {
@@ -114,11 +97,11 @@ const getDayMeta = function(gridID, store) {
   if (state.currentMonth === 1 && dayObj.dayOfYear > 335) {
     year = year - 1;
   }
-  dayObj.fullDate = moment([year]).dayOfYear(dayObj.dayOfYear);
-  dayObj.day = moment(dayObj.fullDate).format("DD");
-  dayObj.month = moment(dayObj.fullDate).format("MM");
-  dayObj.year = moment(dayObj.fullDate).format("YYYY");
-
+  dayObj.fullDate = moment.utc([year]).dayOfYear(dayObj.dayOfYear);
+  dayObj.day = moment.utc(dayObj.fullDate).format("DD");
+  dayObj.month = moment.utc(dayObj.fullDate).format("MM");
+  dayObj.year = moment.utc(dayObj.fullDate).format("YYYY");
+  dayObj.dayName = moment.utc(dayObj.fullDate).format("dddd");
   if (
     _.has(eventData, dayObj.year) &&
     _.has(eventData[dayObj.year], dayOfYear)
@@ -131,4 +114,4 @@ const getDayMeta = function(gridID, store) {
   return dayObj;
 };
 
-export { getDayMeta, findDayOfYear, createCalendarHelper, stringTruncate };
+export { getDayMeta, createCalendarHelper, stringTruncate };

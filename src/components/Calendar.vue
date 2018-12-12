@@ -1,10 +1,16 @@
 <template>
   <div>
-    <v-toolbar light color="blue-grey lighten-5" class="mt-2">
+    <v-toolbar light color="blue-grey lighten-5" class="mt-0">
       <v-btn fab dark small color="grey accent-4" @click="getPreviousMonth()">
         <v-icon dark>remove</v-icon>
       </v-btn>
-      <v-btn dark @click="today" color="grey accent-3" style="font-size: 12px;">TODAY</v-btn>
+      <v-btn
+        v-if="!isCondensed"
+        dark
+        @click="today"
+        color="grey accent-3"
+        style="font-size: 12px;"
+      >TODAY</v-btn>
       <v-btn fab dark small color="grey accent-4" @click="getNextMonth()">
         <v-icon dark>add</v-icon>
       </v-btn>&nbsp;&nbsp;
@@ -14,10 +20,15 @@
       >{{currentDate}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <!-- <v-btn dark @click="today" color="grey accent-3">
-        <v-icon dark left>today</v-icon>TODAY
-      </v-btn>&nbsp;-->
+
+      <div v-if="isLoading">
+        <v-progress-circular small indeterminate color="primary"></v-progress-circular>
+      </div>
+      <v-btn v-if="!isCondensed" dark color="grey accent-3" @click="refresh">
+        <v-icon>refresh</v-icon>
+      </v-btn>
       <v-btn
+        v-if="!isCondensed"
         dark
         color="grey accent-3"
         href="https://calendar.icjia-api.cloud/admin"
@@ -26,12 +37,9 @@
       >
         <v-icon dark left>add_box</v-icon>Add New Event
       </v-btn>
-      <v-btn dark color="grey accent-3" @click="refresh">
-        <v-icon>refresh</v-icon>
-      </v-btn>
     </v-toolbar>
 
-    <div class="name-container">
+    <div class="name-container" v-if="!isCondensed">
       <div class="name-element">Sunday</div>
       <div class="name-element">Monday</div>
       <div class="name-element">Tuesday</div>
@@ -63,10 +71,14 @@ export default {
   methods: {
     gridBackground(gridID) {
       const dayObj = getDayMeta(gridID, this.$store);
+
+      // if (this.breakpoint.name === "xs" || this.breakpoint.name === "sm") {
+      //   return "white";
+      // }
       if (dayObj.month - 1 === this.$store.state.currentMonth - 1) {
         return "white";
       } else {
-        return "grey lighten-4";
+        return "grey lighten-3";
       }
     },
     refresh() {
@@ -160,6 +172,19 @@ export default {
       let date = new Date(this.currentYear, this.currentMonth - 1);
       return moment(date).format("MMMM YYYY");
     },
+    breakpoint() {
+      return this.$vuetify.breakpoint;
+    },
+    gridModifier() {
+      return null;
+    },
+    isCondensed() {
+      if (this.breakpoint.name === "xs" || this.breakpoint.name === "sm") {
+        return true;
+      } else {
+        return false;
+      }
+    },
     gridSize() {
       return this.calendarMeta[this.currentYear][this.currentMonth - 1]
         .gridSize;
@@ -229,5 +254,18 @@ export default {
   font-weight: bold;
   min-height: 10px;
   background-color: #bbb;
+}
+
+/* @media only screen and (max-width: 600px) {
+  .wrapper {
+    grid-template-columns: repeat(1, minmax(50px, 1fr));
+  }
+} */
+
+@media only screen and (max-width: 960px) {
+  .wrapper {
+    grid-template-columns: repeat(1, minmax(50px, 1fr));
+    grid-gap: 5px;
+  }
 }
 </style>

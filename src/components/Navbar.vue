@@ -78,8 +78,8 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <v-btn dark @click="logout" color="indigo accent-2">
-        <span class="mr-2">SIGN OUT</span>
+      <v-btn dark @click="logout" color="indigo accent-2" v-if="!isCondensed">
+        <!-- <span class="mr-2">SIGN OUT</span> -->
         <v-icon>lock_open</v-icon>
       </v-btn>
       <!-- <v-btn icon @click="refresh">
@@ -99,6 +99,11 @@
           <v-list-tile>
             <v-list-tile-title @click="closeEventDrawer">
               <router-link to="/contact" class="link">Contact Support</router-link>
+            </v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile>
+            <v-list-tile-title>
+              <router-link to="/" class="link">Sign Out</router-link>
             </v-list-tile-title>
           </v-list-tile>
         </v-list>
@@ -200,6 +205,16 @@ export default {
       return moment(this.$store.state.dayMeta.fullDate).format(
         "dddd, MMMM DD, YYYY"
       );
+    },
+    breakpoint() {
+      return this.$vuetify.breakpoint;
+    },
+    isCondensed() {
+      if (this.breakpoint.name === "xs" || this.breakpoint.name === "sm") {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
 

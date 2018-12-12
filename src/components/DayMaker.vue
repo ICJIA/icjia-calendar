@@ -1,30 +1,33 @@
 <template>
   <div>
     <div v-if="dayObj.year >=this.minYear && dayObj.year <= this.maxYear">
-      <div class="pl-1 pt-2 pb-2 dayNumber">{{dayObj.day}}</div>
-      <div v-if="!debug">
-        <div style="min-height: 150px;">
-          <div v-for="(event, index) in dayObj.dayEvents" :key="index">
-            <div v-for="(isVisible, index) in visibleEvents" :key="index">
-              <div v-if="event.color === isVisible">
-                <v-tooltip top open-delay="50" max-width="400">
-                  <div :style="eventStyle(event)" class="event" slot="activator">{{event.title}}</div>
-                  <h2 style="text-transform: uppercase;">{{event.title}}</h2>
-                  <div v-html="event.excerpt"></div>
-                </v-tooltip>
+      <div class="pl-1 pt-2">
+        <div v-if="isCondensed" class="pb-2 dayName">{{getCondensedDate(dayObj.fullDate)}}</div>
+        <div v-if="!isCondensed" class="dayNumber pb-2">{{dayObj.day}}</div>
+        <div v-if="!debug">
+          <div style class="gridElement">
+            <div v-for="(event, index) in dayObj.dayEvents" :key="index">
+              <div v-for="(isVisible, index) in visibleEvents" :key="index">
+                <div v-if="event.color === isVisible">
+                  <v-tooltip top open-delay="50" max-width="400">
+                    <div :style="eventStyle(event)" class="event" slot="activator">{{event.title}}</div>
+                    <h2 style="text-transform: uppercase;">{{event.title}}</h2>
+                    <div v-html="event.excerpt"></div>
+                  </v-tooltip>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div v-else style="font-size: 12px">
-        gridID: {{dayObj.gridID}}
-        <br>
-        dayOfYear: {{dayObj.dayOfYear}}
-        <br>
-        fullDate: {{dayObj.fullDate}}
-        <br>
-        # of events: {{dayObj.dayEvents.length}}
+        <div v-else style="font-size: 11px">
+          gridID: {{dayObj.gridID}}
+          <br>
+          dayOfYear: {{dayObj.dayOfYear}}
+          <br>
+          fullDate: {{dayObj.fullDate}}
+          <br>
+          # of events: {{dayObj.dayEvents.length}}
+        </div>
       </div>
     </div>
     <div v-else>
@@ -61,6 +64,9 @@ export default {
     fullDateFromDayOfYear(day) {
       return moment().dayOfYear(day);
     },
+    getCondensedDate(date) {
+      return moment.utc(date).format("dddd MMMM DD, YYYY");
+    },
 
     eventStyle(event) {
       let marginLeft = "0px";
@@ -83,6 +89,16 @@ export default {
     },
     maxYear() {
       return this.$store.getters.maxYear;
+    },
+    breakpoint() {
+      return this.$vuetify.breakpoint;
+    },
+    isCondensed() {
+      if (this.breakpoint.name === "xs" || this.breakpoint.name === "sm") {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   watch: {}
@@ -92,5 +108,19 @@ export default {
 <style scoped>
 .dayNumber {
   font-size: 18px;
+}
+
+.dayName {
+  font-weight: bold;
+}
+
+.gridElement {
+  min-height: 100px;
+}
+
+@media only screen and (max-width: 960px) {
+  .gridElement {
+    min-height: 10px;
+  }
 }
 </style>
