@@ -22,8 +22,8 @@
       fixed
       clipped
       app
-      stateless
       right
+      stateless
       disable-resize-watcher
       width="325"
       style="background: #eee"
@@ -34,30 +34,37 @@
             style="font-size: 22px; border-bottom: 1px solid #ccc; padding-bottom: 8px;"
           >{{selectedDate}}</h1>
         </div>
-        <div v-if="!eventStatus" class="text-xs-center">
-          <h3 style="color: #888; text-transform: uppercase;" class="mt-3">No Events Scheduled</h3>
+        <div class="text-xs-center pb-0 pt-3">
+          <v-btn depressed small @click="closeEventDrawer">CLOSE
+            <v-icon right dark>close</v-icon>
+          </v-btn>
         </div>
+        <div v-if="!debug">
+          <div v-if="!eventStatus" class="text-xs-center">
+            <h3 style="color: #888; text-transform: uppercase;" class="mt-3">No Events Scheduled</h3>
+          </div>
 
-        <div v-else class="pl-3 pr-3 mt-4 pr-3" ref="eventList">
-          <div v-for="(event, index) in this.$store.state.dayMeta.dayEvents" :key="index">
-            <v-layout>
-              <v-flex xs12>
-                <v-card class="mt-3">
-                  <div
-                    class="text-xs-right pr-3 pt-3"
-                    :style="getCategoryBackgroundColor(event.color)"
-                  >{{event.category}}</div>
-                  <v-card-title primary-title :style="getBackgroundColor(event.color)">
-                    <div class="pb-3">
-                      <div
-                        style="text-transform: uppercase; color: #fff; font-size: 18px;"
-                      >{{event.title}}</div>
-                    </div>
-                  </v-card-title>
-                  <div class="pt-2 pl-3 pr-2 pb-4">{{event.description}}</div>
-                </v-card>
-              </v-flex>
-            </v-layout>
+          <div v-else class="pl-3 pr-3 mt-4 pr-3" ref="eventList">
+            <div v-for="(event, index) in this.$store.state.dayMeta.dayEvents" :key="index">
+              <v-layout>
+                <v-flex xs12>
+                  <v-card class="mt-3">
+                    <div
+                      class="text-xs-center pr-3 pt-3"
+                      :style="getCategoryBackgroundColor(event.color)"
+                    >{{event.category}}</div>
+                    <v-card-title primary-title :style="getBackgroundColor(event.color)">
+                      <div class="pb-3">
+                        <div
+                          style="text-transform: uppercase; color: #fff; font-size: 18px;"
+                        >{{event.title}}</div>
+                      </div>
+                    </v-card-title>
+                    <div class="pt-2 pl-3 pr-2 pb-4">{{event.description}}</div>
+                  </v-card>
+                </v-flex>
+              </v-layout>
+            </div>
           </div>
         </div>
 
