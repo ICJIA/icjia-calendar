@@ -158,9 +158,7 @@ import moment from "moment";
 import { EventBus } from "../event-bus.js";
 import { config } from "@/config";
 export default {
-  mounted() {
-    console.log(this.config);
-  },
+  mounted() {},
   methods: {
     getBackgroundColor(color) {
       return `margin: 0; padding: 0; border-top: 1px solid #aaa; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;

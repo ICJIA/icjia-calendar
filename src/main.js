@@ -21,6 +21,7 @@ if (jwt) {
   Vue.prototype.$http.defaults.headers.common[
     "Authorization"
   ] = `Bearer ${jwt}`;
+  console.log("jwt token added to header");
 }
 
 const vm = new Vue({

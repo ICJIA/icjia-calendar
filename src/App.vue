@@ -32,14 +32,10 @@
 
 <script>
 import { createCalendarHelper } from "@/utils";
-
 import Navbar from "@/components/Navbar";
 import MyFooter from "@/components/MyFooter";
-import { stringTruncate, getDayMeta } from "@/utils";
-import moment from "moment";
-import _ from "lodash";
 import { config } from "@/config";
-import { EventBus } from "@/event-bus.js";
+
 export default {
   name: "App",
   components: {
@@ -52,15 +48,10 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch("startLoader");
-    this.init();
-    this.getEvents();
-    EventBus.$on("refresh", () => {
-      console.log("refresh here");
-    });
+    this.appInit();
   },
   methods: {
-    init() {
+    appInit() {
       this.$store.dispatch(
         "setCurrentYear",
         parseInt(new Date().getFullYear())
@@ -76,92 +67,6 @@ export default {
         "setCalendarMeta",
         createCalendarHelper(this.minYear, this.maxYear)
       );
-    },
-    getEvents() {
-      this.$http
-        .get(`${config.app.baseURL}${config.app.eventsRoute}`)
-        .then(response => {
-          this.createEvents(response);
-          this.$store.dispatch("setApiData", this.events);
-          this.$store.dispatch("stopLoader");
-        })
-        .catch(e => console.log(e));
-    },
-    createEvents(response) {
-      response.data.forEach(e => {
-        let eventObj = {};
-        let start, end, duration;
-        start = moment.utc(e.start);
-        if (e.end) {
-          end = moment.utc(e.end);
-        } else {
-          end = end = moment.utc(e.start);
-        }
-
-        duration = end.diff(start, "days");
-        eventObj.title = e.title.trim();
-        eventObj.start = e.start;
-        eventObj.end = end;
-        eventObj.duration = duration;
-        eventObj.description = e.description;
-        eventObj.excerpt = stringTruncate(e.description, 150);
-        let colorIndex = _.findIndex(config.categories, {
-          name: e.category.trim()
-        });
-        try {
-          eventObj.color = config.categories[colorIndex].color;
-        } catch {
-          eventObj.color = "gray";
-        }
-
-        eventObj.category = e.category.trim();
-
-        eventObj.duration;
-        let dayOfYear = moment.utc(e.start).dayOfYear();
-        eventObj.year = moment.utc(e.start).format("YYYY");
-        if (!_.has(this.events, start.format("YYYY"))) {
-          this.events[start.format("YYYY")] = {};
-        }
-        if (!_.has(this.events[start.format("YYYY")], dayOfYear)) {
-          this.events[start.format("YYYY")][dayOfYear] = [];
-        }
-        this.events[start.format("YYYY")][dayOfYear].push(eventObj);
-        if (duration > 0) {
-          for (let d = 0; d < duration; d++) {
-            let workingDate = start.add(1, "days");
-            let dayOfYear = moment.utc(workingDate).dayOfYear();
-
-            eventObj.duration = duration + 1;
-            eventObj.year = moment.utc(workingDate).format("YYYY");
-            if (!_.has(this.events, eventObj.year)) {
-              this.events[eventObj.year] = {};
-            }
-            if (!_.has(this.events[eventObj.year], dayOfYear)) {
-              this.events[eventObj.year][dayOfYear] = [];
-            }
-            this.events[eventObj.year][dayOfYear].push(eventObj);
-          }
-        }
-      });
-    },
-    setToday() {
-      // auto-populate eventDrawer with today's info
-      let gridID =
-        this.calendarMeta[this.currentYear][this.currentMonth - 1]
-          .startDayOfWeek + this.currentDay;
-
-      let meta = getDayMeta(gridID, this.$store);
-      this.$store.dispatch("setDayMeta", meta);
-      let noEvents = [];
-
-      if (this.events[meta.year][meta.dayOfYear]) {
-        this.$store.dispatch(
-          "setDayEvents",
-          this.apiData[meta.year][meta.dayOfYear]
-        );
-      } else {
-        this.$store.dispatch("setDayEvents", noEvents);
-      }
     }
   },
   computed: {

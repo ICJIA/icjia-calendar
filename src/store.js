@@ -7,7 +7,6 @@ Vue.use(Vuex);
 const colors = config.categories.map(cat => {
   return cat.color;
 });
-console.log(config);
 
 export default new Vuex.Store({
   state: {
