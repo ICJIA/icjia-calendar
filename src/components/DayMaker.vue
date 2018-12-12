@@ -2,7 +2,7 @@
   <div>
     <div v-if="dayObj.year >=this.minYear && dayObj.year <= this.maxYear">
       <div class="pl-0 pt-2">
-        <div v-if="isCondensed" class="pb-2 dayName">{{getCondensedDate(dayObj.fullDate)}}</div>
+        <div v-if="isCondensed" class="pb-2 dayName pl-2">{{getCondensedDate(dayObj.fullDate)}}</div>
         <div v-if="!isCondensed" class="dayNumber pl-1 pb-2">{{dayObj.day}}</div>
         <div v-if="!debug">
           <div style class="gridElement">

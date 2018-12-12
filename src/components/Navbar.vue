@@ -90,10 +90,9 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <v-btn dark @click="logout" color="indigo accent-2" v-if="!isCondensed">
-        <!-- <span class="mr-2">SIGN OUT</span> -->
+      <!-- <v-btn dark @click="logout" color="indigo accent-2" v-if="!isCondensed">
         <v-icon>lock_open</v-icon>
-      </v-btn>
+      </v-btn>-->
       <v-btn icon @click="refresh" v-if="!isCondensed">
         <v-icon>refresh</v-icon>
       </v-btn>
@@ -103,12 +102,15 @@
         </v-btn>
         <v-list dark>
           <v-list-tile>
+            <v-icon left>today</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
-              <a href="/" class="link">Refresh Calendar</a>
+              <router-link to="/" class="link">View Calendar</router-link>
             </v-list-tile-title>
           </v-list-tile>
+          <v-divider class="mb-2 mt-2"></v-divider>
 
           <v-list-tile>
+            <v-icon left>add</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
               <a
                 href="https://calendar.icjia-api.cloud/admin"
@@ -117,14 +119,22 @@
               >Add New Event</a>
             </v-list-tile-title>
           </v-list-tile>
-          <v-divider></v-divider>
           <v-list-tile>
+            <v-icon left>refresh</v-icon>&nbsp;&nbsp;
+            <v-list-tile-title>
+              <a href="/" class="link">Refresh Events</a>
+            </v-list-tile-title>
+          </v-list-tile>
+          <v-divider class="mb-2 mt-2"></v-divider>
+          <v-list-tile>
+            <v-icon left>markunread</v-icon>&nbsp;&nbsp;
             <v-list-tile-title @click="closeEventDrawer">
               <router-link to="/contact" class="link">Contact Support</router-link>
             </v-list-tile-title>
           </v-list-tile>
 
           <v-list-tile>
+            <v-icon left>lock_open</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
               <router-link to="/" class="link">Sign Out</router-link>
             </v-list-tile-title>
@@ -215,7 +225,13 @@ export default {
     },
     markdownToHtml(description) {
       const html = md.render(description);
-      return html;
+      /** HTML links to open in new tab */
+      const pattern = /a href=/g;
+      const sanitizedMarkDownText = html.replace(
+        pattern,
+        "a target='_blank' href="
+      );
+      return sanitizedMarkDownText;
     }
   },
 
@@ -284,11 +300,34 @@ a {
   text-decoration: none;
 }
 
+a {
+  color: #fff;
+}
+
 /* .debug.v-input--selection-controls.v-input .v-label {
   font-weight: 900;
 
   font-size: 12px;
 } */
+
+a:hover {
+  color: #ccc;
+}
+.description a {
+  font-weight: bold;
+}
+.description a:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+a.link {
+  color: #fff;
+}
+
+a.link:hover {
+  color: #ccc;
+}
 
 .v-label {
   font-size: 12px !important;

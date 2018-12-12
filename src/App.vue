@@ -193,7 +193,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 a {
   color: #aaa !important;
 }
@@ -210,7 +210,7 @@ a {
   color: #ddd !important;
 }
 
-.theme--light.application {
+/* .theme--light.application {
   background: #bbb !important;
-}
+} */
 </style>

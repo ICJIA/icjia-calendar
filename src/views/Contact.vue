@@ -197,4 +197,7 @@ export default {
 </script>
 
 <style scoped>
+.theme--light.application {
+  background: #bbb !important;
+}
 </style>
