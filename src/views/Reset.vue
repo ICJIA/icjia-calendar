@@ -3,9 +3,10 @@
     <v-layout row class="text-xs-center" align-center justify-center>
       <v-flex xs12 sm6 class="animated bounceInDown">
         <v-card class="pt-1 pb-5 pl-3 pr-3">
-          <v-card-title primary-title>
-            <h2>Reset Password</h2>
-          </v-card-title>
+          <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
+            <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
+            <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">RESET PASSWORD</div>
+          </div>
           <v-form v-if="hasCode" @submit="reset" onSubmit="return false;">
             <v-text-field
               prepend-icon="lock"
@@ -29,7 +30,7 @@
               <v-btn primary large block @click="reset">Reset</v-btn>
             </v-card-actions>
           </v-form>
-          <div v-else>
+          <div v-else class="mt-5">
             <v-btn primary large block @click="forgot">Get password reset link</v-btn>
           </div>
 

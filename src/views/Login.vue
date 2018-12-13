@@ -5,10 +5,9 @@
         <v-card class v-if="!this.$store.getters.isLoggedIn">
           <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
             <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
+            <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">LOGIN</div>
           </div>
-          <div class="text-xs-center">
-            <h1 class="mt-3" style="color: #555555 !important">USER LOGIN</h1>
-          </div>
+
           <div class="pr-3 pl-3 pt-3 pb-3">
             <v-form @submit="login" onSubmit="return false;">
               <v-text-field
@@ -38,7 +37,7 @@
                 class="mt-3"
               >{{this.$store.state.status}}</div>
 
-              <div class="mt-2 mb-3">
+              <div class="mt-2 mb-3" style="font-weight: bold">
                 <router-link to="/forgot">Forget your password?</router-link>
               </div>
             </v-form>
@@ -89,5 +88,9 @@ export default {
 a {
   color: #222;
   text-decoration: underline;
+}
+
+a:hover {
+  color: #aaa;
 }
 </style>

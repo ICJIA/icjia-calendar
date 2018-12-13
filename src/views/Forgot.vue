@@ -5,11 +5,10 @@
         <v-card class="pb-4">
           <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
             <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
+            <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">RESET PASSWORD</div>
           </div>
-          <div class="mt-3 mb-3">
-            <h2>Reset My Password</h2>
-          </div>
-          <div class="pl-3 pr-3">
+
+          <div class="pl-3 pr-3 pt-3">
             <v-form @submit="reset" onSubmit="return false;">
               <v-text-field
                 prepend-icon="person"
@@ -17,6 +16,7 @@
                 label="email"
                 v-model="email"
                 ref="email"
+                @click="clearStatus"
               ></v-text-field>
 
               <v-card-actions>
@@ -46,6 +46,7 @@ export default {
   mounted() {
     this.$nextTick(this.$refs.email.focus);
   },
+
   data() {
     return {
       email: "",
@@ -53,6 +54,9 @@ export default {
     };
   },
   methods: {
+    clearStatus() {
+      this.$store.commit("CLEAR_STATUS");
+    },
     reset() {
       let email = this.email.toString();
 
@@ -67,4 +71,12 @@ export default {
 </script>
 
 <style scoped>
+a {
+  color: #222;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #aaa;
+}
 </style>
