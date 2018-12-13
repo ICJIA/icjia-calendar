@@ -7,20 +7,23 @@
 <script>
 import Calendar from "../components/Calendar";
 
-import { stringTruncate, getDayMeta, createCalendarHelper } from "@/utils";
+import { stringTruncate, getDayMeta } from "@/utils";
 import moment from "moment";
 import _ from "lodash";
-import { config } from "@/config";
+import config from "@/config";
 
 export default {
   components: {
     Calendar
   },
-  mounted() {
-    // this.$store.dispatch(
-    //   "setCalendarMeta",
-    //   createCalendarHelper("2000", "2099")
-    // );
+  created() {
+    this.$store.dispatch("setCurrentYear", parseInt(new Date().getFullYear()));
+    this.$store.dispatch(
+      "setCurrentMonth",
+      parseInt(new Date().getMonth()) + 1
+    );
+    this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
+
     this.getEvents();
   },
   data() {
@@ -34,14 +37,14 @@ export default {
 
       try {
         let response = await this.$http.get(
-          `${config.app.baseURL}${config.app.eventsRoute}`
+          `${config.api.base}${config.api.events}`
         );
         this.createEvents(response);
         this.$store.dispatch("setApiData", this.events);
         this.setToday();
         this.$store.dispatch("stopLoader");
       } catch (e) {
-        console.log("Error: ", e);
+        console.log("Error: ", JSON.stringify(e));
       }
     },
     createEvents(response) {

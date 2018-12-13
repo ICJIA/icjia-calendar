@@ -23,10 +23,17 @@ const config = {
   },
   app: {
     minYear: 2000,
-    maxYear: 2099,
-    baseURL: "https://calendar.icjia-api.cloud",
-    eventsRoute: "/events"
+    maxYear: 2099
+  },
+  api: {
+    base: "https://strapidev.icjia-api.cloud",
+    baseClient: "https://calendar.icjia.cloud",
+    forgetPassword: "/auth/forgot-password",
+    resetPassword: "/auth/reset-password",
+    resetPasswordCallback: "/reset",
+    events: "/events",
+    login: "/auth/local"
   }
 };
 
-export { config };
+export default config;

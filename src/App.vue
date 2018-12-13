@@ -34,7 +34,7 @@
 import { createCalendarHelper } from "@/utils";
 import Navbar from "@/components/Navbar";
 import MyFooter from "@/components/MyFooter";
-import { config } from "@/config";
+import config from "@/config";
 
 export default {
   name: "App",
@@ -52,15 +52,6 @@ export default {
   },
   methods: {
     appInit() {
-      this.$store.dispatch(
-        "setCurrentYear",
-        parseInt(new Date().getFullYear())
-      );
-      this.$store.dispatch(
-        "setCurrentMonth",
-        parseInt(new Date().getMonth()) + 1
-      );
-      this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
       this.$store.dispatch("setMinYear", config.app.minYear);
       this.$store.dispatch("setMaxYear", config.app.maxYear);
       this.$store.dispatch(
@@ -93,6 +84,9 @@ export default {
     },
     isLoading() {
       return this.$store.getters.isLoading;
+    },
+    isLoggedIn: function() {
+      return this.$store.getters.isLoggedIn;
     }
   }
 };

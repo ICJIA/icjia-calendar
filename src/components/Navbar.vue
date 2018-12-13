@@ -82,7 +82,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar dark app color="indigo darken-1">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="this.$store.getters.isLoggedIn"></v-toolbar-side-icon>
       <router-link to="/" class="nav">
         <v-toolbar-title class="text-uppercase">
           <span class style="color: #fff; font-weight: 900">ILLINOIS</span> |
@@ -93,23 +93,25 @@
       <!-- <v-btn dark @click="logout" color="indigo accent-2" v-if="!isCondensed">
         <v-icon>lock_open</v-icon>
       </v-btn>-->
-      <v-btn icon @click="refresh" v-if="!isCondensed">
-        <v-icon>refresh</v-icon>
-      </v-btn>
+      <div v-if="this.$store.getters.isLoggedIn">
+        <v-btn icon @click="refresh" v-if="!isCondensed">
+          <v-icon>refresh</v-icon>
+        </v-btn>
+      </div>
       <v-menu offset-y nudge-left="100" transition="slide-x-transition">
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
         </v-btn>
         <v-list dark>
-          <v-list-tile>
+          <v-list-tile v-if="this.$store.getters.isLoggedIn">
             <v-icon left>today</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
               <router-link to="/" class="link">View Calendar</router-link>
             </v-list-tile-title>
           </v-list-tile>
-          <v-divider class="mb-2 mt-2"></v-divider>
+          <v-divider class="mb-2 mt-2" v-if="this.$store.getters.isLoggedIn"></v-divider>
 
-          <v-list-tile>
+          <v-list-tile v-if="this.$store.getters.isLoggedIn">
             <v-icon left>add</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
               <a
@@ -119,13 +121,13 @@
               >Add New Event</a>
             </v-list-tile-title>
           </v-list-tile>
-          <v-list-tile>
+          <v-list-tile v-if="this.$store.getters.isLoggedIn">
             <v-icon left>refresh</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
               <a href="/" class="link">Refresh Events</a>
             </v-list-tile-title>
           </v-list-tile>
-          <v-divider class="mb-2 mt-2"></v-divider>
+          <v-divider class="mb-2 mt-2" v-if="this.$store.getters.isLoggedIn"></v-divider>
           <v-list-tile>
             <v-icon left>markunread</v-icon>&nbsp;&nbsp;
             <v-list-tile-title @click="closeEventDrawer">
@@ -134,15 +136,28 @@
           </v-list-tile>
 
           <v-list-tile>
+            <v-icon left>redo</v-icon>&nbsp;&nbsp;
+            <v-list-tile-title>
+              <router-link to="/forgot" class="link">Reset Password</router-link>
+            </v-list-tile-title>
+          </v-list-tile>
+
+          <v-list-tile v-if="this.$store.getters.isLoggedIn">
             <v-icon left>lock_open</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
-              <router-link to="/" class="link">Sign Out</router-link>
+              <router-link to="/login" class="link">Sign Out</router-link>
+            </v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile v-else>
+            <v-icon left>lock</v-icon>&nbsp;&nbsp;
+            <v-list-tile-title>
+              <router-link to="/login" class="link">Sign In</router-link>
             </v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
 
-      <v-toolbar-side-icon @click.stop="toggleEventDrawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click.stop="toggleEventDrawer" v-if="this.$store.getters.isLoggedIn"></v-toolbar-side-icon>
     </v-toolbar>
   </div>
 </template>
@@ -156,7 +171,7 @@ const md = require("markdown-it")({
 });
 import moment from "moment";
 import { EventBus } from "../event-bus.js";
-import { config } from "@/config";
+import config from "@/config";
 export default {
   mounted() {},
   methods: {

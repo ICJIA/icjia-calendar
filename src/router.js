@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import store from "./store.js";
 
 Vue.use(Router);
 
@@ -11,7 +12,10 @@ const router = new Router({
     {
       path: "/",
       name: "home",
-      component: Home
+      component: Home,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: "/sandbox",
@@ -47,8 +51,49 @@ const router = new Router({
 
       component: () =>
         import(/* webpackChunkName: "sandbox" */ "./views/Sandbox4.vue")
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: () =>
+        import(/* webpackChunkName: "login" */ "./views/Login.vue")
+    },
+    {
+      path: "/forgot",
+      name: "forgot",
+      component: () =>
+        import(/* webpackChunkName: "forgot" */ "./views/Forgot.vue")
+    },
+    {
+      path: "/reset",
+      name: "reset",
+      component: () =>
+        import(/* webpackChunkName: "reset" */ "./views/Reset.vue")
+    },
+    {
+      path: "/404",
+      name: "error",
+      component: () => import(/* webpackChunkName: "error" */ "./views/404.vue")
+    },
+    {
+      path: "*",
+      redirect: { name: "error" }
     }
   ]
+});
+
+router.beforeEach((to, from, next) => {
+  let jwt = localStorage.getItem("jwt");
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isLoggedIn && jwt) {
+      next();
+      return;
+    }
+    store.dispatch("logout").then(router.push("/login"));
+    next("/login");
+  } else {
+    next();
+  }
 });
 
 export default router;

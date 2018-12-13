@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import { config } from "@/config";
-
+import config from "@/config";
+import axios from "axios";
 Vue.use(Vuex);
 
 const colors = config.categories.map(cat => {
@@ -24,7 +24,11 @@ export default new Vuex.Store({
     drawer: false,
     dayEvents: [],
     dayMeta: {},
-    isLoading: false
+    isLoading: false,
+    status: "",
+    jwt: localStorage.getItem("jwt") || "",
+    userMeta: JSON.parse(localStorage.getItem("userMeta")) || "",
+    user: {}
   },
   mutations: {
     TOGGLE_DEBUG(state, debug) {
@@ -41,6 +45,9 @@ export default new Vuex.Store({
     },
     TOGGLE_DRAWER(state, drawer) {
       state.debug = !drawer;
+    },
+    CLOSE_CATEGORY_DRAWER(state) {
+      state.drawer = false;
     },
     SET_CALENDAR_META(state, calendarMeta) {
       state.calendarMeta = calendarMeta;
@@ -78,6 +85,36 @@ export default new Vuex.Store({
     },
     SET_DAY_META(state, dayMeta) {
       state.dayMeta = dayMeta;
+    },
+    auth_request(state) {
+      state.status = "<img src='/loading.gif' />";
+    },
+    auth_success(state, payload) {
+      state.status = "<img src='/loading.gif' />";
+      state.jwt = payload.jwt;
+      state.userMeta = payload.userMeta;
+    },
+    auth_reset(state, message) {
+      state.status = message;
+    },
+
+    auth_error(state, err) {
+      state.status = `<div style='color: red'>${err}</div>`;
+    },
+    CLEAR_STATUS(state) {
+      state.status = ``;
+    },
+    logout(state) {
+      state.status = "";
+      state.jwt = "";
+      state.user = {};
+      state.userMeta = "";
+      state.apiData = {};
+      state.dayMeta = {};
+      state.dayEvents = [];
+      state.currentDay = null;
+      state.currentMonth = null;
+      state.currentYear = null;
     }
   },
   actions: {
@@ -117,6 +154,112 @@ export default new Vuex.Store({
     },
     stopLoader({ commit }) {
       commit("STOP_LOADER");
+    },
+    logout({ commit }) {
+      return new Promise((resolve, reject) => {
+        commit("logout");
+        commit("CLOSE_EVENT_DRAWER");
+        commit("CLOSE_CATEGORY_DRAWER");
+        localStorage.removeItem("jwt");
+        localStorage.removeItem("userMeta");
+        delete axios.defaults.headers.common["Authorization"];
+        resolve();
+      });
+    },
+    reset({ commit }, payload) {
+      commit("CLEAR_STATUS");
+      return new Promise((resolve, reject) => {
+        commit("CLEAR_STATUS");
+        axios({
+          url: `${config.api.base}${config.api.resetPassword}`,
+          data: payload,
+          method: "POST"
+        })
+          .then(resp => {
+            commit(
+              "auth_reset",
+              `<div style="color: green">Success! You've reset your password.</div>`
+            );
+            commit("logout");
+            localStorage.removeItem("jwt");
+            localStorage.removeItem("userMeta");
+            delete axios.defaults.headers.common["Authorization"];
+            resolve(resp);
+          })
+          .catch(err => {
+            let statusCode = JSON.stringify(err.response.data.statusCode);
+            let message = JSON.parse(JSON.stringify(err.response.data.message));
+
+            commit(
+              "auth_error",
+              `<h3>ERROR:</h3>${message}<div>Your password was not reset.</div>`
+            );
+
+            reject(err);
+          });
+      });
+    },
+    forgot({ commit }, email) {
+      commit("CLEAR_STATUS");
+      return new Promise((resolve, reject) => {
+        commit("auth_request");
+
+        let data = {};
+        data.email = email;
+        data.url = `${config.api.baseClient}${
+          config.api.resetPasswordCallback
+        }`;
+
+        axios({
+          url: `${config.api.base}${config.api.forgetPassword}`,
+          data: data,
+          method: "POST"
+        })
+          .then(resp => {
+            commit(
+              "auth_reset",
+              `<div style="color: green"><h3>Success!</h3><div>Please check your email for your reset link.</div></div>`
+            );
+
+            resolve(resp);
+          })
+          .catch(err => {
+            let statusCode = JSON.stringify(err.response.data.statusCode);
+
+            let message = JSON.parse(JSON.stringify(err.response.data.message));
+            commit("auth_error", `<h3>ERROR:</h3>${message}`);
+            localStorage.removeItem("jwt");
+            localStorage.removeItem("userMeta");
+            reject(err);
+          });
+      });
+    },
+    login({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        commit("auth_request");
+        axios({
+          url: `${config.api.base}${config.api.login}`,
+          data: payload,
+          method: "POST"
+        })
+          .then(resp => {
+            const jwt = resp.data.jwt;
+            const userMeta = resp.data.user;
+            localStorage.setItem("jwt", jwt);
+            localStorage.setItem("userMeta", JSON.stringify(userMeta));
+            axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
+            commit("auth_success", { jwt, userMeta });
+            resolve(resp);
+          })
+          .catch(err => {
+            console.log("error");
+            let message = JSON.parse(JSON.stringify(err.response.data.message));
+            commit("auth_error", message);
+            localStorage.removeItem("jwt");
+            localStorage.removeItem("userMeta");
+            reject(err);
+          });
+      });
     }
   },
   getters: {
@@ -134,6 +277,9 @@ export default new Vuex.Store({
     dayEvents: state => state.dayEvents,
     dayMeta: state => state.dayMeta,
     eventDrawer: state => state.eventDrawer,
-    isLoading: state => state.isLoading
+    isLoading: state => state.isLoading,
+    isLoggedIn: state => !!state.jwt,
+    authStatus: state => state.status,
+    userMeta: state => state.userMeta
   }
 });
