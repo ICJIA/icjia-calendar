@@ -29,11 +29,3 @@ const vm = new Vue({
   store,
   render: h => h(App)
 }).$mount("#app");
-
-// router.beforeEach((routeTo, routeFrom, next) => {
-//   vm.$store.dispatch("startLoader");
-//   next();
-// });
-// router.afterEach(() => {
-//   vm.$store.dispatch("stopLoader");
-// });
