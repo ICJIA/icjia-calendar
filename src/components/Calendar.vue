@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar
-      style="position:fixed; top: 65px; z-index: 100"
+      style="position:fixed; top: 57px; z-index: 100"
       light
       color="blue-grey lighten-5"
       class="mt-0"

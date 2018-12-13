@@ -3,10 +3,10 @@
     <v-navigation-drawer
       :value="categoryDrawer"
       fixed
-      clipped
       app
       disable-resize-watcher
       width="250"
+      style="background: #eee; z-index: 150"
     >
       <div class="text-xs-center pb-0 pt-3 mb-3">
         <v-btn depressed small @click="closeCategoryDrawer">CLOSE
