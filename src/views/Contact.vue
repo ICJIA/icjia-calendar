@@ -3,7 +3,7 @@
     <v-container fill-height class="px-3 mt-5" id="page-content">
       <v-layout row wrap>
         <v-flex xs10 offset-xs1>
-          <h1>Contact ICJIA Technical Support</h1>
+          <h1>Contact ICJIA Web Support</h1>
         </v-flex>
 
         <v-flex xs10 offset-xs1 style="margin-top: 50px">

@@ -1,34 +1,33 @@
 <template>
   <v-container fill-height>
     <v-layout row class="text-xs-center" align-center justify-center>
-      <v-flex xs5 class="grey lighten-4 animated bounceInDown">
-        <transition name="fade">
-          <v-card class>
-            <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
-              <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
-            </div>
-            <div class="mt-3 mb-3">
-              <h2>Reset My Password</h2>
-            </div>
-            <div class="pl-3 pr-3">
-              <v-form>
-                <v-text-field
-                  prepend-icon="person"
-                  name="email"
-                  label="email"
-                  v-model="email"
-                  ref="email"
-                ></v-text-field>
+      <v-flex xs12 sm6 class="grey lighten-4 animated bounceInDown">
+        <v-card class="pb-4">
+          <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
+            <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
+          </div>
+          <div class="mt-3 mb-3">
+            <h2>Reset My Password</h2>
+          </div>
+          <div class="pl-3 pr-3">
+            <v-form>
+              <v-text-field
+                prepend-icon="person"
+                name="email"
+                label="enter your email address"
+                v-model="email"
+                ref="email"
+              ></v-text-field>
 
-                <v-card-actions>
-                  <v-btn primary large block @click="reset">Send Reset Link</v-btn>
-                </v-card-actions>
+              <v-card-actions>
+                <v-btn primary large block @click="reset">Send Reset Link</v-btn>
+              </v-card-actions>
 
-                <div style="height: 50px;" class="mt-3">{{this.$store.state.status}}</div>
-              </v-form>
-            </div>
-          </v-card>
-        </transition>
+              <div style="height: 50px;" class="mt-3">{{this.$store.state.status}}</div>
+            </v-form>
+          </div>
+          <div class>LOGOUT</div>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>

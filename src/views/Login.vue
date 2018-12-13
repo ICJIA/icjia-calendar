@@ -1,10 +1,13 @@
 <template>
   <v-container fill-height>
     <v-layout row class="text-xs-center" align-center justify-center>
-      <v-flex xs5 class="grey lighten-4 animated zoomIn fast">
+      <v-flex xs12 sm6 class="grey lighten-4 animated zoomIn fast">
         <v-card class v-if="!this.$store.getters.isLoggedIn">
           <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
             <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
+          </div>
+          <div class="text-xs-center">
+            <h1 class="mt-3" style="color: #555555 !important">USER LOGIN</h1>
           </div>
           <div class="pr-3 pl-3 pt-3 pb-3">
             <v-form>
@@ -78,9 +81,6 @@ export default {
 </script>
 
 <style scoped>
-.login-form {
-  max-width: 500px;
-}
 a {
   color: #222;
   text-decoration: underline;

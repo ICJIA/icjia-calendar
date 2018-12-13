@@ -4,13 +4,9 @@
       <v-btn fab dark small color="grey accent-4" @click="getPreviousMonth()">
         <v-icon dark>remove</v-icon>
       </v-btn>
-      <v-btn
-        v-if="!isCondensed"
-        dark
-        @click="today"
-        color="grey accent-3"
-        style="font-size: 12px;"
-      >TODAY</v-btn>
+      <v-btn v-if="!isCondensed" dark @click="today" color="grey accent-3" style="font-size: 12px;">
+        <v-icon dark>today</v-icon>&nbsp;TODAY
+      </v-btn>
       <v-btn fab dark small color="grey accent-4" @click="getNextMonth()">
         <v-icon dark>add</v-icon>
       </v-btn>&nbsp;&nbsp;
@@ -26,17 +22,16 @@
       </div>
       <!-- <v-btn v-if="!isCondensed" dark color="grey accent-3" @click="refresh">
         <v-icon>refresh</v-icon>
-      </v-btn>
+      </v-btn>-->
       <v-btn
-        v-if="!isCondensed"
         dark
-        color="grey accent-3"
-        href="https://calendar.icjia-api.cloud/admin"
+        color="indigo darken-1"
+        to="/login"
         target="_blank"
         style="color: #fff !important"
       >
-        <v-icon dark left>add_box</v-icon>Add New Event
-      </v-btn>-->
+        <v-icon dark left>lock_open</v-icon>Log out
+      </v-btn>
     </v-toolbar>
 
     <div class="name-container" v-if="!isCondensed">

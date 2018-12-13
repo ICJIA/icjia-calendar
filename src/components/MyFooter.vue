@@ -50,4 +50,10 @@ export default {
 </script>
 
 <style scoped>
+a {
+  color: #eee !important;
+}
+a:hover {
+  color: #aaa !important;
+}
 </style>

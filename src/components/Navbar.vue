@@ -118,7 +118,7 @@
           <v-list-tile v-if="this.$store.getters.isLoggedIn">
             <v-icon left>today</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
-              <router-link to="/" class="link">View Calendar</router-link>
+              <router-link to="/" class="link">Home</router-link>
             </v-list-tile-title>
           </v-list-tile>
           <v-divider class="mb-2 mt-2" v-if="this.$store.getters.isLoggedIn"></v-divider>
@@ -157,13 +157,25 @@
           <v-list-tile v-if="this.$store.getters.isLoggedIn">
             <v-icon left>lock_open</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
-              <router-link to="/login" class="link">Sign Out</router-link>
+              <router-link to="/login" class="link">Log Out</router-link>
             </v-list-tile-title>
           </v-list-tile>
+          <v-list-tile v-if="this.$store.getters.isLoggedIn">
+            <!-- <v-icon left>lock_open</v-icon>&nbsp;&nbsp; -->
+            <v-list-tile-title>
+              <router-link to="/login" class="link">
+                <span
+                  v-if="!isCondensed"
+                  style="color: #ccc; font-size: 14px"
+                >&nbsp;&nbsp;{{this.$store.state.userMeta.email}}</span>
+              </router-link>
+            </v-list-tile-title>
+          </v-list-tile>
+
           <v-list-tile v-else>
             <v-icon left>lock</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
-              <router-link to="/login" class="link">Sign In</router-link>
+              <router-link to="/login" class="link">Log In</router-link>
             </v-list-tile-title>
           </v-list-tile>
         </v-list>

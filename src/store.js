@@ -122,7 +122,6 @@ export default new Vuex.Store({
     setCalendarMeta({ commit }, calendarMeta) {
       commit("SET_CALENDAR_META", calendarMeta);
     },
-
     setVisibleEvents({ commit }, events) {
       commit("SET_VISIBLE_EVENTS", events);
     },
@@ -185,9 +184,7 @@ export default new Vuex.Store({
             resolve(resp);
           })
           .catch(err => {
-            let statusCode = JSON.stringify(err.response.data.statusCode);
             let message = JSON.parse(JSON.stringify(err.response.data.message));
-
             commit(
               "auth_error",
               `ERROR:${message} Your password was not reset.`
