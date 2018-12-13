@@ -37,7 +37,7 @@
       stateless
       floating
       disable-resize-watcher
-      width="325"
+      width="400"
       style="background: #eee"
     >
       <v-list class>
