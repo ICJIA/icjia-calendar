@@ -29,6 +29,7 @@
         to="/login"
         target="_blank"
         style="color: #fff !important"
+        v-if="!isCondensed"
       >
         <v-icon dark left>lock_open</v-icon>Log out
       </v-btn>

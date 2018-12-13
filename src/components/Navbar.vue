@@ -34,7 +34,6 @@
       fixed
       app
       right
-      stateless
       floating
       disable-resize-watcher
       width="400"
