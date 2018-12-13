@@ -96,7 +96,7 @@ export default {
   data() {
     return {
       name: "",
-      email: "",
+      email: this.$store.state.userMeta.email || "",
       comment: "",
       showSubmit: true,
       showAxiosError: false,

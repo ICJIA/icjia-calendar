@@ -219,7 +219,7 @@ export default new Vuex.Store({
           })
           .catch(err => {
             let message = JSON.parse(JSON.stringify(err.response.data.message));
-            commit("auth_error", `ERROR: ${message}`);
+            commit("auth_error", `${message}`);
             localStorage.removeItem("jwt");
             localStorage.removeItem("userMeta");
             commit("STOP_LOADER");

@@ -166,7 +166,7 @@
               <router-link to="/login" class="link">
                 <span
                   v-if="!isCondensed"
-                  style="color: #ccc; font-size: 14px"
+                  style="color:#8C9EFF; font-size: 14px"
                 >&nbsp;&nbsp;{{this.$store.state.userMeta.email}}</span>
               </router-link>
             </v-list-tile-title>
