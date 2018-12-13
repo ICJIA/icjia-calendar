@@ -10,23 +10,28 @@
             <h2>Reset My Password</h2>
           </div>
           <div class="pl-3 pr-3">
-            <v-form>
+            <v-form @submit="reset" onSubmit="return false;">
               <v-text-field
                 prepend-icon="person"
                 name="email"
-                label="enter your email address"
+                label="email"
                 v-model="email"
                 ref="email"
               ></v-text-field>
 
               <v-card-actions>
-                <v-btn primary large block @click="reset">Send Reset Link</v-btn>
+                <v-btn primary :disabled="disabled" large block @click="reset">Send Reset Link</v-btn>
               </v-card-actions>
 
-              <div style="height: 50px;" class="mt-3">{{this.$store.state.status}}</div>
+              <div
+                style="height: 50px;font-weight: bold;font-size: 18px; "
+                class="mt-3"
+              >{{this.$store.state.status}}</div>
             </v-form>
           </div>
-          <div class>LOGOUT</div>
+          <div class="text-xs-left pl-3" style="font-weight: bold">
+            <router-link to="/login">&laquo;&nbsp;Back to log in</router-link>
+          </div>
         </v-card>
       </v-flex>
     </v-layout>
@@ -43,13 +48,19 @@ export default {
   },
   data() {
     return {
-      email: ""
+      email: "",
+      disabled: false
     };
   },
   methods: {
     reset() {
       let email = this.email.toString();
-      this.$store.dispatch("forgot", email);
+
+      this.$store.dispatch("forgot", email).then(r => {
+        if (r.data.ok) {
+          this.disabled = true;
+        }
+      });
     }
   }
 };

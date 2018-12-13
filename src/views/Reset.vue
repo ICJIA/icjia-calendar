@@ -6,7 +6,7 @@
           <v-card-title primary-title>
             <h2>Reset Password</h2>
           </v-card-title>
-          <v-form v-if="hasCode">
+          <v-form v-if="hasCode" @submit="reset" onSubmit="return false;">
             <v-text-field
               prepend-icon="lock"
               name="password"

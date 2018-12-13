@@ -10,7 +10,7 @@
             <h1 class="mt-3" style="color: #555555 !important">USER LOGIN</h1>
           </div>
           <div class="pr-3 pl-3 pt-3 pb-3">
-            <v-form>
+            <v-form @submit="login" onSubmit="return false;">
               <v-text-field
                 prepend-icon="person"
                 name="identifier"
@@ -18,6 +18,7 @@
                 v-model="identifier"
                 autocomplete="identifier"
                 ref="identifier"
+                @keydown.enter="login"
               ></v-text-field>
               <v-text-field
                 prepend-icon="lock"
@@ -26,15 +27,19 @@
                 type="password"
                 v-model="password"
                 autocomplete="password"
+                @keydown.enter="login"
               ></v-text-field>
 
               <v-card-actions class="pt-5">
                 <v-btn primary large block @click="login">Login&nbsp;</v-btn>
               </v-card-actions>
-              <div style="height: 50px;" class="mt-3">{{this.$store.state.status}}</div>
+              <div
+                style="font-size: 18px; height: 50px; font-weight: bold"
+                class="mt-3"
+              >{{this.$store.state.status}}</div>
 
               <div class="mt-2 mb-3">
-                <router-link to="/forgot">I forgot my password</router-link>
+                <router-link to="/forgot">Forget your password?</router-link>
               </div>
             </v-form>
           </div>
