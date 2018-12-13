@@ -1,10 +1,14 @@
 <template>
   <v-app>
+    <div v-if="isLoading" style="z-index: 1000">
+      <v-progress-linear :indeterminate="true" style="padding: 0; margin: 0" height="5"></v-progress-linear>
+    </div>
+    <div v-else style="height: 4px;"></div>
     <navbar/>
     <div
       v-if="$browserDetect.isIE"
       class="text-xs-center pt-5 pb-5"
-      style="background-color: red; margin-top: 70px;"
+      style="background-color: red; margin-top: 140px;"
     >
       <h1 style="color: white">
         Your browser is out of date.
@@ -20,10 +24,6 @@
     </div>
 
     <v-content>
-      <div v-if="isLoading">
-        <v-progress-linear :indeterminate="true" style="padding: 0; margin: 0" height="5"></v-progress-linear>
-      </div>
-      <div v-else style="height: 4px;"></div>
       <router-view/>
     </v-content>
     <my-footer/>

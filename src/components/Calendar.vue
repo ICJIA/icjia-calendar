@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-toolbar light color="blue-grey lighten-5" class="mt-0">
+    <v-toolbar
+      style="position:fixed; top: 65px; z-index: 100"
+      light
+      color="blue-grey lighten-5"
+      class="mt-0"
+    >
       <v-btn fab dark small color="grey accent-4" @click="getPreviousMonth()">
         <v-icon dark>remove</v-icon>
       </v-btn>
@@ -23,7 +28,7 @@
       <!-- <v-btn v-if="!isCondensed" dark color="grey accent-3" @click="refresh">
         <v-icon>refresh</v-icon>
       </v-btn>-->
-      <v-btn
+      <!-- <v-btn
         dark
         color="indigo darken-1"
         to="/login"
@@ -32,23 +37,25 @@
         v-if="!isCondensed"
       >
         <v-icon dark left>lock_open</v-icon>Log out
-      </v-btn>
+      </v-btn>-->
     </v-toolbar>
 
-    <div class="name-container" v-if="!isCondensed">
-      <div class="name-element">Sunday</div>
-      <div class="name-element">Monday</div>
-      <div class="name-element">Tuesday</div>
-      <div class="name-element">Wednesday</div>
-      <div class="name-element">Thursday</div>
-      <div class="name-element">Friday</div>
-      <div class="name-element">Saturday</div>
-    </div>
+    <div style="padding-top: 60px;">
+      <div class="name-container" v-if="!isCondensed">
+        <div class="name-element">Sunday</div>
+        <div class="name-element">Monday</div>
+        <div class="name-element">Tuesday</div>
+        <div class="name-element">Wednesday</div>
+        <div class="name-element">Thursday</div>
+        <div class="name-element">Friday</div>
+        <div class="name-element">Saturday</div>
+      </div>
 
-    <div class="wrapper with-height">
-      <div v-for="i in gridSize" :key="`1${i}`">
-        <div class="box box1" @click="getDayInfo(i)" :class="gridBackground(i)">
-          <day-maker :gridID="i" :dayObj="generateDayMeta(i)"/>
+      <div class="wrapper with-height">
+        <div v-for="i in gridSize" :key="`1${i}`">
+          <div class="box box1" @click="getDayInfo(i)" :class="gridBackground(i)">
+            <day-maker :gridID="i" :dayObj="generateDayMeta(i)"/>
+          </div>
         </div>
       </div>
     </div>

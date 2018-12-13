@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2">
+  <div>
     <calendar/>
   </div>
 </template>

@@ -34,10 +34,9 @@
       fixed
       app
       right
-      floating
       disable-resize-watcher
       width="400"
-      style="background: #eee"
+      style="background: #eee; z-index: 150"
     >
       <v-list class>
         <div class="text-xs-center">
@@ -109,7 +108,7 @@
           <v-icon>refresh</v-icon>
         </v-btn>
       </div>
-      <v-menu offset-y nudge-left="100" transition="slide-x-transition">
+      <v-menu offset-y nudge-left="100" transition="slide-x-transition" style="z-index: 150;">
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
         </v-btn>
