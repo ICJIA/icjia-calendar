@@ -1,7 +1,19 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="drawer" fixed clipped app disable-resize-watcher width="250">
-      <v-list class="pl-3 pr-3 mt-5 mb-5">
+    <v-navigation-drawer
+      :value="categoryDrawer"
+      fixed
+      clipped
+      app
+      disable-resize-watcher
+      width="250"
+    >
+      <div class="text-xs-center pb-0 pt-3 mb-3">
+        <v-btn depressed small @click="closeCategoryDrawer">CLOSE
+          <v-icon right dark>close</v-icon>
+        </v-btn>
+      </div>
+      <v-list class="pl-3 pr-3mb-5">
         <v-list-tile v-for="(category, index) in config.categories" :key="index">
           <v-checkbox
             style="font-size: 12px !important;"
@@ -81,8 +93,8 @@
         </div>
       </v-list>
     </v-navigation-drawer>
-    <v-toolbar dark app color="indigo darken-1">
-      <v-toolbar-side-icon @click.stop="drawer = !drawer" v-if="this.$store.getters.isLoggedIn"></v-toolbar-side-icon>
+    <v-toolbar dark app color="indigo darken-4">
+      <v-toolbar-side-icon @click.stop="toggleCategoryDrawer" v-if="this.$store.getters.isLoggedIn"></v-toolbar-side-icon>
       <router-link to="/" class="nav">
         <v-toolbar-title class="text-uppercase">
           <span class style="color: #fff; font-weight: 900">ILLINOIS</span> |
@@ -230,6 +242,12 @@ export default {
         this.$store.dispatch("setVisibleEvents", isVisible);
       }
     },
+    toggleCategoryDrawer() {
+      this.$store.commit("TOGGLE_CATEGORY_DRAWER");
+    },
+    closeCategoryDrawer() {
+      this.$store.commit("CLOSE_CATEGORY_DRAWER");
+    },
     toggleEventDrawer() {
       this.$store.commit("TOGGLE_EVENT_DRAWER");
     },
@@ -264,6 +282,9 @@ export default {
     },
     eventDrawer() {
       return this.$store.state.eventDrawer;
+    },
+    categoryDrawer() {
+      return this.$store.state.categoryDrawer;
     },
     isLoading() {
       return this.$store.getters.isLoading;

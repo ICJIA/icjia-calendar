@@ -21,14 +21,14 @@ export default new Vuex.Store({
     minYear: null,
     maxYear: null,
     apiData: {},
-    drawer: false,
     dayEvents: [],
     dayMeta: {},
     isLoading: false,
     status: "",
     jwt: localStorage.getItem("jwt") || "",
     userMeta: JSON.parse(localStorage.getItem("userMeta")) || "",
-    user: {}
+    user: {},
+    categoryDrawer: false
   },
   mutations: {
     TOGGLE_DEBUG(state, debug) {
@@ -43,11 +43,14 @@ export default new Vuex.Store({
     TOGGLE_EVENT_DRAWER(state) {
       state.eventDrawer = !state.eventDrawer;
     },
-    TOGGLE_DRAWER(state, drawer) {
-      state.debug = !drawer;
+    OPEN_CATEGORY_DRAWER(state) {
+      state.categoryDrawer = true;
     },
     CLOSE_CATEGORY_DRAWER(state) {
-      state.drawer = false;
+      state.categoryDrawer = false;
+    },
+    TOGGLE_CATEGORY_DRAWER(state) {
+      state.categoryDrawer = !state.categoryDrawer;
     },
     SET_CALENDAR_META(state, calendarMeta) {
       state.calendarMeta = calendarMeta;
@@ -86,11 +89,9 @@ export default new Vuex.Store({
     SET_DAY_META(state, dayMeta) {
       state.dayMeta = dayMeta;
     },
-    auth_request(state) {
-      state.status = "<img src='/loading.gif' />";
-    },
+
     auth_success(state, payload) {
-      state.status = "<img src='/loading.gif' />";
+      state.status = "Success!";
       state.jwt = payload.jwt;
       state.userMeta = payload.userMeta;
     },
@@ -99,7 +100,7 @@ export default new Vuex.Store({
     },
 
     auth_error(state, err) {
-      state.status = `<div style='color: red'>${err}</div>`;
+      state.status = `${err}`;
     },
     CLEAR_STATUS(state) {
       state.status = ``;
@@ -176,10 +177,7 @@ export default new Vuex.Store({
           method: "POST"
         })
           .then(resp => {
-            commit(
-              "auth_reset",
-              `<div style="color: green">Success! You've reset your password.</div>`
-            );
+            commit("auth_reset", `Success! You've reset your password.`);
             commit("logout");
             localStorage.removeItem("jwt");
             localStorage.removeItem("userMeta");
@@ -192,7 +190,7 @@ export default new Vuex.Store({
 
             commit(
               "auth_error",
-              `<h3>ERROR:</h3>${message}<div>Your password was not reset.</div>`
+              `ERROR:${message} Your password was not reset.`
             );
 
             reject(err);
@@ -202,8 +200,7 @@ export default new Vuex.Store({
     forgot({ commit }, email) {
       commit("CLEAR_STATUS");
       return new Promise((resolve, reject) => {
-        commit("auth_request");
-
+        commit("START_LOADER");
         let data = {};
         data.email = email;
         data.url = `${config.api.baseClient}${
@@ -218,25 +215,25 @@ export default new Vuex.Store({
           .then(resp => {
             commit(
               "auth_reset",
-              `<div style="color: green"><h3>Success!</h3><div>Please check your email for your reset link.</div></div>`
+              `Success! Please check your email for your reset link.`
             );
-
+            commit("STOP_LOADER");
             resolve(resp);
           })
           .catch(err => {
-            let statusCode = JSON.stringify(err.response.data.statusCode);
-
             let message = JSON.parse(JSON.stringify(err.response.data.message));
-            commit("auth_error", `<h3>ERROR:</h3>${message}`);
+            commit("auth_error", `ERROR: ${message}`);
             localStorage.removeItem("jwt");
             localStorage.removeItem("userMeta");
+            commit("STOP_LOADER");
             reject(err);
           });
       });
     },
     login({ commit }, payload) {
       return new Promise((resolve, reject) => {
-        commit("auth_request");
+        commit("START_LOADER");
+
         axios({
           url: `${config.api.base}${config.api.login}`,
           data: payload,
@@ -249,6 +246,7 @@ export default new Vuex.Store({
             localStorage.setItem("userMeta", JSON.stringify(userMeta));
             axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
             commit("auth_success", { jwt, userMeta });
+            commit("STOP_LOADER");
             resolve(resp);
           })
           .catch(err => {
@@ -257,6 +255,7 @@ export default new Vuex.Store({
             commit("auth_error", message);
             localStorage.removeItem("jwt");
             localStorage.removeItem("userMeta");
+            commit("STOP_LOADER");
             reject(err);
           });
       });
@@ -273,13 +272,13 @@ export default new Vuex.Store({
     minYear: state => state.minYear,
     maxYear: state => state.maxYear,
     apiData: state => state.apiData,
-    drawer: state => state.drawer,
+    categoryDrawer: state => state.categoryDrawer,
     dayEvents: state => state.dayEvents,
     dayMeta: state => state.dayMeta,
     eventDrawer: state => state.eventDrawer,
     isLoading: state => state.isLoading,
     isLoggedIn: state => !!state.jwt,
-    authStatus: state => state.status,
+    status: state => state.status,
     userMeta: state => state.userMeta
   }
 });

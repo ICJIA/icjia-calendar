@@ -1,12 +1,10 @@
 <template>
   <v-container fill-height>
     <v-layout row class="text-xs-center" align-center justify-center>
-      <v-flex xs4 class="grey lighten-4 animated zoomIn fast">
+      <v-flex xs5 class="grey lighten-4 animated zoomIn fast">
         <v-card class v-if="!this.$store.getters.isLoggedIn">
           <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
-            <h2>
-              <span class="text-uppercase;">ICJIA LOGIN</span>
-            </h2>
+            <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
           </div>
           <div class="pr-3 pl-3 pt-3 pb-3">
             <v-form>
@@ -26,13 +24,15 @@
                 v-model="password"
                 autocomplete="password"
               ></v-text-field>
+
               <v-card-actions class="pt-5">
-                <v-btn primary large block @click="login">Login</v-btn>
+                <v-btn primary large block @click="login">Login&nbsp;</v-btn>
               </v-card-actions>
-              <div class="mt-4 mb-3">
+              <div style="height: 50px;" class="mt-3">{{this.$store.state.status}}</div>
+
+              <div class="mt-2 mb-3">
                 <router-link to="/forgot">I forgot my password</router-link>
               </div>
-              <div style="height: 50px; font-weight: bold" v-html="this.$store.state.status"></div>
             </v-form>
           </div>
         </v-card>
