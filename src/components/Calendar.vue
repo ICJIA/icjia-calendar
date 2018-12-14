@@ -235,6 +235,8 @@ export default {
   display: grid;
   grid-gap: 2px;
   grid-template-columns: repeat(7, minmax(50px, 1fr));
+  border-right: 1px solid #999;
+  border-left: 1px solid #999;
 }
 .box {
   background-color: #eee;
@@ -254,6 +256,9 @@ export default {
   grid-template-columns: repeat(7, minmax(50px, 1fr));
   grid-auto-rows: minmax(10px, auto) !important;
   margin-top: 2px;
+  border-right: 1px solid #999;
+  border-left: 1px solid #999;
+  border-top: 1px solid #999;
 }
 .name-element {
   padding-top: 10px;
