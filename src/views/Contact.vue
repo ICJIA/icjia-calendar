@@ -64,7 +64,7 @@
             For questions or comments, please contact
             <a
               href="mailto: christopher.schweda@illinois.gov"
-            >ICJIA Technical Support</a>
+            >ICJIA Web Support</a>
           </div>
         </v-flex>
       </v-layout>

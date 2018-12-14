@@ -26,6 +26,7 @@ export default {
 
     this.getEvents();
   },
+  mounted() {},
   data() {
     return {
       events: {}
@@ -45,12 +46,21 @@ export default {
         this.$store.dispatch("stopLoader");
       } catch (e) {
         this.$store.dispatch("stopLoader");
-        let error = JSON.stringify(e);
-        console.log(error);
-        this.$store.commit(
-          "api_error",
-          "NETWORK ERROR. PLEASE LOG OUT AND TRY AGAIN OR REFRESH."
-        );
+        this.$store.commit("SET_ERROR", true);
+        let error = JSON.parse(JSON.stringify(e));
+        try {
+          let message = error.response.data.message;
+          console.log(message);
+          this.$store.commit(
+            "api_error",
+            `${error.response.data.message} PLEASE LOG OUT AND TRY AGAIN.`
+          );
+        } catch {
+          this.$store.commit(
+            "api_error",
+            `NETWORK ERROR. PLEASE LOG OUT AND TRY AGAIN.`
+          );
+        }
       }
     },
     createEvents(response) {

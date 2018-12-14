@@ -30,7 +30,8 @@ export default new Vuex.Store({
     user: {},
     categoryDrawer: false,
     forceRender: 1,
-    error: ""
+    error: "",
+    isError: false
   },
   mutations: {
     FORCE_RENDER(state) {
@@ -99,7 +100,9 @@ export default new Vuex.Store({
     SET_DAY_META(state, dayMeta) {
       state.dayMeta = dayMeta;
     },
-
+    SET_ERROR(state, boolean) {
+      state.isError = boolean;
+    },
     auth_success(state, payload) {
       state.status = "Success!";
       state.jwt = payload.jwt;
@@ -124,11 +127,6 @@ export default new Vuex.Store({
       state.user = {};
       state.userMeta = "";
       state.apiData = {};
-      state.dayMeta = {};
-      state.dayEvents = [];
-      state.currentDay = null;
-      state.currentMonth = null;
-      state.currentYear = null;
     }
   },
   actions: {
@@ -173,6 +171,7 @@ export default new Vuex.Store({
         commit("logout");
         commit("CLOSE_EVENT_DRAWER");
         commit("CLOSE_CATEGORY_DRAWER");
+        commit("SET_ERROR", true);
         localStorage.removeItem("jwt");
         localStorage.removeItem("userMeta");
         delete axios.defaults.headers.common["Authorization"];
@@ -190,6 +189,7 @@ export default new Vuex.Store({
         })
           .then(resp => {
             commit("auth_reset", `Success! You've reset your password.`);
+            commit("SET_ERROR", false);
             commit("logout");
             localStorage.removeItem("jwt");
             localStorage.removeItem("userMeta");
@@ -197,11 +197,14 @@ export default new Vuex.Store({
             resolve(resp);
           })
           .catch(err => {
-            let message = JSON.parse(JSON.stringify(err.response.data.message));
-            commit(
-              "auth_error",
-              `ERROR: ${message} Your password was not reset.`
-            );
+            let message;
+            try {
+              message = JSON.parse(JSON.stringify(err.response.data.message));
+            } catch {
+              message = "NETWORK ERROR: Cannot access the API";
+            }
+            commit("SET_ERROR", true);
+            commit("auth_error", `ERROR: ${message}`);
 
             reject(err);
           });
@@ -228,13 +231,20 @@ export default new Vuex.Store({
               `Success! Please check your email for your reset link.`
             );
             commit("STOP_LOADER");
+            commit("SET_ERROR", false);
             resolve(resp);
           })
           .catch(err => {
-            let message = JSON.parse(JSON.stringify(err.response.data.message));
+            let message;
+            try {
+              message = JSON.parse(JSON.stringify(err.response.data.message));
+            } catch {
+              message = "NETWORK ERROR: Please try again.";
+            }
             commit("auth_error", `${message}`);
             localStorage.removeItem("jwt");
             localStorage.removeItem("userMeta");
+            commit("SET_ERROR", true);
             commit("STOP_LOADER");
             reject(err);
           });
@@ -257,15 +267,22 @@ export default new Vuex.Store({
             axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
             commit("auth_success", { jwt, userMeta });
             commit("STOP_LOADER");
+            commit("SET_ERROR", false);
             resolve(resp);
           })
           .catch(err => {
-            console.log("error");
-            let message = JSON.parse(JSON.stringify(err.response.data.message));
+            let message;
+            console.log("error", err);
+            try {
+              message = JSON.parse(JSON.stringify(err.response.data.message));
+            } catch {
+              message = "NETWORK ERROR: Please try again.";
+            }
             commit("auth_error", message);
             localStorage.removeItem("jwt");
             localStorage.removeItem("userMeta");
             commit("STOP_LOADER");
+            commit("SET_ERROR", true);
             reject(err);
           });
       });

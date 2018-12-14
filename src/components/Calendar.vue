@@ -22,12 +22,12 @@
 
       <v-spacer></v-spacer>
 
-      <div v-if="this.$store.state.error.length">
+      <div v-if="this.$store.state.isError">
         <v-btn
           small
           color="error"
           class="white--text"
-          @click="refresh"
+          @click="logout"
           style="font-size: 11px; font-weight: bold"
         >
           <v-icon left dark>error</v-icon>
@@ -67,10 +67,12 @@ import DayMaker from "@/components/DayMaker";
 import moment from "moment";
 import { getDayMeta } from "@/utils";
 import _ from "lodash";
+
 export default {
   components: {
     DayMaker
   },
+
   methods: {
     gridBackground(gridID) {
       const dayObj = getDayMeta(gridID, this.$store);
@@ -86,6 +88,9 @@ export default {
     },
     refresh() {
       window.location = "/";
+    },
+    logout() {
+      this.$store.dispatch("logout").then(() => this.$router.push("/login"));
     },
     generateDayMeta(gridID) {
       return getDayMeta(gridID, this.$store);
