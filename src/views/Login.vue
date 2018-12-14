@@ -13,7 +13,7 @@
               <v-text-field
                 prepend-icon="person"
                 name="identifier"
-                label="username"
+                label="username or email"
                 v-model="identifier"
                 autocomplete="identifier"
                 ref="identifier"

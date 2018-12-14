@@ -91,6 +91,7 @@ export default {
       return getDayMeta(gridID, this.$store);
     },
     getDayInfo(gridID) {
+      this.$store.commit("FORCE_RENDER");
       let meta = getDayMeta(gridID, this.$store);
       this.$store.dispatch("setDayMeta", meta);
       this.$store.dispatch("setCurrentDay", meta.day);

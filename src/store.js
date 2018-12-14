@@ -28,9 +28,13 @@ export default new Vuex.Store({
     jwt: localStorage.getItem("jwt") || "",
     userMeta: JSON.parse(localStorage.getItem("userMeta")) || "",
     user: {},
-    categoryDrawer: false
+    categoryDrawer: false,
+    forceRender: 1
   },
   mutations: {
+    FORCE_RENDER(state) {
+      state.forceRender++;
+    },
     TOGGLE_DEBUG(state, debug) {
       state.debug = !debug;
     },

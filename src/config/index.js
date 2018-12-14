@@ -26,7 +26,7 @@ const config = {
     maxYear: 2099
   },
   api: {
-    base: "https://calendar.icjia-api.cloud",
+    base: "https://content.icjia-api.cloud",
     baseClient: "https://calendar.icjia.cloud",
     forgetPassword: "/auth/forgot-password",
     resetPassword: "/auth/reset-password",

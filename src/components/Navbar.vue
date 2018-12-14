@@ -21,6 +21,7 @@
             @click.native="toggleEvents(category.color)"
             :color="category.color"
             input-value="true"
+            class="category"
           ></v-checkbox>
         </v-list-tile>
 
@@ -59,6 +60,7 @@
               <v-layout>
                 <v-flex xs12>
                   <v-card class="mt-3">
+                    <!-- <transition-group name="fade" tag="v-card"> -->
                     <div
                       class="text-xs-right pr-3 pt-2 pb-2"
                       :style="getCategoryBackgroundColor(event.color)"
@@ -77,6 +79,7 @@
                       <div v-html="markdownToHtml(event.description)" class="description mt-3"></div>
                     </div>
                   </v-card>
+                  <!-- </transition-group> -->
                 </v-flex>
               </v-layout>
             </div>
@@ -100,9 +103,7 @@
         </v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <!-- <v-btn dark @click="logout" color="indigo accent-2" v-if="!isCondensed">
-        <v-icon>lock_open</v-icon>
-      </v-btn>-->
+
       <div v-if="this.$store.getters.isLoggedIn">
         <v-btn icon @click="refresh" v-if="!isCondensed">
           <v-icon>refresh</v-icon>
@@ -125,7 +126,7 @@
             <v-icon left>add</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
               <a
-                href="https://calendar.icjia-api.cloud/admin"
+                href="https://content.icjia-api.cloud/admin"
                 class="link"
                 target="_blank"
               >Add New Event</a>
@@ -335,7 +336,7 @@ export default {
 };
 </script>
 
-<style>
+<style >
 .nav-state {
   font-weight: 900;
 }
@@ -373,7 +374,7 @@ a.link:hover {
   color: #ccc;
 }
 
-.v-label {
+.category .v-label {
   font-size: 12px !important;
   font-weight: 900 !important;
   color: #666 !important;
@@ -390,5 +391,15 @@ a.link:hover {
   text-transform: uppercase;
   font-size: 12px;
   color: #222;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease-out;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
