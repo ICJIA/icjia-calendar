@@ -21,6 +21,21 @@
       >{{currentDate}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
+      <!-- <div v-if="this.$store.state.error.length">
+        <v-btn color="error">{{this.$store.state.error}}</v-btn>
+      </div>-->
+      <div v-if="this.$store.state.error.length">
+        <v-btn
+          small
+          color="error"
+          class="white--text"
+          @click="refresh"
+          style="font-size: 11px; font-weight: bold"
+        >
+          <v-icon left dark>error</v-icon>
+          {{$store.state.error}}
+        </v-btn>
+      </div>
 
       <div v-if="isLoading">
         <v-progress-circular small indeterminate color="primary"></v-progress-circular>

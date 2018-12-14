@@ -38,7 +38,7 @@
               >{{this.$store.state.status}}</div>
 
               <div class="mt-2 mb-3" style="font-weight: bold">
-                <router-link to="/forgot">Forget your password?</router-link>
+                <router-link to="/forgot">Reset your password</router-link>
               </div>
             </v-form>
           </div>

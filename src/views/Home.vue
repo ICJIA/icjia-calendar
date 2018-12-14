@@ -44,7 +44,13 @@ export default {
         this.setToday();
         this.$store.dispatch("stopLoader");
       } catch (e) {
-        console.log("Error: ", JSON.stringify(e));
+        this.$store.dispatch("stopLoader");
+        let error = JSON.stringify(e);
+        console.log(error);
+        this.$store.commit(
+          "api_error",
+          "NETWORK ERROR. PLEASE LOG OUT AND TRY AGAIN OR REFRESH."
+        );
       }
     },
     createEvents(response) {

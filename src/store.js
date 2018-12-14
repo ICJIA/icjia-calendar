@@ -29,7 +29,8 @@ export default new Vuex.Store({
     userMeta: JSON.parse(localStorage.getItem("userMeta")) || "",
     user: {},
     categoryDrawer: false,
-    forceRender: 1
+    forceRender: 1,
+    error: ""
   },
   mutations: {
     FORCE_RENDER(state) {
@@ -105,6 +106,9 @@ export default new Vuex.Store({
 
     auth_error(state, err) {
       state.status = `${err}`;
+    },
+    api_error(state, err) {
+      state.error = `${err}`;
     },
     CLEAR_STATUS(state) {
       state.status = ``;
@@ -191,7 +195,7 @@ export default new Vuex.Store({
             let message = JSON.parse(JSON.stringify(err.response.data.message));
             commit(
               "auth_error",
-              `ERROR:${message} Your password was not reset.`
+              `ERROR: ${message} Your password was not reset.`
             );
 
             reject(err);

@@ -2,12 +2,12 @@
   <v-container fill-height>
     <v-layout row class="text-xs-center" align-center justify-center>
       <v-flex xs12 sm6 class="animated bounceInDown">
-        <v-card class="pt-1 pb-5 pl-3 pr-3">
+        <v-card class="pt-1 pb-5">
           <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
             <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
             <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">RESET PASSWORD</div>
           </div>
-          <v-form v-if="hasCode" @submit="reset" onSubmit="return false;">
+          <v-form v-if="!hasCode" @submit="reset" onSubmit="return false;" class="mt-5 pl-3 pr-3">
             <v-text-field
               prepend-icon="lock"
               name="password"
@@ -26,7 +26,7 @@
               autocomplete="passwordConfirmation"
             ></v-text-field>
             <div style="color: red; font-size: 12px">{{matchStatus}}</div>
-            <v-card-actions class="mt-2">
+            <v-card-actions class="mt-4">
               <v-btn primary large block @click="reset">Reset</v-btn>
             </v-card-actions>
           </v-form>
@@ -34,11 +34,7 @@
             <v-btn primary large block @click="forgot">Get password reset link</v-btn>
           </div>
 
-          <div
-            style="height: 50px; color: red; font-weight: bold"
-            class="mt-3"
-            v-html="this.$store.state.status"
-          ></div>
+          <div style="height: 50px; font-weight: bold" class="mt-3">{{this.$store.state.status}}</div>
         </v-card>
       </v-flex>
     </v-layout>
