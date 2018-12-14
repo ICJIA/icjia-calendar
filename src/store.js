@@ -48,6 +48,9 @@ export default new Vuex.Store({
     TOGGLE_EVENT_DRAWER(state) {
       state.eventDrawer = !state.eventDrawer;
     },
+    SET_EVENT_DRAWER(state, val) {
+      state.eventDrawer = val;
+    },
     OPEN_CATEGORY_DRAWER(state) {
       state.categoryDrawer = true;
     },
@@ -56,6 +59,9 @@ export default new Vuex.Store({
     },
     TOGGLE_CATEGORY_DRAWER(state) {
       state.categoryDrawer = !state.categoryDrawer;
+    },
+    SET_CATEGORY_DRAWER(state, val) {
+      state.categoryDrawer = val;
     },
     SET_CALENDAR_META(state, calendarMeta) {
       state.calendarMeta = calendarMeta;
@@ -66,7 +72,6 @@ export default new Vuex.Store({
     STOP_LOADER(state) {
       state.isLoading = false;
     },
-
     SET_VISIBLE_EVENTS(state, visibleEvents) {
       state.visibleEvents = visibleEvents;
     },

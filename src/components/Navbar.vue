@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-navigation-drawer
-      :value="categoryDrawer"
+      v-model="categoryDrawer"
       fixed
       app
       disable-resize-watcher
@@ -30,8 +30,9 @@
         </v-list-tile>
       </v-list>
     </v-navigation-drawer>
+
     <v-navigation-drawer
-      :value="eventDrawer"
+      v-model="eventDrawer"
       fixed
       app
       right
@@ -43,6 +44,7 @@
         <div class="text-xs-center">
           <h1
             style="font-size: 22px; border-bottom: 1px solid #ccc; padding-bottom: 8px;"
+            class
           >{{selectedDate}}</h1>
         </div>
         <div class="text-xs-center pb-0 pt-3">
@@ -94,6 +96,7 @@
         </div>
       </v-list>
     </v-navigation-drawer>
+
     <v-toolbar dark app color="indigo darken-4">
       <v-toolbar-side-icon @click.stop="toggleCategoryDrawer" v-if="this.$store.getters.isLoggedIn"></v-toolbar-side-icon>
       <router-link to="/" class="nav">
@@ -291,11 +294,22 @@ export default {
     currentDate() {
       return moment().format("MMMM YYYY");
     },
-    eventDrawer() {
-      return this.$store.state.eventDrawer;
+
+    categoryDrawer: {
+      get() {
+        return this.$store.state.categoryDrawer;
+      },
+      set(val) {
+        this.$store.commit("SET_CATEGORY_DRAWER", val);
+      }
     },
-    categoryDrawer() {
-      return this.$store.state.categoryDrawer;
+    eventDrawer: {
+      get() {
+        return this.$store.state.eventDrawer;
+      },
+      set(val) {
+        this.$store.commit("SET_EVENT_DRAWER", val);
+      }
     },
     isLoading() {
       return this.$store.getters.isLoading;
@@ -328,7 +342,6 @@ export default {
 
   data() {
     return {
-      drawer: false,
       expand: false,
       config: config
     };
@@ -391,15 +404,5 @@ a.link:hover {
   text-transform: uppercase;
   font-size: 12px;
   color: #222;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.25s ease-out;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>
