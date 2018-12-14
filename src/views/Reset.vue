@@ -7,7 +7,7 @@
             <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
             <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">RESET PASSWORD</div>
           </div>
-          <v-form v-if="!hasCode" @submit="reset" onSubmit="return false;" class="mt-5 pl-3 pr-3">
+          <v-form v-if="hasCode" @submit="reset" onSubmit="return false;" class="mt-5 pl-3 pr-3">
             <v-text-field
               prepend-icon="lock"
               name="password"
