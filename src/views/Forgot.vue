@@ -58,7 +58,7 @@ export default {
       this.$store.commit("CLEAR_STATUS");
     },
     reset() {
-      let email = this.email.toString();
+      let email = this.email.toString().toLowerCase();
 
       this.$store.dispatch("forgot", email).then(r => {
         if (r.data.ok) {
