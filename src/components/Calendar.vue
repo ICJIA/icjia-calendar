@@ -21,9 +21,7 @@
       >{{currentDate}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <!-- <div v-if="this.$store.state.error.length">
-        <v-btn color="error">{{this.$store.state.error}}</v-btn>
-      </div>-->
+
       <div v-if="this.$store.state.error.length">
         <v-btn
           small
@@ -40,19 +38,6 @@
       <div v-if="isLoading">
         <v-progress-circular small indeterminate color="primary"></v-progress-circular>
       </div>
-      <!-- <v-btn v-if="!isCondensed" dark color="grey accent-3" @click="refresh">
-        <v-icon>refresh</v-icon>
-      </v-btn>-->
-      <!-- <v-btn
-        dark
-        color="indigo darken-1"
-        to="/login"
-        target="_blank"
-        style="color: #fff !important"
-        v-if="!isCondensed"
-      >
-        <v-icon dark left>lock_open</v-icon>Log out
-      </v-btn>-->
     </v-toolbar>
 
     <div style="padding-top: 60px;">
