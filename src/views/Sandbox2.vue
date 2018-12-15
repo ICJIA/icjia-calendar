@@ -8,7 +8,7 @@
               <v-text-field
                 v-model="email"
                 :error-messages="emailErrors"
-                label="Email"
+                label="Your @illinois.gov email"
                 @input="$v.email.$touch()"
                 @blur="$v.email.$touch()"
                 aria-label="Email"
@@ -28,10 +28,12 @@
                 v-model="repeatPassword"
                 :error-messages="repeatPasswordErrors"
                 label="Verify Password"
-                :append-icon="e3 ? 'visibility' : 'visibility_off'"
-                @click:append="() => (e3 = !e3)"
-                :type="e3 ? 'password' : 'text'"
+                :append-icon="e4 ? 'visibility' : 'visibility_off'"
+                @click:append="() => (e4 = !e4)"
+                :type="e4 ? 'password' : 'text'"
                 aria-label="Verify Password"
+                @input="$v.repeatPassword.$touch()"
+                @blur="$v.repeatPassword.$touch()"
               ></v-text-field>
             </form>
             <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view>
@@ -76,6 +78,7 @@ export default {
     return {
       name: "",
       e3: true,
+      e4: true,
       email: "",
       password: "",
       repeatPassword: ""
@@ -84,14 +87,16 @@ export default {
   computed: {
     emailErrors() {
       const errors = [];
+      if (!this.$v.email.$dirty) return errors;
       !this.$v.email.required && errors.push("Email is required.");
       !this.$v.email.email && errors.push("Not a valid e-mail address.");
       !this.$v.email.illinoisDotGov &&
-        errors.push("You must use your @illinois.gov email adddress.");
+        errors.push("You must use a valid @illinois.gov email adddress.");
       return errors;
     },
     passwordErrors() {
       const errors = [];
+      if (!this.$v.password.$dirty) return errors;
       !this.$v.password.minLength &&
         errors.push("Password must have minimum 8 characters.");
       !this.$v.password.required && errors.push("Password is required.");
@@ -104,6 +109,7 @@ export default {
     },
     repeatPasswordErrors() {
       const errors = [];
+      if (!this.$v.password.$dirty) return errors;
       !this.$v.repeatPassword.sameAsPassword &&
         errors.push("Passwords must match");
       return errors;
