@@ -90,19 +90,7 @@ const router = new Router({
         }
       }
     },
-    // {
-    //   path: "/404",
-    //   name: "error",
-    //   component: () =>
-    //     import(/* webpackChunkName: "error" */ "./views/404.vue"),
-    //   meta: {
-    //     nav: {
-    //       eventDrawer: false,
-    //       categoryDrawer: false,
-    //       refresh: false
-    //     }
-    //   }
-    // },
+
     {
       path: "/sandbox",
       name: "sandbox",
@@ -141,11 +129,24 @@ const router = new Router({
           refresh: false
         }
       }
+    },
+    {
+      path: "/404",
+      name: "error",
+      component: () =>
+        import(/* webpackChunkName: "error" */ "./views/404.vue"),
+      meta: {
+        nav: {
+          eventDrawer: false,
+          categoryDrawer: false,
+          refresh: false
+        }
+      }
+    },
+    {
+      path: "*",
+      redirect: { name: "error" }
     }
-    // {
-    //   path: "*",
-    //   redirect: { name: "error" }
-    // }
   ]
 });
 
