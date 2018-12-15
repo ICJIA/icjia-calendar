@@ -1,78 +1,72 @@
 <template>
-  <v-container>
-    <h2 class="rule">EVENTS:</h2>
-    <tree-view :data="events" :options="{maxDepth: 4}"></tree-view>
-  </v-container>
+  <div class="page-height">
+    <v-container fill-height class="px-3 mt-5" id="page-content">
+      <v-layout row wrap>
+        <v-flex xs10 offset-xs1 style="margin-top: 50px">
+          <div>
+            <form style="margin-top: 0px">
+              <v-text-field
+                v-model="password"
+                :error-messages="passwordErrors"
+                label="Password"
+                :append-icon="e3 ? 'visibility' : 'visibility_off'"
+                :append-icon-cb="() => (e3 = !e3)"
+                :type="e3 ? 'password' : 'text'"
+                @input="$v.password.$touch()"
+                @blur="$v.password.$touch()"
+              ></v-text-field>
+            </form>
+            <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view>
+          </div>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import moment from "moment";
-import api from "@/api/events.json";
-import _ from "lodash";
+import { validationMixin } from "vuelidate";
+import { required, minLength, alphaNum } from "vuelidate/lib/validators";
+
 export default {
-  created() {
-    this.events = this.init(api);
-  },
-  methods: {
-    init(api) {
-      let events = {};
-      api.forEach(e => {
-        let eventObj = {};
-        let start, end, duration;
-        start = moment(e.start);
-        end = moment(e.end);
+  mixins: [validationMixin],
 
-        duration = end.diff(start, "days");
-        eventObj.title = e.title.trim();
-        eventObj.start = e.start;
-        eventObj.end = e.end;
-        eventObj.duration = duration;
-        eventObj.description = e.description;
-        eventObj.color = "firebrick";
-        eventObj.category = e.category.trim();
-        if (duration === 0) {
-          eventObj.duration = 1;
-          let dayOfYear = start.dayOfYear();
-          if (!_.has(events, start.format("YYYY"))) {
-            events[start.format("YYYY")] = {};
-          }
-          if (!_.has(events[start.format("YYYY")], dayOfYear)) {
-            events[start.format("YYYY")][dayOfYear] = [];
-          }
-          events[start.format("YYYY")][dayOfYear].push(eventObj);
-        } else {
-          for (let d = 0; d <= duration; d++) {
-            let workingDate = start.add(1, "days");
-            let dayOfYear = moment(workingDate).dayOfYear();
+  components: {},
 
-            eventObj.duration = duration + 1;
-            eventObj.year = moment(workingDate).format("YYYY");
-            if (!_.has(events, eventObj.year)) {
-              events[eventObj.year] = {};
-            }
-            if (!_.has(events[eventObj.year], dayOfYear)) {
-              events[eventObj.year][dayOfYear] = [];
-            }
-            events[eventObj.year][dayOfYear].push(eventObj);
-          }
-        }
-      });
-      return events;
-    }
+  mounted() {},
+
+  validations: {
+    password: { required, alphaNum, minLength: minLength(8) }
   },
   data() {
     return {
-      api: api,
-      events: null
+      name: "",
+      e3: true,
+      password: ""
     };
+  },
+  computed: {
+    passwordErrors() {
+      const errors = [];
+      !this.$v.password.minLength &&
+        errors.push("Password must have minimum 8 characters.");
+      !this.$v.password.required && errors.push("Password is required");
+      !this.$v.password.alphaNum &&
+        errors.push("Password must be Alpha Numeric characters.");
+      return errors;
+    },
+
+    isSuccess(v) {
+      return !this.$v.$invalid && this.$v.$dirty;
+    }
+  },
+  methods: {
+    submit() {
+      this.$v.$touch();
+    }
   }
 };
 </script>
 
 <style scoped>
-.rule {
-  border-bottom: 1px solid #aaa;
-  padding-bottom: 10px;
-  margin-bottom: 12px;
-}
 </style>

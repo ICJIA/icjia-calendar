@@ -22,19 +22,7 @@ const router = new Router({
         }
       }
     },
-    {
-      path: "/sandbox",
-      name: "sandbox",
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Sandbox.vue"),
-      meta: {
-        nav: {
-          eventDrawer: true,
-          categoryDrawer: true,
-          refresh: false
-        }
-      }
-    },
+
     {
       path: "/contact",
       name: "contact",
@@ -111,6 +99,32 @@ const router = new Router({
         nav: {
           eventDrawer: false,
           categoryDrawer: false,
+          refresh: false
+        }
+      }
+    },
+    {
+      path: "/sandbox",
+      name: "sandbox",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/Sandbox.vue"),
+      meta: {
+        nav: {
+          eventDrawer: true,
+          categoryDrawer: true,
+          refresh: false
+        }
+      }
+    },
+    {
+      path: "/sandbox-2",
+      name: "sandbox-2",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/Sandbox2.vue"),
+      meta: {
+        nav: {
+          eventDrawer: true,
+          categoryDrawer: true,
           refresh: false
         }
       }

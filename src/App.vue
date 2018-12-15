@@ -26,7 +26,6 @@
     <v-content>
       <router-view/>
     </v-content>
-
     <my-footer/>
   </v-app>
 </template>
@@ -59,6 +58,7 @@ export default {
     });
     this.appInit();
   },
+  mounted() {},
   methods: {
     appInit() {
       this.$store.dispatch("setMinYear", config.app.minYear);
