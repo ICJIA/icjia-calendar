@@ -10,18 +10,20 @@
                 :error-messages="passwordErrors"
                 label="Password"
                 :append-icon="e3 ? 'visibility' : 'visibility_off'"
-                :append-icon-cb="() => (e3 = !e3)"
+                @click:append="() => (e3 = !e3)"
                 :type="e3 ? 'password' : 'text'"
                 @input="$v.password.$touch()"
                 @blur="$v.password.$touch()"
+                aria-label="Password"
               ></v-text-field>
               <v-text-field
                 v-model="repeatPassword"
                 :error-messages="repeatPasswordErrors"
                 label="Verify Password"
                 :append-icon="e3 ? 'visibility' : 'visibility_off'"
-                :append-icon-cb="() => (e3 = !e3)"
+                @click:append="() => (e3 = !e3)"
                 :type="e3 ? 'password' : 'text'"
+                aria-label="Verify Password"
               ></v-text-field>
             </form>
             <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view>
