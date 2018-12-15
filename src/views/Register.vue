@@ -1,10 +1,17 @@
 <template>
   <div class="page-height">
-    <v-container fill-height class="px-3 mt-5" id="page-content">
-      <v-layout row wrap>
-        <v-flex xs10 offset-xs1 style="margin-top: 50px">
-          <div>
-            <form style="margin-top: 0px">
+    <v-container fill-height>
+      <v-layout row class="text-xs-center" align-center justify-center>
+        <v-flex xs12 sm6 class="animated bounceInDown">
+          <v-card class="pt-1 pb-5">
+            <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
+              <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
+              <div
+                style="color: #fff; font-weight: bold; font-size: 16px"
+                class="mt-2"
+              >User Registration</div>
+            </div>
+            <form class="pt-5 pl-3 pr-3">
               <v-text-field
                 v-model="email"
                 :error-messages="emailErrors"
@@ -12,6 +19,7 @@
                 @input="$v.email.$touch()"
                 @blur="$v.email.$touch()"
                 aria-label="Email"
+                @click.native="clearStatus"
               ></v-text-field>
 
               <v-text-field
@@ -43,15 +51,16 @@
                 style="height: 50px; font-weight: bold"
               >{{this.$store.state.status}}</div>
               <div v-if="!disabled" class="text-xs-center">
-                <v-btn @click="submit">submit</v-btn>
+                <v-btn @click="submit">Register</v-btn>&nbsp;
+                <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
               </div>
-              <v-else class="text-xs-center">
+              <div v-else class="text-xs-center">
                 <v-btn to="/login">Log in</v-btn>
-              </v-else>
+              </div>
             </form>
 
             <!-- <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view> -->
-          </div>
+          </v-card>
         </v-flex>
       </v-layout>
     </v-container>
@@ -69,7 +78,6 @@ import {
 } from "vuelidate/lib/validators";
 import passwordComplexity from "@/validators/passwordComplexity";
 import illinoisDotGov from "@/validators/illinoisDotGov";
-import axios from "axios";
 import config from "@/config";
 export default {
   mixins: [validationMixin],
@@ -80,7 +88,6 @@ export default {
 
   validations: {
     email: { required, email, illinoisDotGov },
-
     password: {
       required,
       minLength: minLength(8),
@@ -100,8 +107,6 @@ export default {
       repeatPassword: "",
       username: "",
       showSubmit: true,
-      showAxiosError: false,
-      axiosError: "",
       showLoader: false,
       successMessage: "",
       disabled: false
@@ -138,16 +143,23 @@ export default {
         errors.push("Passwords must match");
       return errors;
     },
+    isLoading() {
+      return this.$store.getters.isLoading;
+    },
 
     isSuccess(v) {
       return !this.$v.$invalid && this.$v.$dirty;
     }
   },
   methods: {
+    clearStatus() {
+      this.$store.commit("CLEAR_STATUS");
+    },
     submit() {
       this.$v.$touch();
 
       if (this.isSuccess) {
+        this.$store.commit("START_LOADER");
         this.showLoader = true;
         let payload = {
           username: this.email.toLowerCase(),
@@ -157,10 +169,14 @@ export default {
         this.$store
           .dispatch("register", payload)
           .then(() => {
+            this.$store.commit("STOP_LOADER");
             console.log("Success!");
             this.disabled = true;
           })
-          .catch(err => console.log(JSON.striginfy(err)));
+          .catch(err => {
+            console.log(JSON.stringify(err));
+            this.$store.commit("STOP_LOADER");
+          });
       }
     }
   }

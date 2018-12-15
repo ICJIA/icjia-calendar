@@ -186,6 +186,7 @@ export default new Vuex.Store({
               "auth_register",
               `Success! Please check your email for your verification link.`
             );
+
             resolve();
           })
           .catch(err => {
