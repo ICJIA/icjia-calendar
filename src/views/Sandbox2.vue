@@ -161,10 +161,12 @@ export default {
             console.log("Well done!");
             console.log("User profile", response.data.user);
             console.log("User token", response.data.jwt);
+            this.showLoader = false;
           })
           .catch(error => {
             // Handle error.
-            console.log("An error occurred:", error);
+            console.log("An error occurred:", JSON.stringify(error));
+            this.showLoader = false;
           });
       }
     }
