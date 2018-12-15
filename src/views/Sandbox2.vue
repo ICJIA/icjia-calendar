@@ -15,6 +15,14 @@
                 @input="$v.password.$touch()"
                 @blur="$v.password.$touch()"
               ></v-text-field>
+              <v-text-field
+                v-model="repeatPassword"
+                :error-messages="repeatPasswordErrors"
+                label="Verify Password"
+                :append-icon="e3 ? 'visibility' : 'visibility_off'"
+                :append-icon-cb="() => (e3 = !e3)"
+                :type="e3 ? 'password' : 'text'"
+              ></v-text-field>
             </form>
             <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view>
           </div>
@@ -26,7 +34,13 @@
 
 <script>
 import { validationMixin } from "vuelidate";
-import { required, minLength, alphaNum } from "vuelidate/lib/validators";
+import {
+  required,
+  minLength,
+  alphaNum,
+  sameAs
+} from "vuelidate/lib/validators";
+import passwordComplexity from "@/validators/passwordComplexity";
 
 export default {
   mixins: [validationMixin],
@@ -36,13 +50,21 @@ export default {
   mounted() {},
 
   validations: {
-    password: { required, alphaNum, minLength: minLength(8) }
+    password: {
+      required,
+      minLength: minLength(8),
+      passwordComplexity
+    },
+    repeatPassword: {
+      sameAsPassword: sameAs("password")
+    }
   },
   data() {
     return {
       name: "",
       e3: true,
-      password: ""
+      password: "",
+      repeatPassword: ""
     };
   },
   computed: {
@@ -51,8 +73,17 @@ export default {
       !this.$v.password.minLength &&
         errors.push("Password must have minimum 8 characters.");
       !this.$v.password.required && errors.push("Password is required");
-      !this.$v.password.alphaNum &&
-        errors.push("Password must be Alpha Numeric characters.");
+
+      !this.$v.password.passwordComplexity &&
+        errors.push(
+          "Weak password. Please provide at least one uppercase letter and one number. "
+        );
+      return errors;
+    },
+    repeatPasswordErrors() {
+      const errors = [];
+      !this.$v.repeatPassword.sameAsPassword &&
+        errors.push("Passwords must match");
       return errors;
     },
 
