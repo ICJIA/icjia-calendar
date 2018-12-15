@@ -13,7 +13,7 @@
               <v-text-field
                 prepend-icon="person"
                 name="identifier"
-                label="username or email"
+                label="email"
                 v-model="identifier"
                 autocomplete="identifier"
                 ref="identifier"
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     login() {
-      let identifier = this.identifier;
+      let identifier = this.identifier.toLowerCase();
       let password = this.password;
       let payload = {};
       payload.identifier = identifier;

@@ -8,11 +8,12 @@
               <v-text-field
                 v-model="email"
                 :error-messages="emailErrors"
-                label="Your @illinois.gov email"
+                label="Valid @illinois.gov email"
                 @input="$v.email.$touch()"
                 @blur="$v.email.$touch()"
                 aria-label="Email"
               ></v-text-field>
+
               <v-text-field
                 v-model="password"
                 :error-messages="passwordErrors"
@@ -23,6 +24,7 @@
                 @input="$v.password.$touch()"
                 @blur="$v.password.$touch()"
                 aria-label="Password"
+                class="mt-2"
               ></v-text-field>
               <v-text-field
                 v-model="repeatPassword"
@@ -34,7 +36,15 @@
                 aria-label="Verify Password"
                 @input="$v.repeatPassword.$touch()"
                 @blur="$v.repeatPassword.$touch()"
+                class="mt-2"
               ></v-text-field>
+              <div v-if="showSubmit" class="text-xs-center">
+                <v-btn @click="submit">submit</v-btn>
+
+                <span v-if="showLoader">
+                  <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                </span>
+              </div>
             </form>
             <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view>
           </div>
@@ -55,7 +65,7 @@ import {
 } from "vuelidate/lib/validators";
 import passwordComplexity from "@/validators/passwordComplexity";
 import illinoisDotGov from "@/validators/illinoisDotGov";
-
+import axios from "axios";
 export default {
   mixins: [validationMixin],
 
@@ -65,6 +75,7 @@ export default {
 
   validations: {
     email: { required, email, illinoisDotGov },
+
     password: {
       required,
       minLength: minLength(8),
@@ -81,7 +92,13 @@ export default {
       e4: true,
       email: "",
       password: "",
-      repeatPassword: ""
+      repeatPassword: "",
+      username: "",
+      showSubmit: true,
+      showAxiosError: false,
+      axiosError: "",
+      showLoader: false,
+      successMessage: ""
     };
   },
   computed: {
@@ -94,6 +111,7 @@ export default {
         errors.push("You must use a valid @illinois.gov email adddress.");
       return errors;
     },
+
     passwordErrors() {
       const errors = [];
       if (!this.$v.password.$dirty) return errors;
@@ -122,6 +140,33 @@ export default {
   methods: {
     submit() {
       this.$v.$touch();
+
+      if (this.isSuccess) {
+        this.showLoader = true;
+        let payload = {
+          username: this.email.toLowerCase(),
+          email: this.email.toLowerCase(),
+          password: this.password
+        };
+        const vm = this;
+        axios
+          .post("https://content.icjia-api.cloud/auth/local/register", {
+            username: payload.username,
+            email: payload.email,
+            password: payload.password,
+            url: "https://calendar.icjia.cloud/success"
+          })
+          .then(response => {
+            // Handle success.
+            console.log("Well done!");
+            console.log("User profile", response.data.user);
+            console.log("User token", response.data.jwt);
+          })
+          .catch(error => {
+            // Handle error.
+            console.log("An error occurred:", error);
+          });
+      }
     }
   }
 };

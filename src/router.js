@@ -81,7 +81,7 @@ const router = new Router({
       path: "/register",
       name: "register",
       component: () =>
-        import(/* webpackChunkName: "reset" */ "./views/Register.vue"),
+        import(/* webpackChunkName: "regsiter" */ "./views/Register.vue"),
       meta: {
         nav: {
           eventDrawer: false,
@@ -90,28 +90,41 @@ const router = new Router({
         }
       }
     },
-    {
-      path: "/404",
-      name: "error",
-      component: () =>
-        import(/* webpackChunkName: "error" */ "./views/404.vue"),
-      meta: {
-        nav: {
-          eventDrawer: false,
-          categoryDrawer: false,
-          refresh: false
-        }
-      }
-    },
+    // {
+    //   path: "/404",
+    //   name: "error",
+    //   component: () =>
+    //     import(/* webpackChunkName: "error" */ "./views/404.vue"),
+    //   meta: {
+    //     nav: {
+    //       eventDrawer: false,
+    //       categoryDrawer: false,
+    //       refresh: false
+    //     }
+    //   }
+    // },
     {
       path: "/sandbox",
       name: "sandbox",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Sandbox.vue"),
+        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox.vue"),
       meta: {
         nav: {
           eventDrawer: true,
           categoryDrawer: true,
+          refresh: false
+        }
+      }
+    },
+    {
+      path: "/success",
+      name: "success",
+      component: () =>
+        import(/* webpackChunkName: "success" */ "./views/Success.vue"),
+      meta: {
+        nav: {
+          eventDrawer: false,
+          categoryDrawer: false,
           refresh: false
         }
       }
@@ -120,7 +133,7 @@ const router = new Router({
       path: "/sandbox-2",
       name: "sandbox-2",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/Sandbox2.vue"),
+        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox2.vue"),
       meta: {
         nav: {
           eventDrawer: true,
@@ -128,11 +141,11 @@ const router = new Router({
           refresh: false
         }
       }
-    },
-    {
-      path: "*",
-      redirect: { name: "error" }
     }
+    // {
+    //   path: "*",
+    //   redirect: { name: "error" }
+    // }
   ]
 });
 
