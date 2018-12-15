@@ -170,6 +170,11 @@ export default new Vuex.Store({
     },
     register({ commit }, payload) {
       commit("CLEAR_STATUS");
+      commit("CLOSE_EVENT_DRAWER");
+      commit("CLOSE_CATEGORY_DRAWER");
+      localStorage.removeItem("jwt");
+      localStorage.removeItem("userMeta");
+      delete axios.defaults.headers.common["Authorization"];
       return new Promise((resolve, reject) => {
         axios({
           url: `${config.api.base}${config.api.register}`,
