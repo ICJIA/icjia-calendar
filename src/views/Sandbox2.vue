@@ -6,6 +6,14 @@
           <div>
             <form style="margin-top: 0px">
               <v-text-field
+                v-model="email"
+                :error-messages="emailErrors"
+                label="Email"
+                @input="$v.email.$touch()"
+                @blur="$v.email.$touch()"
+                aria-label="Email"
+              ></v-text-field>
+              <v-text-field
                 v-model="password"
                 :error-messages="passwordErrors"
                 label="Password"
@@ -40,9 +48,11 @@ import {
   required,
   minLength,
   alphaNum,
-  sameAs
+  sameAs,
+  email
 } from "vuelidate/lib/validators";
 import passwordComplexity from "@/validators/passwordComplexity";
+import illinoisDotGov from "@/validators/illinoisDotGov";
 
 export default {
   mixins: [validationMixin],
@@ -52,6 +62,7 @@ export default {
   mounted() {},
 
   validations: {
+    email: { required, email, illinoisDotGov },
     password: {
       required,
       minLength: minLength(8),
@@ -65,16 +76,25 @@ export default {
     return {
       name: "",
       e3: true,
+      email: "",
       password: "",
       repeatPassword: ""
     };
   },
   computed: {
+    emailErrors() {
+      const errors = [];
+      !this.$v.email.required && errors.push("Email is required.");
+      !this.$v.email.email && errors.push("Not a valid e-mail address.");
+      !this.$v.email.illinoisDotGov &&
+        errors.push("You must use your @illinois.gov email adddress.");
+      return errors;
+    },
     passwordErrors() {
       const errors = [];
       !this.$v.password.minLength &&
         errors.push("Password must have minimum 8 characters.");
-      !this.$v.password.required && errors.push("Password is required");
+      !this.$v.password.required && errors.push("Password is required.");
 
       !this.$v.password.passwordComplexity &&
         errors.push(
