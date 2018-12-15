@@ -5,7 +5,6 @@
         <v-card class>
           <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
             <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
-            <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">LOGIN</div>
           </div>
 
           <div class="pr-3 pl-3 pt-3 pb-3 mt-5">
