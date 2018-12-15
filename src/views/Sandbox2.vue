@@ -38,15 +38,16 @@
                 @blur="$v.repeatPassword.$touch()"
                 class="mt-2"
               ></v-text-field>
-              <div v-if="showSubmit" class="text-xs-center">
+              <div
+                class="mt-3 text-xs-center"
+                style="height: 50px; font-weight: bold"
+              >{{this.$store.state.status}}</div>
+              <div v-if="!disabled" class="text-xs-center">
                 <v-btn @click="submit">submit</v-btn>
-
-                <span v-if="showLoader">
-                  <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                </span>
               </div>
             </form>
-            <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view>
+
+            <!-- <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view> -->
           </div>
         </v-flex>
       </v-layout>
@@ -66,6 +67,7 @@ import {
 import passwordComplexity from "@/validators/passwordComplexity";
 import illinoisDotGov from "@/validators/illinoisDotGov";
 import axios from "axios";
+import config from "@/config";
 export default {
   mixins: [validationMixin],
 
@@ -98,7 +100,8 @@ export default {
       showAxiosError: false,
       axiosError: "",
       showLoader: false,
-      successMessage: ""
+      successMessage: "",
+      disabled: false
     };
   },
   computed: {
@@ -148,26 +151,13 @@ export default {
           email: this.email.toLowerCase(),
           password: this.password
         };
-        const vm = this;
-        axios
-          .post("https://content.icjia-api.cloud/auth/local/register", {
-            username: payload.username,
-            email: payload.email,
-            password: payload.password,
-            url: "https://calendar.icjia.cloud/success"
+        this.$store
+          .dispatch("register", payload)
+          .then(() => {
+            console.log("Success!");
+            this.disabled = true;
           })
-          .then(response => {
-            // Handle success.
-            console.log("Well done!");
-            console.log("User profile", response.data.user);
-            console.log("User token", response.data.jwt);
-            this.showLoader = false;
-          })
-          .catch(error => {
-            // Handle error.
-            console.log("An error occurred:", JSON.stringify(error));
-            this.showLoader = false;
-          });
+          .catch(err => console.log(JSON.striginfy(err)));
       }
     }
   }

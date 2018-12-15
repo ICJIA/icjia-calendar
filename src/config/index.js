@@ -34,6 +34,7 @@ const config = {
     resetPassword: "/auth/reset-password",
     resetPasswordCallback: "/reset",
     events: "/events",
+    register: "/auth/local/register",
     login: "/auth/local"
   }
 };

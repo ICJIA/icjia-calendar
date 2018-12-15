@@ -111,7 +111,9 @@ export default new Vuex.Store({
     auth_reset(state, message) {
       state.status = message;
     },
-
+    auth_register(state, message) {
+      state.status = message;
+    },
     auth_error(state, err) {
       state.status = `${err}`;
     },
@@ -165,6 +167,37 @@ export default new Vuex.Store({
     },
     stopLoader({ commit }) {
       commit("STOP_LOADER");
+    },
+    register({ commit }, payload) {
+      commit("CLEAR_STATUS");
+      return new Promise((resolve, reject) => {
+        axios({
+          url: `${config.api.base}${config.api.register}`,
+          data: payload,
+          method: "POST"
+        })
+          .then(resp => {
+            commit(
+              "auth_register",
+              `Success! Please check your email for your verification link.`
+            );
+            resolve();
+          })
+          .catch(err => {
+            console.log("Register error: ", JSON.stringify(err));
+            let message;
+            try {
+              message = JSON.parse(JSON.stringify(err.response.data.message));
+            } catch {
+              message = "NETWORK ERROR: Cannot access the API";
+            }
+            commit("SET_ERROR", true);
+            commit("auth_error", `ERROR: ${message}`);
+
+            reject(err);
+          });
+        console.log("register here");
+      });
     },
     logout({ commit }) {
       return new Promise((resolve, reject) => {
