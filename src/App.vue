@@ -26,6 +26,7 @@
     <v-content>
       <router-view/>
     </v-content>
+
     <my-footer/>
   </v-app>
 </template>

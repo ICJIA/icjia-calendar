@@ -15,9 +15,11 @@ const router = new Router({
       component: Home,
       meta: {
         requiresAuth: true,
-        eventDrawer: true,
-        categoryDrawer: true,
-        refresh: true
+        nav: {
+          eventDrawer: true,
+          categoryDrawer: true,
+          refresh: true
+        }
       }
     },
     {
@@ -25,7 +27,13 @@ const router = new Router({
       name: "sandbox",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Sandbox.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
+      meta: {
+        nav: {
+          eventDrawer: true,
+          categoryDrawer: true,
+          refresh: false
+        }
+      }
     },
     {
       path: "/contact",
@@ -33,66 +41,79 @@ const router = new Router({
 
       component: () =>
         import(/* webpackChunkName: "contact" */ "./views/Contact.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
+      meta: {
+        nav: {
+          eventDrawer: false,
+          categoryDrawer: false,
+          refresh: false
+        }
+      }
     },
-    {
-      path: "/sandbox-2",
-      name: "sandbox2",
 
-      component: () =>
-        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox2.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
-    },
-    {
-      path: "/sandbox-3",
-      name: "sandbox3",
-
-      component: () =>
-        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox3.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
-    },
-    {
-      path: "/sandbox-4",
-      name: "sandbox4",
-
-      component: () =>
-        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox4.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
-    },
     {
       path: "/login",
       name: "login",
       component: () =>
         import(/* webpackChunkName: "login" */ "./views/Login.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
+      meta: {
+        nav: {
+          eventDrawer: false,
+          categoryDrawer: false,
+          refresh: false
+        }
+      }
     },
     {
       path: "/forgot",
       name: "forgot",
       component: () =>
         import(/* webpackChunkName: "forgot" */ "./views/Forgot.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
+      meta: {
+        nav: {
+          eventDrawer: false,
+          categoryDrawer: false,
+          refresh: false
+        }
+      }
     },
     {
       path: "/reset",
       name: "reset",
       component: () =>
         import(/* webpackChunkName: "reset" */ "./views/Reset.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
+      meta: {
+        nav: {
+          eventDrawer: false,
+          categoryDrawer: false,
+          refresh: false
+        }
+      }
     },
     {
       path: "/register",
       name: "register",
       component: () =>
         import(/* webpackChunkName: "reset" */ "./views/Register.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
+      meta: {
+        nav: {
+          eventDrawer: false,
+          categoryDrawer: false,
+          refresh: false
+        }
+      }
     },
     {
       path: "/404",
       name: "error",
       component: () =>
         import(/* webpackChunkName: "error" */ "./views/404.vue"),
-      meta: { eventDrawer: false, categoryDrawer: false, refresh: false }
+      meta: {
+        nav: {
+          eventDrawer: false,
+          categoryDrawer: false,
+          refresh: false
+        }
+      }
     },
     {
       path: "*",
