@@ -71,6 +71,12 @@ const router = new Router({
         import(/* webpackChunkName: "reset" */ "./views/Reset.vue")
     },
     {
+      path: "/register",
+      name: "register",
+      component: () =>
+        import(/* webpackChunkName: "reset" */ "./views/Register.vue")
+    },
+    {
       path: "/404",
       name: "error",
       component: () => import(/* webpackChunkName: "error" */ "./views/404.vue")
