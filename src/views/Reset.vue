@@ -52,6 +52,10 @@
               <v-btn primary large block @click="forgot" class>Get password reset link</v-btn>
             </div>
 
+            <div class="mt-3">
+              <router-link to="/forgot">Send another reset code</router-link>
+            </div>
+
             <!-- <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view> -->
           </v-card>
         </v-flex>
