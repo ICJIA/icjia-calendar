@@ -20,6 +20,7 @@
                 @blur="$v.email.$touch()"
                 aria-label="Email"
                 @click.native="clearStatus"
+                ref="email"
               ></v-text-field>
 
               <v-text-field
@@ -84,7 +85,9 @@ export default {
 
   components: {},
 
-  mounted() {},
+  mounted() {
+    this.$nextTick(this.$refs.email.focus);
+  },
 
   validations: {
     email: { required, email, illinoisDotGov },

@@ -21,6 +21,7 @@
                 aria-label="Email"
                 @click.native="clearStatus"
                 :disabled="disabled"
+                ref="email"
               ></v-text-field>
 
               <div
@@ -60,7 +61,9 @@ export default {
     this.$store.dispatch("logout");
   },
 
-  mounted() {},
+  mounted() {
+    this.$nextTick(this.$refs.email.focus);
+  },
 
   validations: {
     email: { required, email, illinoisDotGov }

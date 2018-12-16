@@ -18,6 +18,7 @@
                 aria-label="identifier"
                 @click.native="clearStatus"
                 @keyup.enter="submit"
+                ref="identifier"
               ></v-text-field>
 
               <v-text-field
@@ -72,7 +73,9 @@ export default {
     this.$store.dispatch("logout");
   },
 
-  mounted() {},
+  mounted() {
+    this.$nextTick(this.$refs.identifier.focus);
+  },
 
   validations: {
     identifier: { required },

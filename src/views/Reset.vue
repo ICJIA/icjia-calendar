@@ -24,6 +24,7 @@
                 aria-label="Password"
                 :disabled="disabled"
                 class="mt-2"
+                ref="password"
               ></v-text-field>
               <v-text-field
                 v-model="repeatPassword"
@@ -97,7 +98,7 @@ export default {
   },
 
   mounted() {
-    this.$nextTick(this.$refs.identifier.focus);
+    this.$nextTick(this.$refs.password.focus);
   },
 
   validations: {
