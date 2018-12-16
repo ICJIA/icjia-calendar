@@ -1,83 +1,118 @@
 <template>
-  <v-container fill-height>
-    <v-layout row class="text-xs-center" align-center justify-center>
-      <v-flex xs12 sm6 class="grey lighten-4 animated bounceInDown">
-        <v-card class="pb-4">
-          <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
-            <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
-            <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">RESET PASSWORD</div>
-          </div>
-
-          <div class="pl-3 pr-3 pt-3">
-            <v-form @submit="reset" onSubmit="return false;">
+  <div class="page-height">
+    <v-container fill-height>
+      <v-layout row class="text-xs-center" align-center justify-center>
+        <v-flex xs12 sm6 class="animated bounceInDown">
+          <v-card class="pt-1 pb-5">
+            <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
+              <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
+              <div
+                style="color: #fff; font-weight: bold; font-size: 16px"
+                class="mt-2"
+              >RESET PASSWORD</div>
+            </div>
+            <form class="pt-5 pl-3 pr-3">
               <v-text-field
-                prepend-icon="person"
-                name="email"
-                label="email"
                 v-model="email"
-                ref="email"
-                @click="clearStatus"
+                :error-messages="emailErrors"
+                label="Your @illinois.gov email"
+                @input="$v.email.$touch()"
+                @blur="$v.email.$touch()"
+                aria-label="Email"
+                @click.native="clearStatus"
+                :disabled="disabled"
               ></v-text-field>
 
-              <v-card-actions>
-                <v-btn primary :disabled="disabled" large block @click="reset">Send Reset Link</v-btn>
-              </v-card-actions>
-
               <div
-                style="height: 50px;font-weight: bold;font-size: 18px; "
-                class="mt-3"
+                class="mt-3 text-xs-center"
+                style="height: 50px; font-weight: bold"
               >{{this.$store.state.status}}</div>
-            </v-form>
-          </div>
-          <div class="text-xs-left mt-5 pl-3" style="font-weight: bold">
-            <router-link to="/login">&laquo;&nbsp;Back to log in</router-link>
-          </div>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+              <div v-if="!disabled" class="text-xs-center">
+                <v-btn @click="submit">Send Reset Link</v-btn>&nbsp;
+                <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
+              </div>
+
+              <!-- <div v-else class="text-xs-center">
+                <v-btn to="/login">Back to Log in</v-btn>
+              </div>-->
+            </form>
+
+            <!-- <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view> -->
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import { required, email } from "vuelidate/lib/validators";
+
+import illinoisDotGov from "@/validators/illinoisDotGov";
+import config from "@/config";
 export default {
+  mixins: [validationMixin],
+
+  components: {},
   created() {
     this.$store.commit("CLEAR_STATUS");
     this.$store.dispatch("logout");
   },
-  mounted() {
-    this.$nextTick(this.$refs.email.focus);
-  },
 
+  mounted() {},
+
+  validations: {
+    email: { required, email, illinoisDotGov }
+  },
   data() {
     return {
+      name: "",
       email: "",
+      showSubmit: true,
+      showLoader: false,
+      successMessage: "",
       disabled: false
     };
+  },
+  computed: {
+    emailErrors() {
+      const errors = [];
+      if (!this.$v.email.$dirty) return errors;
+      !this.$v.email.required && errors.push("Email is required.");
+      !this.$v.email.email && errors.push("Not a valid e-mail address.");
+      !this.$v.email.illinoisDotGov &&
+        errors.push("You must use a valid @illinois.gov email adddress.");
+      return errors;
+    },
+
+    isLoading() {
+      return this.$store.getters.isLoading;
+    },
+
+    isSuccess(v) {
+      return !this.$v.$invalid && this.$v.$dirty;
+    }
   },
   methods: {
     clearStatus() {
       this.$store.commit("CLEAR_STATUS");
     },
-    reset() {
-      let email = this.email.toString().toLowerCase();
+    submit() {
+      this.$v.$touch();
 
-      this.$store.dispatch("forgot", email).then(r => {
-        if (r.data.ok) {
-          this.disabled = true;
-        }
-      });
+      if (this.isSuccess) {
+        let email = this.email.toString().toLowerCase();
+        this.$store.dispatch("forgot", email).then(r => {
+          if (r.data.ok) {
+            this.disabled = true;
+          }
+        });
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-a {
-  color: #222;
-  text-decoration: underline;
-}
-
-a:hover {
-  color: #aaa;
-}
 </style>

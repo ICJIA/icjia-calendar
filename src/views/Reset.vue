@@ -80,6 +80,7 @@ export default {
 
   created() {
     this.$store.commit("CLEAR_STATUS");
+    this.$store.dispatch("logout");
     let code = this.$route.query.code;
     if (!code) {
       this.hasCode = false;

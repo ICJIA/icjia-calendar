@@ -27,7 +27,8 @@
         <a href="http://www.icjia.state.il.us">
           {{year}}
           Illinois Criminal Justice Information Authority
-        </a>
+        </a>&nbsp;|&nbsp;
+        <router-link to="/contact">Contact ICJIA Web Support</router-link>
       </v-card-text>
     </v-card>
   </v-footer>
