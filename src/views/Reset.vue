@@ -46,6 +46,9 @@
                 <v-btn @click="reset">Reset my Password</v-btn>&nbsp;
                 <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
               </div>
+              <div v-if="disabled" class="text-xs-center">
+                <router-link to="/login">Log in</router-link>
+              </div>
             </form>
             <div v-if="!hasCode" class="mt-5 pl-5 pr-5">
               <v-btn primary large block @click="forgot" class>Get password reset link</v-btn>
