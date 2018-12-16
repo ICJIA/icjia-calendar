@@ -1,96 +1,147 @@
 <template>
-  <v-container fill-height>
-    <v-layout row class="text-xs-center" align-center justify-center>
-      <v-flex xs12 sm6 class="grey lighten-4 animated zoomIn fast">
-        <v-card class v-if="!this.$store.getters.isLoggedIn">
-          <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
-            <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
-            <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">LOGIN</div>
-          </div>
-
-          <div class="pr-3 pl-3 pt-3 pb-3">
-            <v-form @submit="login" onSubmit="return false;">
+  <div class="page-height">
+    <v-container fill-height>
+      <v-layout row class="text-xs-center" align-center justify-center>
+        <v-flex xs12 sm6 class="animated bounceInDown">
+          <v-card class="pt-1 pb-5">
+            <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
+              <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
+              <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">Log in</div>
+            </div>
+            <v-form class="pt-5 pl-3 pr-3" @submit="submit" onSubmit="return false;">
               <v-text-field
-                prepend-icon="person"
-                name="identifier"
-                label="email"
                 v-model="identifier"
-                autocomplete="identifier"
-                ref="identifier"
-                @keydown.enter="login"
+                :error-messages="identifierErrors"
+                label="Your @illinois.gov email"
+                @input="$v.identifier.$touch()"
+                @blur="$v.identifier.$touch()"
+                aria-label="identifier"
+                @click.native="clearStatus"
+                @keyup.enter="submit"
               ></v-text-field>
+
               <v-text-field
-                prepend-icon="lock"
-                name="password"
-                label="password"
-                type="password"
                 v-model="password"
-                autocomplete="password"
-                @keydown.enter="login"
+                :error-messages="passwordErrors"
+                label="Password"
+                :append-icon="e3 ? 'visibility' : 'visibility_off'"
+                @click:append="() => (e3 = !e3)"
+                :type="e3 ? 'password' : 'text'"
+                @input="$v.password.$touch()"
+                @blur="$v.password.$touch()"
+                aria-label="Password"
+                class="mt-2"
+                @keyup.enter="submit"
               ></v-text-field>
 
-              <v-card-actions class="pt-5">
-                <v-btn primary large block @click="login">Login&nbsp;</v-btn>
-              </v-card-actions>
               <div
-                style="font-size: 18px; height: 50px; font-weight: bold"
-                class="mt-3"
+                class="mt-3 text-xs-center"
+                style="height: 50px; font-weight: bold"
               >{{this.$store.state.status}}</div>
-
-              <div class="mt-2 mb-3" style="font-weight: bold">
-                <router-link to="/forgot">Reset your password</router-link>
+              <div v-if="!disabled" class="text-xs-center">
+                <v-btn @click="submit">Log in</v-btn>&nbsp;
+                <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
+              </div>
+              <div v-else class="text-xs-center">
+                <v-btn to="/login">Log in</v-btn>
               </div>
             </v-form>
-          </div>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+            <div class="mt-2 mb-3 mt-5" style="font-weight: bold">
+              <router-link to="/forgot">Reset your password</router-link>
+            </div>
+
+            <!-- <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view> -->
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+
+import config from "@/config";
 export default {
+  mixins: [validationMixin],
+
+  components: {},
   created() {
     this.$store.commit("CLEAR_STATUS");
     this.$store.dispatch("logout");
   },
-  mounted() {
-    this.$nextTick(this.$refs.identifier.focus);
+
+  mounted() {},
+
+  validations: {
+    identifier: { required },
+    password: {
+      required
+    }
   },
   data() {
     return {
+      name: "",
+      e3: true,
       identifier: "",
-      password: ""
+      password: "",
+      showSubmit: true,
+      showLoader: false,
+      successMessage: "",
+      disabled: false
     };
   },
-  methods: {
-    login() {
-      let identifier = this.identifier.toLowerCase();
-      let password = this.password;
-      let payload = {};
-      payload.identifier = identifier;
-      payload.password = password;
-      this.$store
-        .dispatch("login", payload)
-        .then(() => this.$router.push("/"))
-        .catch(err => console.log(err));
+  computed: {
+    identifierErrors() {
+      const errors = [];
+      if (!this.$v.identifier.$dirty) return errors;
+      !this.$v.identifier.required && errors.push("Email is required.");
+      return errors;
     },
-    logout: function() {
-      this.$store.dispatch("logout").then(() => {
-        this.$router.push("/login");
-      });
+
+    passwordErrors() {
+      const errors = [];
+      if (!this.$v.password.$dirty) return errors;
+      !this.$v.password.required && errors.push("Password is required.");
+      return errors;
+    },
+    isLoading() {
+      return this.$store.getters.isLoading;
+    },
+
+    isSuccess(v) {
+      return !this.$v.$invalid && this.$v.$dirty;
+    }
+  },
+  methods: {
+    clearStatus() {
+      this.$store.commit("CLEAR_STATUS");
+    },
+    submit() {
+      this.$v.$touch();
+      if (this.isSuccess) {
+        this.$store.commit("START_LOADER");
+        this.showLoader = true;
+        let payload = {};
+        payload.identifier = this.identifier;
+        payload.password = this.password;
+        console.log(payload);
+        this.$store
+          .dispatch("login", payload)
+          .then(() => {
+            this.$store.commit("STOP_LOADER");
+            this.$router.push("/");
+          })
+          .catch(err => {
+            console.log(JSON.stringify(err));
+            this.$store.commit("STOP_LOADER");
+          });
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-a {
-  color: #222;
-  text-decoration: underline;
-}
-
-a:hover {
-  color: #aaa;
-}
 </style>

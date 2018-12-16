@@ -96,7 +96,9 @@ export default {
     }
   },
 
-  mounted() {},
+  mounted() {
+    this.$nextTick(this.$refs.identifier.focus);
+  },
 
   validations: {
     password: {
