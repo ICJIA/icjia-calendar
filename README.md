@@ -1,6 +1,6 @@
 # icjia-calendar
 
-> Agency calendar using [Vue](https://vuejs.org/) and [Strapi](https://strapi.io/)
+> Agency calendar using [Vue](https://vuejs.org/) and [Strapi](https://strapi.io/).
 
 ## Project setup
 

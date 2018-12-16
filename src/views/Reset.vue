@@ -15,7 +15,7 @@
               <v-text-field
                 v-model="password"
                 :error-messages="passwordErrors"
-                label="Password"
+                label="New Password"
                 :append-icon="e3 ? 'visibility' : 'visibility_off'"
                 @click:append="() => (e3 = !e3)"
                 :type="e3 ? 'password' : 'text'"
@@ -29,7 +29,7 @@
               <v-text-field
                 v-model="repeatPassword"
                 :error-messages="repeatPasswordErrors"
-                label="Verify Password"
+                label="Verify New Password"
                 :append-icon="e4 ? 'visibility' : 'visibility_off'"
                 @click:append="() => (e4 = !e4)"
                 :disabled="disabled"
