@@ -175,6 +175,7 @@ export default new Vuex.Store({
       localStorage.removeItem("jwt");
       localStorage.removeItem("userMeta");
       delete axios.defaults.headers.common["Authorization"];
+
       return new Promise((resolve, reject) => {
         axios({
           url: `${config.api.base}${config.api.register}`,
@@ -190,7 +191,7 @@ export default new Vuex.Store({
             resolve();
           })
           .catch(err => {
-            console.log("Register error: ", JSON.stringify(err));
+            //console.log("Register error: ", JSON.stringify(err));
             let message;
             try {
               message = JSON.parse(JSON.stringify(err.response.data.message));
@@ -202,7 +203,6 @@ export default new Vuex.Store({
 
             reject(err);
           });
-        console.log("register here");
       });
     },
     logout({ commit }) {

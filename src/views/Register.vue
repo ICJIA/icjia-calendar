@@ -20,6 +20,7 @@
                 @blur="$v.email.$touch()"
                 aria-label="Email"
                 @click.native="clearStatus"
+                @keyup.enter="submit"
                 ref="email"
               ></v-text-field>
 
@@ -33,6 +34,8 @@
                 @input="$v.password.$touch()"
                 @blur="$v.password.$touch()"
                 aria-label="Password"
+                @click.native="clearStatus"
+                @keyup.enter="submit"
                 class="mt-2"
               ></v-text-field>
               <v-text-field
@@ -46,6 +49,8 @@
                 @input="$v.repeatPassword.$touch()"
                 @blur="$v.repeatPassword.$touch()"
                 class="mt-2"
+                @click.native="clearStatus"
+                @keyup.enter="submit"
               ></v-text-field>
               <div
                 class="mt-3 text-xs-center"
