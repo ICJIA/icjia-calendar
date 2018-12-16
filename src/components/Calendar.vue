@@ -77,9 +77,6 @@ export default {
     gridBackground(gridID) {
       const dayObj = getDayMeta(gridID, this.$store);
 
-      // if (this.breakpoint.name === "xs" || this.breakpoint.name === "sm") {
-      //   return "white";
-      // }
       if (dayObj.month - 1 === this.$store.state.currentMonth - 1) {
         return "white";
       } else {
@@ -97,7 +94,17 @@ export default {
     },
     getDayInfo(gridID) {
       this.$store.commit("FORCE_RENDER");
-      document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+      /**
+       * scroll to top if clicking on next month
+       */
+      let scrollCheck = this.calendarMeta[this.currentYear][
+        this.currentMonth - 1
+      ];
+      let shouldScrollToTop = scrollCheck.gridSize - scrollCheck.startDayOfWeek;
+      if (gridID > shouldScrollToTop) {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+      }
       let meta = getDayMeta(gridID, this.$store);
       this.$store.dispatch("setDayMeta", meta);
       this.$store.dispatch("setCurrentDay", meta.day);
@@ -225,6 +232,13 @@ export default {
     },
     isLoading() {
       return this.$store.getters.isLoading;
+    },
+    scrollToTop() {
+      let scrollCheck = this.calendarMeta[this.currentYear][
+        this.currentMonth - 1
+      ];
+      let test = scrollCheck.daysInMonth + startDayOfWeek;
+      console.log(test);
     }
   }
 };
