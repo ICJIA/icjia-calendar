@@ -97,6 +97,7 @@ export default {
     },
     getDayInfo(gridID) {
       this.$store.commit("FORCE_RENDER");
+      document.body.scrollTop = document.documentElement.scrollTop = 0;
       let meta = getDayMeta(gridID, this.$store);
       this.$store.dispatch("setDayMeta", meta);
       this.$store.dispatch("setCurrentDay", meta.day);

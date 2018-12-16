@@ -1,5 +1,4 @@
 export default password => {
-  // probably already handled by the required flag
   if (_.isNull(password) || !_.isString(password) || _.isEmpty(password))
     return false;
 

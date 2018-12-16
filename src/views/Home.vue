@@ -41,7 +41,6 @@ export default {
           `${config.api.base}${config.api.events}`
         );
         this.createEvents(response);
-        console.log(response.data);
         this.$store.dispatch("setApiData", this.events);
         this.setToday();
         this.$store.dispatch("stopLoader");

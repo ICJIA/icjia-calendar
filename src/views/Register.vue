@@ -162,6 +162,7 @@ export default {
   methods: {
     clearStatus() {
       this.$store.commit("CLEAR_STATUS");
+      this.$store.dispatch("logout");
     },
     submit() {
       this.$v.$touch();
