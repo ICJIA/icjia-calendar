@@ -46,7 +46,7 @@
                 <v-btn @click="reset">Reset my Password</v-btn>&nbsp;
                 <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
               </div>
-              <div v-if="disabled" class="text-xs-center">
+              <div v-if="disabled && !sendAnother" class="text-xs-center">
                 <router-link to="/login">Log in</router-link>
               </div>
             </form>
