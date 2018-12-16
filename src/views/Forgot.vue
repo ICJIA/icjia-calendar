@@ -29,7 +29,7 @@
               >{{this.$store.state.status}}</div>
             </v-form>
           </div>
-          <div class="text-xs-left pl-3" style="font-weight: bold">
+          <div class="text-xs-left mt-5 pl-3" style="font-weight: bold">
             <router-link to="/login">&laquo;&nbsp;Back to log in</router-link>
           </div>
         </v-card>
@@ -42,6 +42,7 @@
 export default {
   created() {
     this.$store.commit("CLEAR_STATUS");
+    this.$store.dispatch("logout");
   },
   mounted() {
     this.$nextTick(this.$refs.email.focus);
