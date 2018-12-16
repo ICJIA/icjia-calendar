@@ -22,6 +22,7 @@
                 @input="$v.password.$touch()"
                 @blur="$v.password.$touch()"
                 aria-label="Password"
+                :disabled="disabled"
                 class="mt-2"
               ></v-text-field>
               <v-text-field
@@ -30,6 +31,7 @@
                 label="Verify Password"
                 :append-icon="e4 ? 'visibility' : 'visibility_off'"
                 @click:append="() => (e4 = !e4)"
+                :disabled="disabled"
                 :type="e4 ? 'password' : 'text'"
                 aria-label="Verify Password"
                 @input="$v.repeatPassword.$touch()"
@@ -44,15 +46,12 @@
                 <v-btn @click="reset">Reset my Password</v-btn>&nbsp;
                 <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
               </div>
-              <div v-else class="mt-5">
-                <v-btn primary large block @click="login">Back to Log in</v-btn>
-              </div>
             </form>
             <div v-if="!hasCode" class="mt-5 pl-5 pr-5">
               <v-btn primary large block @click="forgot" class>Get password reset link</v-btn>
             </div>
 
-            <div class="mt-3">
+            <div class="mt-3" v-if="sendAnother">
               <router-link to="/forgot">Send another reset code</router-link>
             </div>
 
@@ -118,7 +117,8 @@ export default {
       successMessage: "",
       disabled: false,
       hasCode: false,
-      code: ""
+      code: "",
+      sendAnother: false
     };
   },
   computed: {
@@ -181,7 +181,9 @@ export default {
           })
           .catch(err => {
             console.log(JSON.stringify(err));
+            this.disabled = true;
             this.$store.commit("STOP_LOADER");
+            this.sendAnother = true;
           });
       }
     }

@@ -11,7 +11,7 @@
                 class="mt-2"
               >RESET PASSWORD</div>
             </div>
-            <form class="pt-5 pl-3 pr-3">
+            <form class="pt-5 pl-3 pr-3" @submit="submit" onSubmit="return false;">
               <v-text-field
                 v-model="email"
                 :error-messages="emailErrors"
