@@ -72,8 +72,10 @@ export default {
         if (e.end) {
           end = moment.utc(e.end);
         } else {
-          end = end = moment.utc(e.start);
+          end = moment.utc(e.start);
         }
+
+        //TODO: Check start < end
 
         duration = end.diff(start, "days");
         eventObj.title = e.title.trim();

@@ -7,7 +7,7 @@
       <div id="eventContent" class="pl-3 pr-3 pt-5 pt-5">
         <h1 class="rule">{{event.title}}</h1>
 
-        <div class="pl-3 pr-2 range">
+        <div class="pl-3 pr-2 mt-3 range">
           <span>
             <span v-html="getEventRange(event)" class></span>
           </span>
