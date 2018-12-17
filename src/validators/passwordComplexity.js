@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export default password => {
   if (_.isNull(password) || !_.isString(password) || _.isEmpty(password))
     return false;

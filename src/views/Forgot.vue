@@ -51,7 +51,7 @@ import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 
 import illinoisDotGov from "@/validators/illinoisDotGov";
-import config from "@/config";
+
 export default {
   mixins: [validationMixin],
 
@@ -93,7 +93,7 @@ export default {
       return this.$store.getters.isLoading;
     },
 
-    isSuccess(v) {
+    isSuccess() {
       return !this.$v.$invalid && this.$v.$dirty;
     }
   },

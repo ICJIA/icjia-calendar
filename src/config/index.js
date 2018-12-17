@@ -21,7 +21,8 @@ const config = {
   },
   app: {
     minYear: 2000,
-    maxYear: 2099
+    maxYear: 2099,
+    smtp: "https://mail.icjia.cloud/icjia-calendar"
   },
   api: {
     base: "https://content.icjia-api.cloud",

@@ -57,17 +57,10 @@
 
 <script>
 import { validationMixin } from "vuelidate";
-import {
-  required,
-  minLength,
-  alphaNum,
-  sameAs,
-  email
-} from "vuelidate/lib/validators";
+import { required, minLength, sameAs, email } from "vuelidate/lib/validators";
 import passwordComplexity from "@/validators/passwordComplexity";
 import illinoisDotGov from "@/validators/illinoisDotGov";
-import axios from "axios";
-import config from "@/config";
+
 export default {
   mixins: [validationMixin],
 
@@ -136,7 +129,7 @@ export default {
       return errors;
     },
 
-    isSuccess(v) {
+    isSuccess() {
       return !this.$v.$invalid && this.$v.$dirty;
     }
   },

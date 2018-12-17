@@ -232,13 +232,6 @@ export default {
     },
     isLoading() {
       return this.$store.getters.isLoading;
-    },
-    scrollToTop() {
-      let scrollCheck = this.calendarMeta[this.currentYear][
-        this.currentMonth - 1
-      ];
-      let test = scrollCheck.daysInMonth + startDayOfWeek;
-      console.log(test);
     }
   }
 };

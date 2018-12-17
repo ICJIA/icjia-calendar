@@ -182,7 +182,7 @@ export default new Vuex.Store({
           data: payload,
           method: "POST"
         })
-          .then(resp => {
+          .then(() => {
             commit(
               "auth_register",
               `Success! Please check your email for your verification link.`
@@ -207,14 +207,19 @@ export default new Vuex.Store({
     },
     logout({ commit }) {
       return new Promise((resolve, reject) => {
-        commit("logout");
-        commit("CLOSE_EVENT_DRAWER");
-        commit("CLOSE_CATEGORY_DRAWER");
-        commit("SET_ERROR", true);
-        localStorage.removeItem("jwt");
-        localStorage.removeItem("userMeta");
-        delete axios.defaults.headers.common["Authorization"];
-        resolve();
+        try {
+          commit("logout");
+          commit("CLOSE_EVENT_DRAWER");
+          commit("CLOSE_CATEGORY_DRAWER");
+          commit("SET_ERROR", true);
+          localStorage.removeItem("jwt");
+          localStorage.removeItem("userMeta");
+          delete axios.defaults.headers.common["Authorization"];
+          resolve();
+        } catch (err) {
+          reject(err);
+          console.log(err);
+        }
       });
     },
     reset({ commit }, payload) {

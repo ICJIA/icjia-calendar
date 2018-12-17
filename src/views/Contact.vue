@@ -76,9 +76,8 @@
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 import DOMPurify from "dompurify";
-
 import axios from "axios";
-
+import config from "@/config";
 export default {
   mixins: [validationMixin],
 
@@ -128,7 +127,7 @@ export default {
       !this.$v.comment.required && errors.push("A comment is required");
       return errors;
     },
-    isSuccess(v) {
+    isSuccess() {
       return !this.$v.$invalid && this.$v.$dirty;
     }
   },
@@ -156,9 +155,9 @@ export default {
           comment: this.comment
         };
         const vm = this;
-        let obj = axios({
+        axios({
           method: "post",
-          url: "https://mail.icjia.cloud/icjia-calendar",
+          url: `${config.app.smtp}`,
           data: data,
           config: { headers: { "Content-Type": "multipart/form-data" } }
         })

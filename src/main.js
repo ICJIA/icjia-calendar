@@ -24,7 +24,7 @@ if (jwt) {
   console.log("jwt token added to header");
 }
 
-const vm = new Vue({
+new Vue({
   router,
   store,
   render: h => h(App)
