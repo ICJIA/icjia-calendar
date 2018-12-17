@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="calendar">
     <v-toolbar
       style="position:fixed; top: 57px; z-index: 100"
       light

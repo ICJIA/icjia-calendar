@@ -62,13 +62,18 @@
               <v-layout>
                 <v-flex xs12>
                   <v-card class="mt-3">
-                    <!-- <transition-group name="fade" tag="v-card"> -->
                     <div
                       class="text-xs-right pr-3 pt-2 pb-2"
                       :style="getCategoryBackgroundColor(event.color)"
                     >{{event.category}}</div>
-                    <div :style="getBackgroundColor(event.color)" class="pl-3 pt-2 pr-3 pb-2">
-                      <span style="text-transform: uppercase; color: #fff;">{{event.title}}</span>
+                    <div :style="getBackgroundColor(event.color)" class="pl-3 pr-1 headerBox">
+                      <span
+                        style="text-transform: uppercase; color: #fff;"
+                        id="title"
+                      >{{event.title}}</span>
+                      <span style="text-transform: uppercase; color: #fff;">
+                        <print-modal :event="event"></print-modal>
+                      </span>
                     </div>
                     <div class="pt-2 pl-3 pr-2 pb-4">
                       <span>
@@ -81,7 +86,6 @@
                       <div v-html="markdownToHtml(event.description)" class="description mt-3"></div>
                     </div>
                   </v-card>
-                  <!-- </transition-group> -->
                 </v-flex>
               </v-layout>
             </div>
@@ -198,8 +202,12 @@ const md = require("markdown-it")({
 import moment from "moment";
 import { EventBus } from "../event-bus.js";
 import config from "@/config";
+import printModal from "@/components/PrintModal";
 export default {
   mounted() {},
+  components: {
+    printModal
+  },
   methods: {
     getBackgroundColor(color) {
       return `margin: 0; padding: 0; border-top: 1px solid #aaa; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
@@ -277,6 +285,9 @@ export default {
         "a target='_blank' href="
       );
       return sanitizedMarkDownText;
+    },
+    print() {
+      console.log("print here");
     }
   },
 
@@ -404,5 +415,13 @@ a.link:hover {
   text-transform: uppercase;
   font-size: 12px;
   color: #222;
+}
+
+.headerBox {
+  display: flex;
+
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
