@@ -127,7 +127,7 @@ export default {
         this.$store.commit("START_LOADER");
         this.showLoader = true;
         let payload = {};
-        payload.identifier = this.identifier;
+        payload.identifier = this.identifier.toLowerCase();
         payload.password = this.password;
         console.log(payload);
         this.$store
