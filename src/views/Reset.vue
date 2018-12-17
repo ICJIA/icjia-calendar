@@ -167,7 +167,6 @@ export default {
         payload.code = this.code;
         payload.password = password;
         payload.passwordConfirmation = repeatPassword;
-        console.log(payload);
         this.$store
           .dispatch("reset", payload)
           .then(() => {

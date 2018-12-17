@@ -128,7 +128,6 @@ export default {
         let payload = {};
         payload.identifier = this.identifier.toLowerCase();
         payload.password = this.password;
-        console.log(payload);
         this.$store
           .dispatch("login", payload)
           .then(() => {
