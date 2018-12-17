@@ -103,6 +103,7 @@
 
     <v-toolbar dark app color="indigo darken-4">
       <v-toolbar-side-icon @click.stop="toggleCategoryDrawer" v-if="this.$store.getters.isLoggedIn"></v-toolbar-side-icon>
+
       <router-link to="/" class="nav">
         <v-toolbar-title class="text-uppercase">
           <span class style="color: #fff; font-weight: 900">ILLINOIS</span> |
@@ -112,10 +113,14 @@
       <v-spacer></v-spacer>
 
       <div v-if="this.$store.getters.isLoggedIn">
-        <v-btn icon @click="refresh" v-if="!isCondensed">
-          <v-icon>refresh</v-icon>
-        </v-btn>
+        <v-tooltip left>
+          <v-btn icon @click="refresh" v-if="!isCondensed" slot="activator">
+            <v-icon>refresh</v-icon>
+          </v-btn>
+          <span>Refresh events</span>
+        </v-tooltip>
       </div>
+
       <v-menu offset-y nudge-left="100" transition="slide-x-transition" style="z-index: 150;">
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
