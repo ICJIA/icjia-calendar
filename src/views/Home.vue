@@ -92,11 +92,11 @@ export default {
         eventObj.duration = duration;
         eventObj.description = e.description;
         eventObj.excerpt = stringTruncate(e.description, 150);
-        let colorIndex = _.findIndex(config.categories, {
+        let colorIndex = _.findIndex(config.app.categories, {
           name: e.category.trim()
         });
         try {
-          eventObj.color = config.categories[colorIndex].color;
+          eventObj.color = config.app.categories[colorIndex].color;
         } catch {
           eventObj.color = "gray";
         }

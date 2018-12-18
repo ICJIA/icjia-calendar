@@ -12,7 +12,7 @@
           ></v-text-field>
           <div
             class="text-xs-right"
-            style="font-size: 12px; font-weight: bold; margin-top: -10px;"
+            style="font-size: 12px; font-weight: bold; margin-top: -10px; color: #555"
           >Found: {{result.length}}</div>
         </v-flex>
         <div v-for="(event, index) in result" :key="index" class="mt-5">
@@ -60,21 +60,9 @@
 <script>
 import Fuse from "fuse.js";
 import moment from "moment";
-let options = {
-  shouldSort: true,
-  threshold: 0.6,
-  location: 0,
-  distance: 100,
-  maxPatternLength: 32,
-  minMatchCharLength: 1,
-  keys: ["title", "description", "category"]
-};
-const md = require("markdown-it")({
-  html: true,
-  linkify: true,
-  typographer: true
-});
 import config from "@/config";
+const md = require("markdown-it")(config.app.markdown);
+
 import _ from "lodash";
 export default {
   mounted() {
@@ -95,18 +83,18 @@ export default {
         );
 
         this.events = response.data;
-        this.fuse = new Fuse(this.events, options);
+        this.fuse = new Fuse(this.events, config.app.search);
       } catch (e) {
         console.log(JSON.stringify(e));
       }
     },
     getBackgroundColor(e) {
       let color;
-      let colorIndex = _.findIndex(config.categories, {
+      let colorIndex = _.findIndex(config.app.categories, {
         name: e.category.trim()
       });
       try {
-        color = config.categories[colorIndex].color;
+        color = config.app.categories[colorIndex].color;
       } catch {
         color = "gray";
       }

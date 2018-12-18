@@ -14,7 +14,7 @@
         </v-btn>
       </div>
       <v-list class="pl-3 pr-3mb-5">
-        <v-list-tile v-for="(category, index) in config.categories" :key="index">
+        <v-list-tile v-for="(category, index) in config.app.categories" :key="index">
           <v-checkbox
             style="font-size: 12px !important;"
             :label="`${category.name}`"
@@ -233,14 +233,10 @@
 
 <script>
 /* eslint-disable */
-const md = require("markdown-it")({
-  html: true,
-  linkify: true,
-  typographer: true
-});
+import config from "@/config";
+const md = require("markdown-it")(config.app.markdown);
 import moment from "moment";
 import { EventBus } from "../event-bus.js";
-import config from "@/config";
 import printModal from "@/components/PrintModal";
 export default {
   mounted() {},

@@ -4,7 +4,7 @@ import config from "@/config";
 import axios from "axios";
 Vue.use(Vuex);
 
-const colors = config.categories.map(cat => {
+const colors = config.app.categories.map(cat => {
   return cat.color;
 });
 
