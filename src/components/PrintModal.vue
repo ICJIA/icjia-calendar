@@ -1,34 +1,49 @@
 <template>
-  <v-dialog v-model="dialog" width="60%" id="event">
-    <v-btn slot="activator" flat icon fab small dark>
-      <v-icon dark>print</v-icon>
+  <v-dialog v-model="dialog" width="70%">
+    <v-btn slot="activator" light color="primary">
+      <v-icon left>print</v-icon>Print
     </v-btn>
-    <div style="background-color: #fff;">
-      <div id="eventContent" class="pl-3 pr-3 pt-5 pt-5">
-        <h1 class="rule">{{event.title}}</h1>
 
-        <div class="pl-3 pr-2 mt-3 range">
-          <span>
-            <span v-html="getEventRange(event)" class></span>
-          </span>
-          <span style="float: right">
-            <span class>{{getDuration(event.duration)}}</span>
-          </span>
+    <v-card>
+      <v-card-text>
+        <div id="eventContent" class="pl-3 pr-3 pt-5 pt-5">
+          <div
+            v-for="(event, index) in this.$store.state.dayMeta.dayEvents"
+            :key="index"
+            style="margin-bottom: 50px;"
+          >
+            <h1 class="rule">{{event.title}}</h1>
 
-          <div v-html="markdownToHtml(event.description)" class="pt-5" style="font-weight: 400;"></div>
+            <div class="pl-3 pr-2 mt-3 range">
+              <span>
+                <span v-html="getEventRange(event)" class></span>
+              </span>
+              <span style="float: right">
+                <span class>{{getDuration(event.duration)}}</span>
+              </span>
+
+              <div
+                v-html="markdownToHtml(event.description)"
+                class="pt-5"
+                style="font-weight: 400;"
+              ></div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div>
-        <v-divider></v-divider>
-        <div class="pt-3 pb-3 text-xs-right">
-          <v-spacer></v-spacer>
-          <v-btn color="primary" flat @click="dialog = false" class="hidden-print">Close</v-btn>
-          <v-btn color="primary" @click="printModal" class="hidden-print">Print
-            <v-icon right dark>print</v-icon>
-          </v-btn>
-        </div>
-      </div>
-    </div>
+      </v-card-text>
+
+      <v-divider></v-divider>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" flat @click="dialog = false" class="hidden-print">Close
+          <v-icon right dark>close</v-icon>
+        </v-btn>
+        <v-btn color="primary" @click="printModal" class="hidden-print">Print
+          <v-icon right dark>print</v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </v-dialog>
 </template>
 

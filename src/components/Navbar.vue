@@ -47,10 +47,16 @@
             class
           >{{selectedDate}}</h1>
         </div>
-        <div class="text-xs-center pb-0 pt-3">
-          <v-btn depressed small @click="closeEventDrawer">CLOSE
-            <v-icon right dark>close</v-icon>
-          </v-btn>
+
+        <div class="controls pl-5 pr-5 pt-3">
+          <div>
+            <v-btn depressed @click="closeEventDrawer">CLOSE
+              <v-icon right dark>close</v-icon>
+            </v-btn>
+          </div>
+          <div>
+            <print-modal :event="event"></print-modal>
+          </div>
         </div>
         <div v-if="!debug">
           <div v-if="!eventStatus" class="text-xs-center">
@@ -68,12 +74,10 @@
                     >{{event.category}}</div>
                     <div :style="getBackgroundColor(event.color)" class="pl-3 pr-1 headerBox">
                       <span
+                        class="pt-2 pb-2"
                         style="text-transform: uppercase; color: #fff;"
                         id="title"
                       >{{event.title}}</span>
-                      <span style="text-transform: uppercase; color: #fff;">
-                        <print-modal :event="event"></print-modal>
-                      </span>
                     </div>
                     <div class="pt-2 pl-3 pr-2 pb-4">
                       <span>
@@ -426,6 +430,12 @@ a.link:hover {
   display: flex;
 
   flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.controls {
+  display: flex;
   align-items: center;
   justify-content: space-between;
 }
