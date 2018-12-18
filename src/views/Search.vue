@@ -11,7 +11,7 @@
             placeholder="Enter any word from the event's category, title, or description"
           ></v-text-field>
         </v-flex>
-        <div v-for="(event, index) in result" :key="index">
+        <div v-for="(event, index) in result" :key="index" class>
           <v-layout>
             <v-flex xs10 offset-xs1>
               <v-card class="mt-3">

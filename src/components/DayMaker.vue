@@ -67,6 +67,7 @@ export default {
     getCondensedDate(date) {
       return moment.utc(date).format("dddd MMMM DD, YYYY");
     },
+    today() {},
 
     eventStyle(event) {
       let marginLeft = "0px";

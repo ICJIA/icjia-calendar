@@ -76,13 +76,21 @@ export default {
   methods: {
     gridBackground(gridID) {
       const dayObj = getDayMeta(gridID, this.$store);
-
+      const now = moment.utc().format("MM-DD-YYYY");
+      const day = moment.utc(dayObj.fullDate).format("MM-DD-YYYY");
+      let str;
       if (dayObj.month - 1 === this.$store.state.currentMonth - 1) {
-        return "white";
+        str = "white";
       } else {
-        return "grey lighten-3";
+        str = "grey lighten-3";
       }
+
+      if (now === day) {
+        str = str + " today";
+      }
+      return str;
     },
+
     refresh() {
       window.location = "/";
     },
@@ -283,6 +291,11 @@ export default {
     grid-template-columns: repeat(1, minmax(50px, 1fr));
   }
 } */
+
+.today {
+  border: 0px solid #ddd !important;
+  background-color: #eee !important;
+}
 
 @media only screen and (max-width: 960px) {
   .wrapper {
