@@ -54,7 +54,7 @@
               <v-icon right dark>close</v-icon>
             </v-btn>
           </span>
-          <span v-if="this.$store.state.dayMeta.dayEvents.length>0" class="pl-2">
+          <span v-if="eventStatus" class="pl-2">
             <print-modal></print-modal>
           </span>
         </div>
@@ -88,6 +88,13 @@
                       </span>
 
                       <div v-html="markdownToHtml(event.description)" class="description mt-3"></div>
+                    </div>
+
+                    <div
+                      class="text-xs-right pt-2 pb-2 pl-2 pr-2"
+                      style="font-size: 10px; text-transform: uppercase;  font-weight: bold; color: #999; background: #fff; border-top: 1px solid #eee;"
+                    >
+                      <span>Posted: {{formatDate(event.createdAt)}}</span>
                     </div>
                   </v-card>
                 </v-flex>
@@ -219,6 +226,9 @@ export default {
   methods: {
     getBackgroundColor(color) {
       return `margin: 0; padding: 0; border-top: 1px solid #aaa; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
+    },
+    formatDate(d) {
+      return moment(d).format("MM/DD/YYYY");
     },
     getCategoryBackgroundColor(color) {
       return `padding: 0; margin: 0; font-size: 10px; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
@@ -433,9 +443,9 @@ a.link:hover {
   justify-content: space-between;
 }
 
-/* .controls {
+.space-between {
   display: flex;
   align-items: center;
   justify-content: space-between;
-} */
+}
 </style>

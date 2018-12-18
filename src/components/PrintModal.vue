@@ -28,6 +28,12 @@
                 style="font-weight: 400;"
               ></div>
             </div>
+            <div
+              class="text-xs-right pt-2 pb-2 pl-2 pr-2"
+              style="font-size: 10px; text-transform: uppercase;  font-weight: bold; color: #999; background: #fff; border-top: 1px solid #eee;"
+            >
+              <span>Posted: {{formatDate(event.createdAt)}}</span>
+            </div>
           </div>
         </div>
       </v-card-text>
@@ -71,6 +77,9 @@ export default {
         "a target='_blank' href="
       );
       return sanitizedMarkDownText;
+    },
+    formatDate(d) {
+      return moment(d).format("MM/DD/YYYY");
     },
     getDuration(num) {
       if (num < 1) {

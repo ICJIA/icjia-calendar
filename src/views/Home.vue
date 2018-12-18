@@ -40,6 +40,7 @@ export default {
         let response = await this.$http.get(
           `${config.api.base}${config.api.events}`
         );
+        // console.log(response.data);
         this.createEvents(response);
         this.$store.dispatch("setApiData", this.events);
         this.setToday();
@@ -101,6 +102,8 @@ export default {
         }
 
         eventObj.category = e.category.trim();
+        eventObj.createdAt = e.createdAt;
+        eventObj.updatedAt = e.updatedAt;
 
         if (start > end) {
           dayOfYear = moment.utc(e.end).dayOfYear();
@@ -129,6 +132,7 @@ export default {
 
             eventObj.duration = duration + 1;
             eventObj.year = moment.utc(workingDate).format("YYYY");
+
             if (!_.has(events, eventObj.year)) {
               events[eventObj.year] = {};
             }
