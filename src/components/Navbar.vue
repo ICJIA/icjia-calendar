@@ -48,15 +48,15 @@
           >{{selectedDate}}</h1>
         </div>
 
-        <div class="controls pl-5 pr-5 pt-3">
-          <div>
+        <div class="text-xs-center pl-5 pr-5 pt-3">
+          <span class="pr-2">
             <v-btn depressed @click="closeEventDrawer">CLOSE
               <v-icon right dark>close</v-icon>
             </v-btn>
-          </div>
-          <div>
-            <print-modal :event="event"></print-modal>
-          </div>
+          </span>
+          <span v-if="this.$store.state.dayMeta.dayEvents.length>0" class="pl-2">
+            <print-modal></print-modal>
+          </span>
         </div>
         <div v-if="!debug">
           <div v-if="!eventStatus" class="text-xs-center">
@@ -176,7 +176,6 @@
             </v-list-tile-title>
           </v-list-tile>
           <v-list-tile v-if="this.$store.getters.isLoggedIn">
-            <!-- <v-icon left>lock_open</v-icon>&nbsp;&nbsp; -->
             <v-list-tile-title>
               <router-link to="/login" class="link">
                 <span
@@ -434,9 +433,9 @@ a.link:hover {
   justify-content: space-between;
 }
 
-.controls {
+/* .controls {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
+} */
 </style>

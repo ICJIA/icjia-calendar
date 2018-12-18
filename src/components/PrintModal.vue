@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" width="70%">
+  <v-dialog v-model="dialog" scrollable width="60%">
     <v-btn slot="activator" light color="primary">
       <v-icon left>print</v-icon>Print
     </v-btn>
@@ -60,11 +60,7 @@ export default {
       dialog: false
     };
   },
-  props: {
-    event: {
-      type: Object
-    }
-  },
+
   methods: {
     markdownToHtml(description) {
       const html = md.render(description);
