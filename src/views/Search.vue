@@ -2,7 +2,7 @@
   <div>
     <v-form class="pb-5">
       <v-container>
-        <v-flex xs10 offset-xs1>
+        <v-flex xs12 sm12 md10 offset-md1>
           <h1 class="mt-5">Event Search</h1>
           <v-text-field
             v-model="query"
@@ -10,10 +10,14 @@
             label="Search"
             placeholder="Enter any word from the event's category, title, or description"
           ></v-text-field>
+          <div
+            class="text-xs-right"
+            style="font-size: 12px; font-weight: bold; margin-top: -10px;"
+          >Found: {{result.length}}</div>
         </v-flex>
-        <div v-for="(event, index) in result" :key="index" class>
+        <div v-for="(event, index) in result" :key="index" class="mt-5">
           <v-layout>
-            <v-flex xs10 offset-xs1>
+            <v-flex xs12 sm12 md10 offset-md1>
               <v-card class="mt-3">
                 <div
                   class="text-xs-right pr-3 pt-2 pb-2"
