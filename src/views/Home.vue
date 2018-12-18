@@ -56,10 +56,7 @@ export default {
             `${error.response.data.message} PLEASE LOG OUT AND TRY AGAIN.`
           );
         } catch {
-          this.$store.commit(
-            "api_error",
-            `NETWORK ERROR. PLEASE LOG OUT AND TRY AGAIN.`
-          );
+          this.$store.commit("api_error", `${e}`);
         }
       }
     },
@@ -67,20 +64,30 @@ export default {
       let events = {};
       response.data.forEach(e => {
         let eventObj = {};
-        let start, end, duration;
-        start = moment.utc(e.start);
-        if (e.end) {
-          end = moment.utc(e.end);
-        } else {
-          end = moment.utc(e.start);
+        let start, end, duration, dayOfYear;
+
+        if (!e.end) {
+          e.end = e.start;
         }
 
-        //TODO: Check start < end
+        start = moment.utc(e.start);
+        end = moment.utc(e.end);
 
-        duration = end.diff(start, "days");
+        if (start > end) {
+          duration = start.diff(end, "days");
+        } else {
+          duration = end.diff(start, "days");
+        }
+
         eventObj.title = e.title.trim();
-        eventObj.start = e.start;
-        eventObj.end = end;
+        if (start > end) {
+          eventObj.start = e.end;
+          eventObj.end = e.start;
+        } else {
+          eventObj.start = e.start;
+          eventObj.end = e.end;
+        }
+
         eventObj.duration = duration;
         eventObj.description = e.description;
         eventObj.excerpt = stringTruncate(e.description, 150);
@@ -95,9 +102,13 @@ export default {
 
         eventObj.category = e.category.trim();
 
-        eventObj.duration;
-        let dayOfYear = moment.utc(e.start).dayOfYear();
-        eventObj.year = moment.utc(e.start).year();
+        if (start > end) {
+          dayOfYear = moment.utc(e.end).dayOfYear();
+          eventObj.year = moment.utc(e.end).year();
+        } else {
+          dayOfYear = moment.utc(e.start).dayOfYear();
+          eventObj.year = moment.utc(e.start).year();
+        }
 
         if (!_.has(events, start.format("YYYY"))) {
           events[eventObj.year] = {};
@@ -108,7 +119,12 @@ export default {
         events[start.format("YYYY")][dayOfYear].push(eventObj);
         if (duration > 0) {
           for (let d = 0; d < duration; d++) {
-            let workingDate = start.add(1, "days");
+            let workingDate;
+            if (start > end) {
+              workingDate = end.add(1, "days");
+            } else {
+              workingDate = start.add(1, "days");
+            }
             let dayOfYear = moment.utc(workingDate).dayOfYear();
 
             eventObj.duration = duration + 1;

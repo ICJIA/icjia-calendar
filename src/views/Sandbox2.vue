@@ -1,157 +1,119 @@
 <template>
-  <div class="page-height">
-    <v-container fill-height class="px-3 mt-5" id="page-content">
-      <v-layout row wrap>
-        <v-flex xs10 offset-xs1 style="margin-top: 50px">
-          <div>
-            <form style="margin-top: 0px">
-              <v-text-field
-                v-model="email"
-                :error-messages="emailErrors"
-                label="Valid @illinois.gov email"
-                @input="$v.email.$touch()"
-                @blur="$v.email.$touch()"
-                aria-label="Email"
-              ></v-text-field>
-
-              <v-text-field
-                v-model="password"
-                :error-messages="passwordErrors"
-                label="Password"
-                :append-icon="e3 ? 'visibility' : 'visibility_off'"
-                @click:append="() => (e3 = !e3)"
-                :type="e3 ? 'password' : 'text'"
-                @input="$v.password.$touch()"
-                @blur="$v.password.$touch()"
-                aria-label="Password"
-                class="mt-2"
-              ></v-text-field>
-              <v-text-field
-                v-model="repeatPassword"
-                :error-messages="repeatPasswordErrors"
-                label="Verify Password"
-                :append-icon="e4 ? 'visibility' : 'visibility_off'"
-                @click:append="() => (e4 = !e4)"
-                :type="e4 ? 'password' : 'text'"
-                aria-label="Verify Password"
-                @input="$v.repeatPassword.$touch()"
-                @blur="$v.repeatPassword.$touch()"
-                class="mt-2"
-              ></v-text-field>
-              <div
-                class="mt-3 text-xs-center"
-                style="height: 50px; font-weight: bold"
-              >{{this.$store.state.status}}</div>
-              <div v-if="!disabled" class="text-xs-center">
-                <v-btn @click="submit">submit</v-btn>
-              </div>
-            </form>
-
-            <!-- <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view> -->
-          </div>
-        </v-flex>
-      </v-layout>
-    </v-container>
+  <div>
+    <tree-view :data="events" :options="{maxDepth: 3}"></tree-view>
   </div>
 </template>
 
 <script>
-import { validationMixin } from "vuelidate";
-import { required, minLength, sameAs, email } from "vuelidate/lib/validators";
-import passwordComplexity from "@/validators/passwordComplexity";
-import illinoisDotGov from "@/validators/illinoisDotGov";
+import { stringTruncate, getDayMeta } from "@/utils";
+import moment from "moment";
+import _ from "lodash";
+import config from "@/config";
 
 export default {
-  mixins: [validationMixin],
-
-  components: {},
-
-  mounted() {},
-
-  validations: {
-    email: { required, email, illinoisDotGov },
-
-    password: {
-      required,
-      minLength: minLength(8),
-      passwordComplexity
-    },
-    repeatPassword: {
-      sameAsPassword: sameAs("password")
-    }
-  },
   data() {
     return {
-      name: "",
-      e3: true,
-      e4: true,
-      email: "",
-      password: "",
-      repeatPassword: "",
-      username: "",
-      showSubmit: true,
-      showAxiosError: false,
-      axiosError: "",
-      showLoader: false,
-      successMessage: "",
-      disabled: false
+      events: null
     };
   },
-  computed: {
-    emailErrors() {
-      const errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.required && errors.push("Email is required.");
-      !this.$v.email.email && errors.push("Not a valid e-mail address.");
-      !this.$v.email.illinoisDotGov &&
-        errors.push("You must use a valid @illinois.gov email adddress.");
-      return errors;
-    },
+  created() {
+    this.$store.dispatch("setCurrentYear", parseInt(new Date().getFullYear()));
+    this.$store.dispatch(
+      "setCurrentMonth",
+      parseInt(new Date().getMonth()) + 1
+    );
+    this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
 
-    passwordErrors() {
-      const errors = [];
-      if (!this.$v.password.$dirty) return errors;
-      !this.$v.password.minLength &&
-        errors.push("Password must have minimum 8 characters.");
-      !this.$v.password.required && errors.push("Password is required.");
-
-      !this.$v.password.passwordComplexity &&
-        errors.push(
-          "Weak password. Please provide at least one uppercase letter and one number. "
-        );
-      return errors;
-    },
-    repeatPasswordErrors() {
-      const errors = [];
-      if (!this.$v.password.$dirty) return errors;
-      !this.$v.repeatPassword.sameAsPassword &&
-        errors.push("Passwords must match");
-      return errors;
-    },
-
-    isSuccess() {
-      return !this.$v.$invalid && this.$v.$dirty;
-    }
+    this.getEvents();
   },
   methods: {
-    submit() {
-      this.$v.$touch();
-
-      if (this.isSuccess) {
-        this.showLoader = true;
-        let payload = {
-          username: this.email.toLowerCase(),
-          email: this.email.toLowerCase(),
-          password: this.password
-        };
-        this.$store
-          .dispatch("register", payload)
-          .then(() => {
-            console.log("Success!");
-            this.disabled = true;
-          })
-          .catch(err => console.log(JSON.striginfy(err)));
+    async getEvents() {
+      try {
+        let response = await this.$http.get(
+          `${config.api.base}${config.api.events}`
+        );
+        this.createEvents(response);
+        console.log(response);
+      } catch (e) {
+        console.log(e);
       }
+    },
+    createEvents(response) {
+      let events = {};
+      response.data.forEach(e => {
+        (function() {
+          let eventObj = {};
+          let start, end, duration;
+
+          if (!e.end) {
+            e.end = e.start;
+          }
+
+          start = moment.utc(e.start);
+          end = moment.utc(e.end);
+
+          //TODO: Check start < end
+          if (start > end) {
+            duration = start.diff(end, "days");
+          } else {
+            duration = end.diff(start, "days");
+          }
+
+          eventObj.title = e.title.trim();
+          eventObj.start = e.start;
+          eventObj.end = e.end;
+          eventObj.duration = duration;
+          eventObj.description = e.description;
+          eventObj.excerpt = stringTruncate(e.description, 150);
+          let colorIndex = _.findIndex(config.categories, {
+            name: e.category.trim()
+          });
+          try {
+            eventObj.color = config.categories[colorIndex].color;
+          } catch {
+            eventObj.color = "gray";
+          }
+
+          eventObj.category = e.category.trim();
+
+          eventObj.duration;
+          let dayOfYear = moment.utc(e.start).dayOfYear();
+          eventObj.year = moment.utc(e.start).year();
+
+          if (!_.has(events, start.format("YYYY"))) {
+            events[eventObj.year] = {};
+          }
+          if (!_.has(events[start.format("YYYY")], dayOfYear)) {
+            events[start.format("YYYY")][dayOfYear] = [];
+          }
+          events[start.format("YYYY")][dayOfYear].push(eventObj);
+          if (duration > 0) {
+            for (let d = 0; d < duration; d++) {
+              let workingDate = start.add(1, "days");
+              let dayOfYear = moment.utc(workingDate).dayOfYear();
+
+              eventObj.duration = duration + 1;
+              eventObj.year = moment.utc(workingDate).format("YYYY");
+              if (!_.has(events, eventObj.year)) {
+                events[eventObj.year] = {};
+              }
+              if (!_.has(events[eventObj.year], dayOfYear)) {
+                events[eventObj.year][dayOfYear] = [];
+              }
+              events[eventObj.year][dayOfYear].push(eventObj);
+            }
+          }
+        })();
+      });
+      this.events = events;
+    },
+    setToday() {
+      // auto-populate eventDrawer with today's info
+      let gridID =
+        this.calendarMeta[this.currentYear][this.currentMonth - 1]
+          .startDayOfWeek + this.currentDay;
+      let meta = getDayMeta(gridID, this.$store);
+      this.$store.dispatch("setDayMeta", meta);
     }
   }
 };
