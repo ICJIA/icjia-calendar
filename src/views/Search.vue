@@ -1,18 +1,19 @@
 <template>
   <div>
-    <v-form>
+    <v-form class="pb-5">
       <v-container>
-        <v-flex xs12>
+        <v-flex xs10 offset-xs1>
+          <h1 class="mt-5">Event Search</h1>
           <v-text-field
             v-model="query"
             @keyup="instantSearch"
-            label="Event Search"
-            placeholder="Title or description keywords"
+            label="Search"
+            placeholder="Enter any word from the event's category, title, or description"
           ></v-text-field>
         </v-flex>
         <div v-for="(event, index) in result" :key="index">
           <v-layout>
-            <v-flex xs12>
+            <v-flex xs10 offset-xs1>
               <v-card class="mt-3">
                 <div
                   class="text-xs-right pr-3 pt-2 pb-2"
@@ -27,10 +28,10 @@
                 </div>
                 <div class="pt-2 pl-3 pr-2 pb-4">
                   <span>
-                    <span v-html="getEventRange(event)" class="eventRange"></span>
+                    <span v-html="getEventRange(event.start, event.end)" class="eventRange"></span>
                   </span>
                   <span style="float: right">
-                    <span class="duration">{{getDuration(event)}}</span>
+                    <span class="duration">{{getDuration(event.start, event.end)}}</span>
                   </span>
 
                   <div v-html="markdownToHtml(event.description)" class="description mt-3"></div>
@@ -47,7 +48,7 @@
           </v-layout>
         </div>
       </v-container>
-      {{events}}
+      <!-- {{events}} -->
     </v-form>
   </div>
 </template>
@@ -72,7 +73,10 @@ const md = require("markdown-it")({
 import config from "@/config";
 import _ from "lodash";
 export default {
-  mounted() {},
+  mounted() {
+    this.$store.commit("CLOSE_EVENT_DRAWER");
+    this.$store.commit("CLOSE_CATEGORY_DRAWER");
+  },
   created() {
     this.getEvents();
   },
@@ -108,20 +112,30 @@ export default {
       return moment(d).format("MM/DD/YYYY");
     },
 
-    getDuration(num) {
-      if (num < 1) {
+    getDuration(s, e) {
+      let duration, start, end;
+      start = moment.utc(s);
+      end = moment.utc(e);
+
+      if (!end.isValid()) {
         return `1 day`;
       }
-      return `${num} days`;
-    },
-    getEventRange({ start, end, duration }) {
-      if (duration === 0) {
-        return moment.utc(start).format("MMM DD, YYYY");
-      }
 
-      return `${moment.utc(start).format("MMM DD, YYYY")} - ${moment
-        .utc(end)
-        .format("MMM DD, YYYY")}`;
+      if (start > end) {
+        duration = start.diff(end, "days");
+      } else {
+        duration = end.diff(start, "days");
+      }
+      return `${duration + 1} Days`;
+    },
+    getEventRange(s, e) {
+      let start = moment.utc(s);
+      let end = moment.utc(e);
+      let str = `${start.format("dddd MMMM DD, YYYY")}`;
+      if (end.isValid()) {
+        str = str + ` - ${end.format("dddd MMMM DD, YYYY")}`;
+      }
+      return str;
     },
     markdownToHtml(description) {
       const html = md.render(description);

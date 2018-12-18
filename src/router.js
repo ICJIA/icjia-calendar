@@ -144,6 +144,20 @@ const router = new Router({
       }
     },
     {
+      path: "/search",
+      name: "search",
+      component: () =>
+        import(/* webpackChunkName: "search" */ "./views/Search.vue"),
+      meta: {
+        requiresAuth: true,
+        nav: {
+          eventDrawer: false,
+          categoryDrawer: false,
+          refresh: false
+        }
+      }
+    },
+    {
       path: "*",
       redirect: { name: "error" }
     }

@@ -125,10 +125,28 @@
 
       <div v-if="this.$store.getters.isLoggedIn">
         <v-tooltip left>
+          <v-btn icon @click="home" v-if="!isCondensed" slot="activator">
+            <v-icon>home</v-icon>
+          </v-btn>
+          <span>Home</span>
+        </v-tooltip>
+      </div>
+
+      <div v-if="this.$store.getters.isLoggedIn">
+        <v-tooltip left>
           <v-btn icon @click="refresh" v-if="!isCondensed" slot="activator">
             <v-icon>refresh</v-icon>
           </v-btn>
           <span>Refresh events</span>
+        </v-tooltip>
+      </div>
+
+      <div v-if="this.$store.getters.isLoggedIn" @click="search">
+        <v-tooltip left>
+          <v-btn icon slot="activator">
+            <v-icon>search</v-icon>
+          </v-btn>
+          <span>Search</span>
         </v-tooltip>
       </div>
 
@@ -141,6 +159,12 @@
             <v-icon left>today</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
               <router-link to="/" class="link">Home</router-link>
+            </v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile v-if="this.$store.getters.isLoggedIn">
+            <v-icon left>search</v-icon>&nbsp;&nbsp;
+            <v-list-tile-title>
+              <router-link to="/search" class="link">Search</router-link>
             </v-list-tile-title>
           </v-list-tile>
           <v-divider class="mb-2 mt-2" v-if="this.$store.getters.isLoggedIn"></v-divider>
@@ -224,6 +248,12 @@ export default {
     printModal
   },
   methods: {
+    search() {
+      this.$router.push("/search");
+    },
+    home() {
+      this.$router.push("/");
+    },
     getBackgroundColor(color) {
       return `margin: 0; padding: 0; border-top: 1px solid #aaa; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
     },
