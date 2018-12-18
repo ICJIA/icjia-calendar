@@ -2,7 +2,7 @@
   <div class="page-height">
     <v-container fill-height>
       <v-layout row class="text-xs-center" align-center justify-center>
-        <v-flex xs12 sm6 class="animated bounceInDown mt-3 mb-3">
+        <v-flex xs12 sm6 class="animated zoomIn mt-3 mb-3">
           <v-card class="pt-1 pb-5">
             <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
               <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
