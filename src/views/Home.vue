@@ -17,12 +17,24 @@ export default {
     Calendar
   },
   created() {
-    this.$store.dispatch("setCurrentYear", parseInt(new Date().getFullYear()));
-    this.$store.dispatch(
-      "setCurrentMonth",
-      parseInt(new Date().getMonth()) + 1
-    );
-    this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
+    /**
+     * Set today's date if no date already set.
+     */
+    if (
+      this.$store.state.currentYear === null ||
+      this.$store.state.currentMonth === null ||
+      this.$store.state.currentDay === null
+    ) {
+      this.$store.dispatch(
+        "setCurrentYear",
+        parseInt(new Date().getFullYear())
+      );
+      this.$store.dispatch(
+        "setCurrentMonth",
+        parseInt(new Date().getMonth()) + 1
+      );
+      this.$store.dispatch("setCurrentDay", parseInt(new Date().getUTCDate()));
+    }
 
     this.getEvents();
   },
@@ -43,7 +55,7 @@ export default {
         // console.log(response.data);
         this.createEvents(response);
         this.$store.dispatch("setApiData", this.events);
-        this.setToday();
+        //this.setToday();
         this.$store.dispatch("stopLoader");
       } catch (e) {
         this.$store.dispatch("stopLoader");
@@ -147,11 +159,12 @@ export default {
     },
     setToday() {
       // auto-populate eventDrawer with today's info
-      let gridID =
-        this.calendarMeta[this.currentYear][this.currentMonth - 1]
-          .startDayOfWeek + this.currentDay;
-      let meta = getDayMeta(gridID, this.$store);
-      this.$store.dispatch("setDayMeta", meta);
+      // let gridID =
+      //   this.calendarMeta[this.currentYear][this.currentMonth - 1]
+      //     .startDayOfWeek + this.currentDay;
+      // let meta = getDayMeta(gridID, this.$store);
+      // this.$store.dispatch("setDayMeta", meta);
+      console.log("set today");
     }
   },
   computed: {

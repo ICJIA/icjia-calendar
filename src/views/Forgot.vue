@@ -49,7 +49,6 @@
 <script>
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
-
 import illinoisDotGov from "@/validators/illinoisDotGov";
 
 export default {

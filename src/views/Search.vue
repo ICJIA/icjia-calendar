@@ -18,36 +18,43 @@
         <div v-for="(event, index) in result" :key="index" class="mt-5">
           <v-layout>
             <v-flex xs12 sm12 md10 offset-md1>
-              <v-card class="mt-3">
-                <div
-                  class="text-xs-right pr-3 pt-2 pb-2"
-                  :style="getBackgroundColor(event)"
-                >{{event.category}}</div>
-                <div :style="getBackgroundColor(event)" class="pl-3 pr-1 headerBox">
-                  <span
-                    class="pt-2 pb-2"
-                    style="text-transform: uppercase; color: #fff;"
-                    id="title"
-                  >{{event.title}}</span>
-                </div>
-                <div class="pt-2 pl-3 pr-2 pb-4">
-                  <span>
-                    <span v-html="getEventRange(event.start, event.end)" class="eventRange"></span>
-                  </span>
-                  <span style="float: right">
-                    <span class="duration">{{getDuration(event.start, event.end)}}</span>
-                  </span>
-
-                  <div v-html="markdownToHtml(event.description)" class="description mt-3"></div>
-                </div>
-
-                <div
-                  class="text-xs-right pt-2 pb-2 pl-2 pr-2"
-                  style="font-size: 10px; text-transform: uppercase;  font-weight: bold; color: #999; background: #fff; border-top: 1px solid #eee;"
+              <v-hover>
+                <v-card
+                  class="mt-3 eventCard"
+                  @click.native="showOnCalendar(event.start)"
+                  slot-scope="{ hover }"
+                  :class="`elevation-${hover ? 16 : 2}`"
                 >
-                  <span>Posted: {{formatDate(event.createdAt)}}</span>
-                </div>
-              </v-card>
+                  <div
+                    class="text-xs-right pr-3 pt-2 pb-2"
+                    :style="getBackgroundColor(event)"
+                  >{{event.category}}</div>
+                  <div :style="getBackgroundColor(event)" class="pl-3 pr-1 headerBox">
+                    <span
+                      class="pt-2 pb-2"
+                      style="text-transform: uppercase; color: #fff;"
+                      id="title"
+                    >{{event.title}}</span>
+                  </div>
+                  <div class="pt-2 pl-3 pr-2 pb-4">
+                    <span>
+                      <span v-html="getEventRange(event.start, event.end)" class="eventRange"></span>
+                    </span>
+                    <span style="float: right">
+                      <span class="duration">{{getDuration(event.start, event.end)}}</span>
+                    </span>
+
+                    <div v-html="markdownToHtml(event.description)" class="description mt-3"></div>
+                  </div>
+
+                  <div
+                    class="text-xs-right pt-2 pb-2 pl-2 pr-2"
+                    style="font-size: 10px; text-transform: uppercase;  font-weight: bold; color: #999; background: #fff; border-top: 1px solid #eee;"
+                  >
+                    <span>Posted: {{formatDate(event.createdAt)}}</span>
+                  </div>
+                </v-card>
+              </v-hover>
             </v-flex>
           </v-layout>
         </div>
@@ -62,6 +69,7 @@ import Fuse from "fuse.js";
 import moment from "moment";
 import config from "@/config";
 const md = require("markdown-it")(config.app.markdown);
+import { getDayMeta } from "@/utils";
 
 import _ from "lodash";
 export default {
@@ -75,6 +83,24 @@ export default {
   methods: {
     instantSearch() {
       this.result = this.fuse.search(this.query);
+    },
+    showOnCalendar(date) {
+      let year, month, day, d;
+      year = moment.utc(date).format("YYYY");
+      month = moment.utc(date).format("MM");
+      day = moment.utc(date).format("DD");
+      d = moment.utc(date);
+
+      this.$store.dispatch("setCurrentYear", parseInt(year));
+      this.$store.dispatch("setCurrentMonth", parseInt(month));
+      this.$store.dispatch("setCurrentDay", parseInt(day));
+
+      let meta = this.$store.state.apiData[year][d.dayOfYear()];
+      console.log(meta);
+      // this.$store.dispatch("setDayMeta", meta);
+      // this.$store.dispatch("setDayEvents", meta);
+
+      //this.$router.push("/");
     },
     async getEvents() {
       try {
@@ -153,4 +179,7 @@ export default {
 </script>
 
 <style scoped>
+/* .eventCard:hover {
+  cursor: pointer;
+} */
 </style>
