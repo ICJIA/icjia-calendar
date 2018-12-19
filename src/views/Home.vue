@@ -164,7 +164,7 @@ export default {
       //     .startDayOfWeek + this.currentDay;
       // let meta = getDayMeta(gridID, this.$store);
       // this.$store.dispatch("setDayMeta", meta);
-      console.log("set today");
+      //console.log("set today");
     }
   },
   computed: {

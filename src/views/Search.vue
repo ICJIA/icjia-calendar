@@ -94,13 +94,14 @@ export default {
       this.$store.dispatch("setCurrentYear", parseInt(year));
       this.$store.dispatch("setCurrentMonth", parseInt(month));
       this.$store.dispatch("setCurrentDay", parseInt(day));
+      this.$store.commit("CLOSE_EVENT_DRAWER");
+      // let meta = this.$store.state.apiData[year][d.dayOfYear()];
+      // console.log(meta);
 
-      let meta = this.$store.state.apiData[year][d.dayOfYear()];
-      console.log(meta);
       // this.$store.dispatch("setDayMeta", meta);
       // this.$store.dispatch("setDayEvents", meta);
 
-      //this.$router.push("/");
+      this.$router.push("/");
     },
     async getEvents() {
       try {
@@ -179,7 +180,7 @@ export default {
 </script>
 
 <style scoped>
-/* .eventCard:hover {
+.eventCard:hover {
   cursor: pointer;
-} */
+}
 </style>
