@@ -11,8 +11,6 @@ const config = {
       { name: "Out of Office", color: "#B71C1C" },
       { name: "ICJIA General", color: "#E91E63" }
     ],
-    minYear: 2000,
-    maxYear: 2099,
     smtp: "https://mail.icjia.cloud/icjia-calendar",
     search: {
       shouldSort: true,
@@ -27,11 +25,13 @@ const config = {
       html: true,
       linkify: true,
       typographer: true
-    }
+    },
+    excerptTruncate: 150
   },
   api: {
     base: "https://content.icjia-api.cloud",
     baseClient: "https://calendar.icjia.cloud",
+    admin: "/admin",
     forgetPassword: "/auth/forgot-password",
     resetPassword: "/auth/reset-password",
     resetPasswordCallback: "/reset",

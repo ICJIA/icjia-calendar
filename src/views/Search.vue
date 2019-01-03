@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-top: 100px">
     <v-form class="pb-5">
       <v-container>
         <v-flex xs12 sm12 md10 offset-md1>
@@ -15,7 +15,7 @@
             style="font-size: 12px; font-weight: bold; margin-top: -10px; color: #555"
           >Found: {{result.length}}</div>
         </v-flex>
-        <div v-for="(event, index) in result" :key="index" class="mt-5">
+        <div v-for="(event, index) in result" :key="index" class="mt-5 animated fadeIn fast">
           <v-layout>
             <v-flex xs12 sm12 md10 offset-md1>
               <v-hover>
@@ -29,10 +29,9 @@
                     class="text-xs-right pr-3 pt-2 pb-2"
                     :style="getBackgroundColor(event)"
                   >{{event.category}}</div>
-                  <div :style="getBackgroundColor(event)" class="pl-3 pr-1 headerBox">
+                  <div :style="getBackgroundColor(event)" class="pt-2 pb-2 pl-3 pr-1 headerBox">
                     <span
-                      class="pt-2 pb-2"
-                      style="text-transform: uppercase; color: #fff;"
+                      style="text-transform: uppercase; color: #fff; font-size: 18px;"
                       id="title"
                     >{{event.title}}</span>
                   </div>
@@ -48,10 +47,12 @@
                   </div>
 
                   <div
-                    class="text-xs-right pt-2 pb-2 pl-2 pr-2"
+                    class="pt-2 pb-2 pl-2 pr-2"
                     style="font-size: 10px; text-transform: uppercase;  font-weight: bold; color: #999; background: #fff; border-top: 1px solid #eee;"
                   >
-                    <span>Posted: {{formatDate(event.createdAt)}}</span>
+                    <span style="color: #333" @click="view()">View on Calendar</span>
+                    
+                    <span style="float: right">Posted: {{formatDate(event.createdAt)}}</span>
                   </div>
                 </v-card>
               </v-hover>
@@ -59,7 +60,6 @@
           </v-layout>
         </div>
       </v-container>
-      <!-- {{events}} -->
     </v-form>
   </div>
 </template>
@@ -69,52 +69,48 @@ import Fuse from "fuse.js";
 import moment from "moment";
 import config from "@/config";
 const md = require("markdown-it")(config.app.markdown);
-import { getDayMeta } from "@/utils";
+import { EventBus } from "@/event-bus.js";
 
 import _ from "lodash";
 export default {
-  mounted() {
+  created() {
     this.$store.commit("CLOSE_EVENT_DRAWER");
     this.$store.commit("CLOSE_CATEGORY_DRAWER");
+    this.$store
+      .dispatch("getData")
+      .then(response => this.$store.dispatch("structureData", response))
+      .then(r => {
+        console.log(r);
+        this.fuse = new Fuse(this.$store.state.data.data, config.app.search);
+      })
+      .catch(e => console.log("Error: ", e));
   },
-  created() {
-    this.getEvents();
+  mounted() {
+    EventBus.$on("refresh", () => {
+      this.fuse = new Fuse(this.$store.state.data.data, config.app.search);
+      this.result = this.fuse.search(this.query);
+    });
   },
   methods: {
     instantSearch() {
       this.result = this.fuse.search(this.query);
     },
     showOnCalendar(date) {
-      let year, month, day, d;
-      year = moment.utc(date).format("YYYY");
-      month = moment.utc(date).format("MM");
-      day = moment.utc(date).format("DD");
-      d = moment.utc(date);
-
-      this.$store.dispatch("setCurrentYear", parseInt(year));
-      this.$store.dispatch("setCurrentMonth", parseInt(month));
-      this.$store.dispatch("setCurrentDay", parseInt(day));
-      this.$store.commit("CLOSE_EVENT_DRAWER");
-      // let meta = this.$store.state.apiData[year][d.dayOfYear()];
-      // console.log(meta);
-
-      // this.$store.dispatch("setDayMeta", meta);
-      // this.$store.dispatch("setDayEvents", meta);
-
-      this.$router.push("/");
+      this.$store.commit("OPEN_EVENT_DRAWER");
+      this.$store.dispatch(
+        "setCurrentDate",
+        moment(date)
+          .utc()
+          .format()
+      );
+      this.$store.dispatch(
+        "setSelectedDate",
+        moment(date)
+          .utc()
+          .format()
+      );
     },
-    async getEvents() {
-      try {
-        let response = await this.$http.get(
-          `${config.api.base}${config.api.events}`
-        );
 
-        this.events = response.data;
-        this.fuse = new Fuse(this.events, config.app.search);
-      } catch (e) {
-        console.log(JSON.stringify(e));
-      }
-    },
     getBackgroundColor(e) {
       let color;
       let colorIndex = _.findIndex(config.app.categories, {
@@ -125,36 +121,49 @@ export default {
       } catch {
         color = "gray";
       }
-      return `margin: 0; padding: 0; border-top: 1px solid #aaa; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
+      return `border-top: 1px solid #aaa; background-color: ${color} !important; color: #eee !important; font-weight: bold; text-transform: uppercase;`;
     },
     formatDate(d) {
       return moment(d).format("MM/DD/YYYY");
     },
 
-    getDuration(s, e) {
-      let duration, start, end;
-      start = moment.utc(s);
-      end = moment.utc(e);
+    getDuration(start, end) {
+      var s = moment(start);
+      var e = moment(end);
 
-      if (!end.isValid()) {
-        return `1 day`;
-      }
-
-      if (start > end) {
-        duration = start.diff(end, "days");
+      let duration;
+      if (s > e) {
+        duration = s.diff(e, "days") + 1;
       } else {
-        duration = end.diff(start, "days");
+        duration = e.diff(s, "days") + 1;
       }
-      return `${duration + 1} Days`;
+
+      if (duration === 1) {
+        return duration + " day";
+      } else {
+        return duration + " days";
+      }
     },
-    getEventRange(s, e) {
-      let start = moment.utc(s);
-      let end = moment.utc(e);
-      let str = `${start.format("dddd MMMM DD, YYYY")}`;
-      if (end.isValid()) {
-        str = str + ` - ${end.format("dddd MMMM DD, YYYY")}`;
+    getEventRange(start, end) {
+      var s = moment(start);
+      var e = moment(end);
+
+      let duration = s.diff(e, "days") + 1;
+      if (duration === 1) {
+        return moment(s)
+          .utc()
+          .format("dddd, MMMM DD, YYYY");
+      } else {
+        return (
+          moment(s)
+            .utc()
+            .format("dddd, MMMM DD, YYYY") +
+          " - " +
+          moment(e)
+            .utc()
+            .format("dddd, MMMM DD, YYYY")
+        );
       }
-      return str;
     },
     markdownToHtml(description) {
       const html = md.render(description);
@@ -165,8 +174,12 @@ export default {
         "a target='_blank' href="
       );
       return sanitizedMarkDownText;
+    },
+    view() {
+      this.$router.push("/");
     }
   },
+
   computed: {},
   data() {
     return {

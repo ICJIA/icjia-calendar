@@ -36,7 +36,6 @@
 
 <script>
 const info = require("../../package.json");
-
 export default {
   data: () => ({
     icons: ["fab fa-github"],

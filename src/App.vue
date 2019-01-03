@@ -1,10 +1,15 @@
 <template>
   <v-app>
+    <nav-primary></nav-primary>
     <div v-if="isLoading" style="z-index: 1000">
-      <v-progress-linear :indeterminate="true" style="padding: 0; margin: 0" height="5"></v-progress-linear>
+      <v-progress-linear
+        :indeterminate="true"
+        color="blue-grey lighten-3"
+        style="position: fixed; top: -15px;"
+        height="5"
+      ></v-progress-linear>
     </div>
-    <div v-else style="height: 4px;"></div>
-    <navbar/>
+
     <div
       v-if="$browserDetect.isIE"
       class="text-xs-center pt-5 pb-5"
@@ -31,24 +36,20 @@
 </template>
 
 <script>
-import { createCalendarHelper } from "@/utils";
-import Navbar from "@/components/Navbar";
+import NavPrimary from "@/components/NavPrimary.vue";
 import MyFooter from "@/components/MyFooter";
-import config from "@/config";
+import moment from "moment";
 
 export default {
   name: "App",
+
   components: {
-    Navbar,
+    NavPrimary,
     MyFooter
-  },
-  data() {
-    return {
-      events: {}
-    };
   },
   created() {
     this.$http.interceptors.response.use(undefined, function(err) {
+      console.log(err);
       return new Promise(function(resolve) {
         if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
           this.$store.dispatch("logout");
@@ -57,74 +58,19 @@ export default {
         throw err;
       });
     });
-    this.appInit();
   },
-  mounted() {},
-  methods: {
-    appInit() {
-      this.$store.dispatch("setMinYear", config.app.minYear);
-      this.$store.dispatch("setMaxYear", config.app.maxYear);
-      this.$store.dispatch(
-        "setCalendarMeta",
-        createCalendarHelper(this.minYear, this.maxYear)
-      );
-    }
+  mounted() {
+    this.$store.dispatch("setSelectedDate", moment().startOf("day"));
+    this.$store.dispatch("setCurrentDate", moment().startOf("day"));
   },
   computed: {
-    minYear() {
-      return this.$store.getters.minYear;
-    },
-    maxYear() {
-      return this.$store.getters.maxYear;
-    },
-    currentYear() {
-      return this.$store.getters.currentYear;
-    },
-    currentMonth() {
-      return this.$store.getters.currentMonth;
-    },
-    currentDay() {
-      return this.$store.getters.currentDay;
-    },
-    calendarMeta() {
-      return this.$store.getters.calendarMeta;
-    },
-    apiData() {
-      return this.$store.getters.apiData;
-    },
     isLoading() {
       return this.$store.getters.isLoading;
-    },
-    isLoggedIn: function() {
-      return this.$store.getters.isLoggedIn;
     }
+  },
+  methods: {},
+  data() {
+    return {};
   }
 };
 </script>
-
-<style scoped>
-a {
-  color: #aaa !important;
-}
-
-.header-link {
-  color: #222;
-}
-
-.subheader-link {
-  color: #222;
-}
-
-a {
-  color: #ccc !important;
-}
-
-a:hover {
-  color: #aaa !important;
-  text-decoration: underline !important;
-}
-
-/* .theme--light.application {
-  background: #bbb !important;
-} */
-</style>

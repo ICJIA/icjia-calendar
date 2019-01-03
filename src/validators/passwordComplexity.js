@@ -10,8 +10,5 @@ export default password => {
   // Minimum of 1 Number
   if (false === /\d/.test(password)) return false;
 
-  // Minimum of 6 Characters
-  // separately targeting input length to provide specific error message
-
   return true;
 };

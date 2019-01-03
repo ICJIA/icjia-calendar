@@ -74,6 +74,13 @@ section p {
 section span + p {
   margin: 20px 0 0 0;
 }
+.route {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.route a {
+  text-decoration: none;
+}
 @media (min-width: 768px) {
   section {
     height: 40px;
