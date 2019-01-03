@@ -1,55 +1,50 @@
 <template>
-  <div class="page-height">
-    <v-container fill-height>
-      <v-layout row class="text-xs-center" align-center justify-center>
-        <v-flex xs12 sm6 class="animated bounceInDown mt-3 mb-3">
-          <v-card class="pt-1 pb-5">
-            <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
-              <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
-              <div
-                style="color: #fff; font-weight: bold; font-size: 16px"
-                class="mt-2"
-              >RESET PASSWORD</div>
+  <v-container fill-height>
+    <v-layout row class="text-xs-center" align-center justify-center>
+      <v-flex xs12 sm6 class="animated bounceInDown mt-3 mb-3">
+        <v-card class="pt-1 pb-5">
+          <div class="text-xs-center pt-3 pb-3" style="background: #1A237E; color: #fff">
+            <img src="/logo.png" alt="Illinois Criminal Justice Informtion Authority Login">
+            <div style="color: #fff; font-weight: bold; font-size: 16px" class="mt-2">RESET PASSWORD</div>
+          </div>
+          <form class="pt-5 pl-3 pr-3" @submit="submit" onSubmit="return false;">
+            <v-text-field
+              v-model="email"
+              :error-messages="emailErrors"
+              label="Your @illinois.gov email"
+              @input="$v.email.$touch()"
+              @blur="$v.email.$touch()"
+              aria-label="Email"
+              @click.native="clearStatus"
+              :disabled="disabled"
+              ref="email"
+            ></v-text-field>
+
+            <div
+              class="mt-3 text-xs-center"
+              style="height: 50px; font-weight: bold"
+            >{{this.$store.state.status}}</div>
+            <div v-if="!disabled" class="text-xs-center">
+              <v-btn @click="submit">Send Reset Link</v-btn>&nbsp;
+              <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
             </div>
-            <form class="pt-5 pl-3 pr-3" @submit="submit" onSubmit="return false;">
-              <v-text-field
-                v-model="email"
-                :error-messages="emailErrors"
-                label="Your @illinois.gov email"
-                @input="$v.email.$touch()"
-                @blur="$v.email.$touch()"
-                aria-label="Email"
-                @click.native="clearStatus"
-                :disabled="disabled"
-                ref="email"
-              ></v-text-field>
 
-              <div
-                class="mt-3 text-xs-center"
-                style="height: 50px; font-weight: bold"
-              >{{this.$store.state.status}}</div>
-              <div v-if="!disabled" class="text-xs-center">
-                <v-btn @click="submit">Send Reset Link</v-btn>&nbsp;
-                <v-progress-circular v-if="isLoading" indeterminate color="primary"></v-progress-circular>
-              </div>
-
-              <!-- <div v-else class="text-xs-center">
+            <!-- <div v-else class="text-xs-center">
                 <v-btn to="/login">Back to Log in</v-btn>
-              </div>-->
-            </form>
+            </div>-->
+          </form>
 
-            <!-- <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view> -->
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
-  </div>
+          <!-- <tree-view :data="this.$v" :options="{maxDepth: 3}"></tree-view> -->
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
-import illinoisDotGov from "@/validators/illinoisDotGov";
+import illinoisDotGov from "../validators/illinoisDotGov";
 
 export default {
   mixins: [validationMixin],

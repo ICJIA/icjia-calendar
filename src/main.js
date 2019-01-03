@@ -15,14 +15,6 @@ Vue.config.productionTip = false;
 import axios from "axios";
 
 Vue.prototype.$http = axios;
-const jwt = localStorage.getItem("jwt");
-
-if (jwt) {
-  Vue.prototype.$http.defaults.headers.common[
-    "Authorization"
-  ] = `Bearer ${jwt}`;
-  console.log("jwt token added to header");
-}
 
 new Vue({
   router,

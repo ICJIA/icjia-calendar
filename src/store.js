@@ -1,44 +1,85 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import moment from "moment";
+Vue.use(Vuex);
 import config from "@/config";
 import axios from "axios";
-Vue.use(Vuex);
+import _ from "lodash";
 
 const colors = config.app.categories.map(cat => {
   return cat.color;
 });
 
+const $http = axios.create({
+  baseURL: `${config.api.base}`,
+  timeout: 1000
+});
+
+$http.interceptors.response.use(undefined, function(err) {
+  console.log(err);
+  return new Promise(function(resolve) {
+    if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+      this.$store.dispatch("logout");
+      resolve();
+    }
+    throw err;
+  });
+});
+
+const stringTruncate = function(str, length) {
+  let dots = str.length > length ? "..." : "";
+  return str.substring(0, length) + dots;
+};
+
 export default new Vuex.Store({
   state: {
-    debug: false,
+    events: null,
+    data: null,
     eventDrawer: false,
-    visibleEvents: colors.map(x => x),
-    appColors: colors.map(x => x),
-    calendarMeta: [],
-    currentMonth: null,
-    currentYear: null,
-    currentDay: null,
-    minYear: null,
-    maxYear: null,
-    apiData: {},
-    dayEvents: [],
-    dayMeta: {},
+    categoryDrawer: false,
+    selectedDate: moment()
+      .startOf("day")
+      .format(),
+    currentDate: moment()
+      .startOf("day")
+      .format(),
     isLoading: false,
-    status: "",
+    error: null,
+    initialized: false,
     jwt: localStorage.getItem("jwt") || "",
     userMeta: JSON.parse(localStorage.getItem("userMeta")) || "",
-    user: {},
-    categoryDrawer: false,
-    forceRender: 1,
-    error: "",
-    isError: false
+    status: "",
+    isLoggedIn: false,
+    visibleEvents: colors.map(x => x),
+    appColors: colors.map(x => x),
+    debug: false,
+    transitionToggle: false
   },
   mutations: {
-    FORCE_RENDER(state) {
-      state.forceRender++;
+    SET_DATA(state, data) {
+      state.data = data;
     },
-    TOGGLE_DEBUG(state, debug) {
-      state.debug = !debug;
+    SET_EVENTS(state, events) {
+      state.events = events;
+    },
+    SET_VISIBLE_EVENTS(state, visibleEvents) {
+      state.visibleEvents = visibleEvents;
+    },
+    SET_SELECTED_DATE(state, date) {
+      state.selectedDate = date;
+    },
+    SET_CURRENT_DATE(state, date) {
+      state.currentDate = date;
+    },
+    INCREMENT_MONTH(state) {
+      state.selectedDate = moment(state.selectedDate)
+        .utc()
+        .add(1, "M");
+    },
+    DECREMENT_MONTH(state) {
+      state.selectedDate = moment(state.selectedDate)
+        .utc()
+        .subtract(1, "M");
     },
     OPEN_EVENT_DRAWER(state) {
       state.eventDrawer = true;
@@ -64,103 +105,76 @@ export default new Vuex.Store({
     SET_CATEGORY_DRAWER(state, val) {
       state.categoryDrawer = val;
     },
-    SET_CALENDAR_META(state, calendarMeta) {
-      state.calendarMeta = calendarMeta;
-    },
     START_LOADER(state) {
       state.isLoading = true;
     },
     STOP_LOADER(state) {
       state.isLoading = false;
     },
-    SET_VISIBLE_EVENTS(state, visibleEvents) {
-      state.visibleEvents = visibleEvents;
+    SET_ERROR(state, error) {
+      state.error = error;
     },
-    SET_CURRENT_YEAR(state, currentYear) {
-      state.currentYear = currentYear;
+    SET_INITIALIZED(state, boolean) {
+      state.initialized = boolean;
     },
-    SET_CURRENT_MONTH(state, currentMonth) {
-      state.currentMonth = currentMonth;
-    },
-    SET_CURRENT_DAY(state, currentDay) {
-      state.currentDay = currentDay;
-    },
-    SET_MIN_YEAR(state, minYear) {
-      state.minYear = minYear;
-    },
-    SET_MAX_YEAR(state, maxYear) {
-      state.maxYear = maxYear;
-    },
-    SET_API_DATA(state, data) {
-      state.apiData = data;
-    },
-    SET_DAY_EVENTS(state, dayEvents) {
-      state.dayEvents = dayEvents;
-    },
-    SET_DAY_META(state, dayMeta) {
-      state.dayMeta = dayMeta;
-    },
-    SET_ERROR(state, boolean) {
-      state.isError = boolean;
-    },
-    auth_success(state, payload) {
+    AUTH_SUCCESS(state, payload) {
       state.status = "Success!";
       state.jwt = payload.jwt;
       state.userMeta = payload.userMeta;
     },
-    auth_reset(state, message) {
+    AUTH_RESET(state, message) {
       state.status = message;
     },
-    auth_register(state, message) {
+    AUTH_REGISTER(state, message) {
       state.status = message;
     },
-    auth_error(state, err) {
+    AUTH_ERROR(state, err) {
       state.status = `${err}`;
     },
-    api_error(state, err) {
+    API_ERROR(state, err) {
       state.error = `${err}`;
+    },
+    TOGGLE_DEBUG(state, debug) {
+      state.debug = !debug;
     },
     CLEAR_STATUS(state) {
       state.status = ``;
     },
-    logout(state) {
+    LOGOUT(state) {
       state.status = "";
       state.jwt = "";
+      state.error = null;
       state.user = {};
       state.userMeta = "";
-      state.apiData = {};
+      state.data = null;
+      state.events = null;
+      state.initialized = false;
+      state.selectedDate = moment()
+        .startOf("day")
+        .format();
+      state.currentDate = moment()
+        .startOf("day")
+        .format();
+    },
+    SET_TRANSITION_TOGGLE(state) {
+      state.transitionToggle = !state.transitionToggle;
     }
   },
   actions: {
-    setCalendarMeta({ commit }, calendarMeta) {
-      commit("SET_CALENDAR_META", calendarMeta);
+    setData({ commit }, data) {
+      commit("SET_DATA", data);
+    },
+    setEvents({ commit }, events) {
+      commit("SET_EVENTS", events);
     },
     setVisibleEvents({ commit }, events) {
       commit("SET_VISIBLE_EVENTS", events);
     },
-    setCurrentYear({ commit }, currentYear) {
-      commit("SET_CURRENT_YEAR", parseInt(currentYear));
+    setSelectedDate({ commit }, date) {
+      commit("SET_SELECTED_DATE", date);
     },
-    setCurrentMonth({ commit }, currentMonth) {
-      commit("SET_CURRENT_MONTH", parseInt(currentMonth));
-    },
-    setCurrentDay({ commit }, setCurrentDay) {
-      commit("SET_CURRENT_DAY", parseInt(setCurrentDay));
-    },
-    setMinYear({ commit }, minYear) {
-      commit("SET_MIN_YEAR", minYear);
-    },
-    setMaxYear({ commit }, maxYear) {
-      commit("SET_MAX_YEAR", maxYear);
-    },
-    setApiData({ commit }, data) {
-      commit("SET_API_DATA", data);
-    },
-    setDayEvents({ commit }, dayEvents) {
-      commit("SET_DAY_EVENTS", dayEvents);
-    },
-    setDayMeta({ commit }, dayMeta) {
-      commit("SET_DAY_META", dayMeta);
+    setCurrentDate({ commit }, date) {
+      commit("SET_CURRENT_DATE", date);
     },
     startLoader({ commit }) {
       commit("START_LOADER");
@@ -168,39 +182,157 @@ export default new Vuex.Store({
     stopLoader({ commit }) {
       commit("STOP_LOADER");
     },
-    register({ commit }, payload) {
-      commit("CLEAR_STATUS");
-      commit("CLOSE_EVENT_DRAWER");
-      commit("CLOSE_CATEGORY_DRAWER");
-      localStorage.removeItem("jwt");
-      localStorage.removeItem("userMeta");
-      delete axios.defaults.headers.common["Authorization"];
-
+    getData({ commit }) {
       return new Promise((resolve, reject) => {
-        axios({
-          url: `${config.api.base}${config.api.register}`,
+        const jwt = localStorage.getItem("jwt");
+
+        if (jwt) {
+          $http.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
+          console.log("jwt token added to header");
+        }
+        commit("START_LOADER");
+
+        $http
+          .get(`${config.api.events}`)
+          .then(resp => {
+            commit("STOP_LOADER");
+            commit("SET_DATA", resp);
+            commit("SET_ERROR", null);
+            resolve(resp);
+          })
+          .catch(err => {
+            commit("STOP_LOADER");
+            let error = {};
+            error.type = "network";
+            error.response = err;
+            commit("SET_ERROR", error);
+
+            reject(err);
+          });
+      });
+    },
+    structureData({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        try {
+          let events = {};
+          payload.data.forEach(e => {
+            let eventObj = {};
+            let start, end, duration, dayOfYear;
+            if (!e.end) {
+              e.end = e.start;
+            }
+            start = moment.utc(e.start);
+            end = moment.utc(e.end);
+            if (start > end) {
+              duration = start.diff(end, "days");
+            } else {
+              duration = end.diff(start, "days");
+            }
+            eventObj.title = e.title.trim();
+            if (start > end) {
+              eventObj.start = e.end;
+              eventObj.end = e.start;
+            } else {
+              eventObj.start = e.start;
+              eventObj.end = e.end;
+            }
+            eventObj.duration = duration;
+            eventObj.description = e.description;
+            eventObj.excerpt = stringTruncate(
+              e.description,
+              config.app.excerptTruncate
+            );
+            let colorIndex = _.findIndex(config.app.categories, {
+              name: e.category.trim()
+            });
+            try {
+              eventObj.color = config.app.categories[colorIndex].color;
+            } catch {
+              eventObj.color = "gray";
+            }
+            eventObj.category = e.category.trim();
+            eventObj.createdAt = e.createdAt;
+            eventObj.updatedAt = e.updatedAt;
+            if (start > end) {
+              dayOfYear = moment.utc(e.end).dayOfYear();
+              eventObj.year = moment.utc(e.end).year();
+            } else {
+              dayOfYear = moment.utc(e.start).dayOfYear();
+              eventObj.year = moment.utc(e.start).year();
+            }
+            if (!_.has(events, start.format("YYYY"))) {
+              events[eventObj.year] = {};
+            }
+            if (!_.has(events[start.format("YYYY")], dayOfYear)) {
+              events[start.format("YYYY")][dayOfYear] = [];
+            }
+            events[start.format("YYYY")][dayOfYear].push(eventObj);
+            if (duration > 0) {
+              for (let d = 0; d < duration; d++) {
+                let workingDate;
+                if (start > end) {
+                  workingDate = end.add(1, "days");
+                } else {
+                  workingDate = start.add(1, "days");
+                }
+                let dayOfYear = moment.utc(workingDate).dayOfYear();
+                eventObj.duration = duration + 1;
+                eventObj.year = moment.utc(workingDate).format("YYYY");
+                if (!_.has(events, eventObj.year)) {
+                  events[eventObj.year] = {};
+                }
+                if (!_.has(events[eventObj.year], dayOfYear)) {
+                  events[eventObj.year][dayOfYear] = [];
+                }
+                events[eventObj.year][dayOfYear].push(eventObj);
+              }
+            }
+          });
+          commit("SET_EVENTS", events);
+          commit("SET_INITIALIZED", true);
+          resolve("Success.");
+        } catch (err) {
+          let error = {};
+          error.type = "structure";
+          error.response = err;
+          commit("SET_ERROR", error);
+          commit("SET_INITIALIZED", false);
+          reject(err);
+        }
+      });
+    },
+    login({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        commit("START_LOADER");
+
+        $http({
+          url: `${config.api.base}${config.api.login}`,
           data: payload,
           method: "POST"
         })
-          .then(() => {
-            commit(
-              "auth_register",
-              `Success! Please check your email for your verification link.`
-            );
-
-            resolve();
+          .then(resp => {
+            const jwt = resp.data.jwt;
+            const userMeta = resp.data.user;
+            localStorage.setItem("jwt", jwt);
+            localStorage.setItem("userMeta", JSON.stringify(userMeta));
+            axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
+            commit("AUTH_SUCCESS", { jwt, userMeta });
+            commit("STOP_LOADER");
+            resolve(resp);
           })
           .catch(err => {
-            //console.log("Register error: ", JSON.stringify(err));
             let message;
+            console.log("error", err);
             try {
               message = JSON.parse(JSON.stringify(err.response.data.message));
             } catch {
-              message = "NETWORK ERROR: Cannot access the API";
+              message = "NETWORK ERROR: Please try again.";
             }
-            commit("SET_ERROR", true);
-            commit("auth_error", `ERROR: ${message}`);
-
+            commit("AUTH_ERROR", message);
+            localStorage.removeItem("jwt");
+            localStorage.removeItem("userMeta");
+            commit("STOP_LOADER");
+            commit("SET_ERROR", err);
             reject(err);
           });
       });
@@ -208,10 +340,9 @@ export default new Vuex.Store({
     logout({ commit }) {
       return new Promise((resolve, reject) => {
         try {
-          commit("logout");
+          commit("LOGOUT");
           commit("CLOSE_EVENT_DRAWER");
           commit("CLOSE_CATEGORY_DRAWER");
-          commit("SET_ERROR", true);
           localStorage.removeItem("jwt");
           localStorage.removeItem("userMeta");
           delete axios.defaults.headers.common["Authorization"];
@@ -222,25 +353,27 @@ export default new Vuex.Store({
         }
       });
     },
-    reset({ commit }, payload) {
+    register({ commit }, payload) {
       commit("CLEAR_STATUS");
+      commit("CLOSE_EVENT_DRAWER");
+      commit("CLOSE_CATEGORY_DRAWER");
+
       return new Promise((resolve, reject) => {
-        commit("CLEAR_STATUS");
         axios({
-          url: `${config.api.base}${config.api.resetPassword}`,
+          url: `${config.api.base}${config.api.register}`,
           data: payload,
           method: "POST"
         })
-          .then(resp => {
-            commit("auth_reset", `Success! You've reset your password.`);
-            commit("SET_ERROR", false);
-            commit("logout");
-            localStorage.removeItem("jwt");
-            localStorage.removeItem("userMeta");
-            delete axios.defaults.headers.common["Authorization"];
-            resolve(resp);
+          .then(() => {
+            commit(
+              "AUTH_REGISTER",
+              `Success! Please check your email for your verification link.`
+            );
+
+            resolve();
           })
           .catch(err => {
+            console.log("Register error: ", JSON.stringify(err));
             let message;
             try {
               message = JSON.parse(JSON.stringify(err.response.data.message));
@@ -248,7 +381,7 @@ export default new Vuex.Store({
               message = "NETWORK ERROR: Cannot access the API";
             }
             commit("SET_ERROR", true);
-            commit("auth_error", `ERROR: ${message}`);
+            commit("AUTH_ERROR", `ERROR: ${message}`);
 
             reject(err);
           });
@@ -256,6 +389,8 @@ export default new Vuex.Store({
     },
     forgot({ commit }, email) {
       commit("CLEAR_STATUS");
+      commit("CLOSE_EVENT_DRAWER");
+      commit("CLOSE_CATEGORY_DRAWER");
       return new Promise((resolve, reject) => {
         commit("START_LOADER");
         let data = {};
@@ -271,7 +406,7 @@ export default new Vuex.Store({
         })
           .then(resp => {
             commit(
-              "auth_reset",
+              "AUTH_RESET",
               `Success! Please check your email for your reset link.`
             );
             commit("STOP_LOADER");
@@ -285,71 +420,22 @@ export default new Vuex.Store({
             } catch {
               message = "NETWORK ERROR: Please try again.";
             }
-            commit("auth_error", `${message}`);
-            localStorage.removeItem("jwt");
-            localStorage.removeItem("userMeta");
             commit("SET_ERROR", true);
-            commit("STOP_LOADER");
-            reject(err);
-          });
-      });
-    },
-    login({ commit }, payload) {
-      return new Promise((resolve, reject) => {
-        commit("START_LOADER");
-
-        axios({
-          url: `${config.api.base}${config.api.login}`,
-          data: payload,
-          method: "POST"
-        })
-          .then(resp => {
-            const jwt = resp.data.jwt;
-            const userMeta = resp.data.user;
-            localStorage.setItem("jwt", jwt);
-            localStorage.setItem("userMeta", JSON.stringify(userMeta));
-            axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
-            commit("auth_success", { jwt, userMeta });
-            commit("STOP_LOADER");
-            commit("SET_ERROR", false);
-            resolve(resp);
-          })
-          .catch(err => {
-            let message;
-            console.log("error", err);
-            try {
-              message = JSON.parse(JSON.stringify(err.response.data.message));
-            } catch {
-              message = "NETWORK ERROR: Please try again.";
-            }
-            commit("auth_error", message);
+            commit("AUTH_ERROR", `ERROR: ${message}`);
             localStorage.removeItem("jwt");
             localStorage.removeItem("userMeta");
             commit("STOP_LOADER");
-            commit("SET_ERROR", true);
             reject(err);
           });
       });
     }
   },
   getters: {
-    debug: state => state.debug,
-    calendarMeta: state => state.calendarMeta,
-    visibleEvents: state => state.visibleEvents,
-    currentYear: state => state.currentYear,
-    currentMonth: state => state.currentMonth,
-    currentDay: state => state.currentDay,
-    appColors: state => state.appColors,
-    minYear: state => state.minYear,
-    maxYear: state => state.maxYear,
-    apiData: state => state.apiData,
-    categoryDrawer: state => state.categoryDrawer,
-    dayEvents: state => state.dayEvents,
-    dayMeta: state => state.dayMeta,
-    eventDrawer: state => state.eventDrawer,
-    isLoading: state => state.isLoading,
     isLoggedIn: state => !!state.jwt,
-    status: state => state.status,
-    userMeta: state => state.userMeta
+    isLoading: state => state.isLoading,
+    userMeta: state => state.userMeta,
+    visibleEvents: state => state.visibleEvents,
+    appColors: state => state.appColors,
+    debug: state => state.debug
   }
 });
