@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-toolbar class="navCalendar" color="grey lighten-3">
-      <!-- <v-switch label="Condensed" v-if="!isCondensed" class="pt-4"></v-switch> -->
       <v-btn fab dark small color="primary" @click="getPreviousMonth()">
         <v-icon dark>remove</v-icon>
       </v-btn>
@@ -12,11 +11,18 @@
         <v-icon dark>add</v-icon>
       </v-btn>
 
-      <h1>{{thisMonth}}</h1>&nbsp;&nbsp;&nbsp;&nbsp;
+      <h1>{{thisMonth}}</h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <v-switch
+        label="Condensed View"
+        v-if="!isCondensed"
+        @click.native="condenseCalendarView"
+        class="pt-4"
+      ></v-switch>
       <v-spacer></v-spacer>
-
-      <div v-if="isLoading">
-        <v-progress-circular small indeterminate color="primary"></v-progress-circular>
+      <div style="width: 100px">
+        <div v-if="isLoading">
+          <v-progress-circular small indeterminate color="primary"></v-progress-circular>
+        </div>
       </div>
 
       <div v-if="this.$store.state.error">
@@ -52,6 +58,12 @@ export default {
     },
     logout() {
       this.$router.push("/login");
+    },
+    condenseCalendarView() {
+      this.$store.commit(
+        "TOGGLE_CONDENSED_CALENDAR_VIEW",
+        this.$store.state.condensedCalendarView
+      );
     }
   },
   computed: {

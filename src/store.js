@@ -53,7 +53,8 @@ export default new Vuex.Store({
     visibleEvents: colors.map(x => x),
     appColors: colors.map(x => x),
     debug: false,
-    transitionToggle: false
+    transitionToggle: false,
+    condensedCalendarView: false
   },
   mutations: {
     SET_DATA(state, data) {
@@ -136,6 +137,9 @@ export default new Vuex.Store({
     },
     TOGGLE_DEBUG(state, debug) {
       state.debug = !debug;
+    },
+    TOGGLE_CONDENSED_CALENDAR_VIEW(state, condensedCalendarView) {
+      state.condensedCalendarView = !state.condensedCalendarView;
     },
     CLEAR_STATUS(state) {
       state.status = ``;
@@ -470,6 +474,7 @@ export default new Vuex.Store({
     userMeta: state => state.userMeta,
     visibleEvents: state => state.visibleEvents,
     appColors: state => state.appColors,
-    debug: state => state.debug
+    debug: state => state.debug,
+    condensedCalendarView: state => state.condensedCalendarView
   }
 });
