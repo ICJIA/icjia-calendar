@@ -428,6 +428,40 @@ export default new Vuex.Store({
             reject(err);
           });
       });
+    },
+    reset({ commit }, payload) {
+      commit("CLEAR_STATUS");
+      return new Promise((resolve, reject) => {
+        commit("CLEAR_STATUS");
+        axios({
+          url: `${config.api.base}${config.api.resetPassword}`,
+          data: payload,
+          method: "POST"
+        })
+          .then(resp => {
+            commit("AUTH_RESET", `Success! You've reset your password.`);
+            commit("SET_ERROR", false);
+            commit("LOGOUT");
+            localStorage.removeItem("jwt");
+            localStorage.removeItem("userMeta");
+            delete axios.defaults.headers.common["Authorization"];
+            commit("STOP_LOADER");
+            commit("SET_ERROR", false);
+            resolve(resp);
+          })
+          .catch(err => {
+            let message;
+            try {
+              message = JSON.parse(JSON.stringify(err.response.data.message));
+            } catch {
+              message = "NETWORK ERROR: Cannot access the API";
+            }
+            commit("STOP_LOADER");
+            commit("SET_ERROR", true);
+            commit("AUTH_ERROR", `ERROR: ${message}`);
+            reject(err);
+          });
+      });
     }
   },
   getters: {

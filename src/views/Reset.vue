@@ -169,7 +169,7 @@ export default {
           .then(() => {
             this.$store.commit("STOP_LOADER");
             this.$store.commit(
-              "auth_reset",
+              "AUTH_RESET",
               "Success! Your password was reset. Please log in."
             );
             this.disabled = true;
