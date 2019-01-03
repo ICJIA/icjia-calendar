@@ -19,7 +19,7 @@
         class="pt-4"
       ></v-switch>
       <v-spacer></v-spacer>
-      <div style="width: 100px">
+      <div>
         <div v-if="isLoading">
           <v-progress-circular small indeterminate color="primary"></v-progress-circular>
         </div>

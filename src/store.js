@@ -12,7 +12,7 @@ const colors = config.app.categories.map(cat => {
 
 const $http = axios.create({
   baseURL: `${config.api.base}`,
-  timeout: 1000
+  timeout: 2000
 });
 
 $http.interceptors.response.use(undefined, function(err) {
@@ -363,7 +363,7 @@ export default new Vuex.Store({
       commit("CLOSE_CATEGORY_DRAWER");
 
       return new Promise((resolve, reject) => {
-        axios({
+        $http({
           url: `${config.api.base}${config.api.register}`,
           data: payload,
           method: "POST"
@@ -403,7 +403,7 @@ export default new Vuex.Store({
           config.api.resetPasswordCallback
         }`;
 
-        axios({
+        $http({
           url: `${config.api.base}${config.api.forgetPassword}`,
           data: data,
           method: "POST"
@@ -437,7 +437,7 @@ export default new Vuex.Store({
       commit("CLEAR_STATUS");
       return new Promise((resolve, reject) => {
         commit("CLEAR_STATUS");
-        axios({
+        $http({
           url: `${config.api.base}${config.api.resetPassword}`,
           data: payload,
           method: "POST"
