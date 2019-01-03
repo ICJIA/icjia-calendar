@@ -14,8 +14,8 @@
       <h1>{{thisMonth}}</h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <v-switch
         label="Condensed View"
+        v-model="condensedCalendarView"
         v-if="!isCondensed"
-        @click.native="condenseCalendarView"
         class="pt-4"
       ></v-switch>
       <v-spacer></v-spacer>
@@ -71,6 +71,15 @@ export default {
     },
     isLoading() {
       return this.$store.state.isLoading;
+    },
+
+    condensedCalendarView: {
+      get() {
+        return this.$store.getters.condensedCalendarView;
+      },
+      set(val) {
+        this.$store.commit("TOGGLE_CONDENSED_CALENDAR_VIEW");
+      }
     },
     isCondensed() {
       if (
