@@ -12,7 +12,9 @@
         <div v-for="(isVisible, index) in visibleEvents" :key="index">
           <div v-if="event.color === isVisible">
             <v-tooltip top open-delay="50" max-width="400" :disabled="isCondensed">
-              <div class="event" :style="eventStyle(event)" slot="activator">{{event.title}}</div>
+              <div class="event" :style="eventStyle(event)" slot="activator">
+                <span v-if="!$store.getters.condensedCalendarView">{{event.title}}</span>
+              </div>
               <h2 style="text-transform: uppercase;">{{event.title}}</h2>
               <div v-html="markdownToHtml(event.excerpt)"></div>
             </v-tooltip>

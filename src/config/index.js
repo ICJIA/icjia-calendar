@@ -19,7 +19,7 @@ const config = {
       distance: 100,
       maxPatternLength: 32,
       minMatchCharLength: 1,
-      keys: ["title", "description", "category"]
+      keys: ["title", "description", "category", "start", "end"]
     },
     markdown: {
       html: true,
