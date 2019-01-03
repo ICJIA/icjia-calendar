@@ -11,9 +11,9 @@
         ></v-checkbox>
       </v-list-tile>
 
-      <v-list-tile class="mt-5">
+      <!-- <v-list-tile class="mt-5">
         <v-switch label="Show Debug Info" @click.native="debugApp" class="debug"></v-switch>
-      </v-list-tile>
+      </v-list-tile>-->
     </v-list>
   </div>
 </template>

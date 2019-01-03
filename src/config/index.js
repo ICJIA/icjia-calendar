@@ -37,7 +37,8 @@ const config = {
     resetPasswordCallback: "/reset",
     events: "/events",
     register: "/auth/local/register",
-    login: "/auth/local"
+    login: "/auth/local",
+    timeout: "2000"
   }
 };
 

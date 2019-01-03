@@ -12,7 +12,7 @@ const colors = config.app.categories.map(cat => {
 
 const $http = axios.create({
   baseURL: `${config.api.base}`,
-  timeout: 2000
+  timeout: `${config.api.timeout}`
 });
 
 $http.interceptors.response.use(undefined, function(err) {
