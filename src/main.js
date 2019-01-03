@@ -11,6 +11,7 @@ import TreeView from "vue-json-tree-view";
 Vue.use(TreeView);
 
 Vue.config.productionTip = false;
+Vue.config.devtools = true;
 
 import axios from "axios";
 
