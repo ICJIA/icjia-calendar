@@ -138,7 +138,7 @@ export default new Vuex.Store({
     TOGGLE_DEBUG(state, debug) {
       state.debug = !debug;
     },
-    TOGGLE_CONDENSED_CALENDAR_VIEW(state, condensedCalendarView) {
+    TOGGLE_CONDENSED_CALENDAR_VIEW(state) {
       state.condensedCalendarView = !state.condensedCalendarView;
     },
     CLEAR_STATUS(state) {

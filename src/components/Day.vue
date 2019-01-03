@@ -29,7 +29,7 @@
 import moment from "moment";
 import config from "@/config";
 const md = require("markdown-it")(config.app.markdown);
-import { EventBus } from "../event-bus.js";
+// import { EventBus } from "../event-bus.js";
 import _ from "lodash";
 export default {
   props: {

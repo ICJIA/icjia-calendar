@@ -60,10 +60,7 @@ export default {
       this.$router.push("/login");
     },
     condenseCalendarView() {
-      this.$store.commit(
-        "TOGGLE_CONDENSED_CALENDAR_VIEW",
-        this.$store.state.condensedCalendarView
-      );
+      this.$store.commit("TOGGLE_CONDENSED_CALENDAR_VIEW");
     }
   },
   computed: {
