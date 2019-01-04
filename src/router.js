@@ -63,6 +63,7 @@ const router = new Router({
     {
       path: "/register",
       name: "register",
+      alias: "/registration",
       component: () =>
         import(/* webpackChunkName: "register" */ "./views/Register.vue"),
       meta: {}
