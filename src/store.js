@@ -135,8 +135,8 @@ export default new Vuex.Store({
     API_ERROR(state, err) {
       state.error = `${err}`;
     },
-    TOGGLE_DEBUG(state, debug) {
-      state.debug = !debug;
+    TOGGLE_DEBUG(state) {
+      state.debug = !state.debug;
     },
     TOGGLE_CONDENSED_CALENDAR_VIEW(state) {
       state.condensedCalendarView = !state.condensedCalendarView;

@@ -8,19 +8,22 @@
     >
       <div v-if="isCondensed" class="pb-2 dayName pl-2">{{displayFriendlyDate}}</div>
       <div v-if="!isCondensed" class="pb-2 dayName pl-2">{{day}}</div>
-      <div v-for="(event, index) in events" :key="index">
-        <div v-for="(isVisible, index) in visibleEvents" :key="index">
-          <div v-if="event.color === isVisible">
-            <v-tooltip top open-delay="50" max-width="400" :disabled="isCondensed">
-              <div class="event" :style="eventStyle(event)" slot="activator">
-                <span v-if="!$store.getters.condensedCalendarView">{{event.title}}</span>
-              </div>
-              <h2 style="text-transform: uppercase;">{{event.title}}</h2>
-              <div v-html="markdownToHtml(event.excerpt)"></div>
-            </v-tooltip>
+      <div v-if="!debug">
+        <div v-for="(event, index) in events" :key="index">
+          <div v-for="(isVisible, index) in visibleEvents" :key="index">
+            <div v-if="event.color === isVisible">
+              <v-tooltip top open-delay="50" max-width="400" :disabled="isCondensed">
+                <div class="event" :style="eventStyle(event)" slot="activator">
+                  <span v-if="!$store.getters.condensedCalendarView">{{event.title}}</span>
+                </div>
+                <h2 style="text-transform: uppercase;">{{event.title}}</h2>
+                <div v-html="markdownToHtml(event.excerpt)"></div>
+              </v-tooltip>
+            </div>
           </div>
         </div>
       </div>
+      <div v-else>{{events}}</div>
     </div>
   </div>
 </template>
@@ -161,6 +164,9 @@ export default {
     },
     breakpoint() {
       return this.$vuetify.breakpoint;
+    },
+    debug() {
+      return this.$store.getters.debug;
     },
     isCondensed() {
       if (this.breakpoint.name === "xs" || this.breakpoint.name === "sm") {

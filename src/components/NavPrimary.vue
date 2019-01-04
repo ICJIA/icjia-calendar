@@ -64,11 +64,53 @@
         <v-icon>refresh</v-icon>
       </v-btn>
 
+      <!-- Settings Menu start -->
+      <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
+        <v-btn icon slot="activator" v-if="!isCondensed && isLoggedIn">
+          <v-icon>apps</v-icon>
+        </v-btn>
+        <v-card>
+          <v-list dark>
+            <v-list-tile style>
+              <v-list-tile-content>
+                <v-list-tile-title class="text-xs-center">ICJIA Calendar</v-list-tile-title>
+                <v-list-tile-sub-title class="text-xs-center">Settings</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+
+          <v-divider></v-divider>
+
+          <v-list dark>
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-switch v-model="condensedCalendarView" color="blue lighten-2"></v-switch>
+              </v-list-tile-action>
+              <v-list-tile-title>Condensed View</v-list-tile-title>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-switch v-model="debug" color="blue lighten-2"></v-switch>
+              </v-list-tile-action>
+              <v-list-tile-title>Debug</v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+
+          <!-- <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn flat @click="menu = false">Cancel</v-btn>
+            <v-btn color="primary" flat @click="menu = false">Save</v-btn>
+          </v-card-actions>-->
+        </v-card>
+      </v-menu>
+
       <v-menu offset-y dark nudge-left="100" transition="slide-x-transition" style="z-index: 150;">
         <v-btn icon slot="activator">
           <v-icon>more_vert</v-icon>
         </v-btn>
-        <v-list dark>
+        <v-list>
           <v-list-tile v-if="this.$store.getters.isLoggedIn">
             <v-icon left>today</v-icon>&nbsp;&nbsp;
             <v-list-tile-title>
@@ -154,7 +196,8 @@ export default {
   data() {
     return {
       snackbarRefresh: false,
-      timeout: 2000
+      timeout: 2000,
+      menu: false
     };
   },
   methods: {
@@ -213,6 +256,22 @@ export default {
     },
     hideEventDrawer() {
       return this.$route.meta.hideEventDrawer;
+    },
+    condensedCalendarView: {
+      get() {
+        return this.$store.getters.condensedCalendarView;
+      },
+      set(val) {
+        this.$store.commit("TOGGLE_CONDENSED_CALENDAR_VIEW");
+      }
+    },
+    debug: {
+      get() {
+        return this.$store.getters.debug;
+      },
+      set(val) {
+        this.$store.commit("TOGGLE_DEBUG");
+      }
     }
   }
 };

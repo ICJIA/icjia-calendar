@@ -9,15 +9,8 @@
 
       <v-btn fab dark small color="primary" @click="getNextMonth()">
         <v-icon dark>add</v-icon>
-      </v-btn>
-
+      </v-btn>&nbsp;&nbsp;&nbsp;&nbsp;
       <h1>{{thisMonth}}</h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <v-switch
-        label="Condensed View"
-        v-model="condensedCalendarView"
-        v-if="!isCondensed"
-        class="pt-4"
-      ></v-switch>
       <v-spacer></v-spacer>
       <div>
         <div v-if="isLoading">
@@ -73,14 +66,6 @@ export default {
       return this.$store.state.isLoading;
     },
 
-    condensedCalendarView: {
-      get() {
-        return this.$store.getters.condensedCalendarView;
-      },
-      set(val) {
-        this.$store.commit("TOGGLE_CONDENSED_CALENDAR_VIEW");
-      }
-    },
     isCondensed() {
       if (
         this.$vuetify.breakpoint.name === "xs" ||
