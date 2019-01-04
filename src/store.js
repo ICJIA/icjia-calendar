@@ -371,7 +371,7 @@ export default new Vuex.Store({
           .then(() => {
             commit(
               "AUTH_REGISTER",
-              `Success! Please check your email for your verification link.`
+              `Success! Please check your email for your verification link. If you don't see the verification email, please also check inside your junk/spam folder.`
             );
 
             resolve();
@@ -411,7 +411,7 @@ export default new Vuex.Store({
           .then(resp => {
             commit(
               "AUTH_RESET",
-              `Success! Please check your email for your reset link.`
+              `Success! Please check your email for your reset link. If you don't see the reset email, please also check inside your junk/spam folder.`
             );
             commit("STOP_LOADER");
             commit("SET_ERROR", false);
