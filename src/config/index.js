@@ -1,14 +1,18 @@
 const config = {
   app: {
     categories: [
-      { name: "NOFO release or close dates", color: "#0D47A1" },
+      { name: "NOFO Release Date", color: "#0D47A1" },
+      { name: "NOFO Close Date", color: "#9575CD" },
       { name: "Grant start dates", color: "#4DB6AC" },
-      { name: "Federal application due dates", color: "#1B5E20" },
-      { name: "Federal reporting due dates", color: "#EC407A" },
-      { name: "Budget Committee dates", color: "#4A148C" },
-      { name: "OFM Grantee Audits", color: "#2962FF" },
+      {
+        name: "Federal application or award acceptance due date",
+        color: "#1B5E20"
+      },
+      { name: "Federal reporting due dates", color: "#3E2723" },
+      { name: "Budget Committee dates", color: "#90A4AE" },
+      { name: "OFM Grantee Audits", color: "#C0CA33" },
       { name: "Site Visits", color: "#6A1B9A" },
-      { name: "Out of Office", color: "#B71C1C" },
+      { name: "In House Meetings", color: "#F57F17" },
       { name: "ICJIA General", color: "#E91E63" }
     ],
     smtp: "https://mail.icjia.cloud/icjia-calendar",
