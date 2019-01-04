@@ -23,7 +23,7 @@
           </div>
         </div>
       </div>
-      <div v-else>{{events}}</div>
+      <div v-else style="font-size: 12px">{{events}}</div>
     </div>
   </div>
 </template>

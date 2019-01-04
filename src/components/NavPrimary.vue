@@ -52,7 +52,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon @click="home" v-if="!isCondensed">
+      <v-btn icon to="/" v-if="!isCondensed">
         <v-icon>home</v-icon>
       </v-btn>
 
