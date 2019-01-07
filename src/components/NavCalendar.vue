@@ -12,7 +12,10 @@
       </v-btn>&nbsp;&nbsp;&nbsp;&nbsp;
       <h1>{{thisMonth}}</h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <v-spacer></v-spacer>
-      <div>
+      <!-- <div v-if="mode==='API_DEV'">
+        <v-btn color="error">{{mode}}</v-btn>
+      </div>-->
+      <div style="width: 75px">
         <div v-if="isLoading">
           <v-progress-circular small indeterminate color="primary"></v-progress-circular>
         </div>
@@ -36,6 +39,7 @@
 
 <script>
 import moment from "moment";
+import config from "@/config";
 export default {
   methods: {
     getNextMonth() {
@@ -64,6 +68,9 @@ export default {
     },
     isLoading() {
       return this.$store.state.isLoading;
+    },
+    mode() {
+      return config.api.mode;
     },
 
     isCondensed() {

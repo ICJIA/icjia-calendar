@@ -30,7 +30,8 @@ const config = {
       linkify: true,
       typographer: true
     },
-    excerptTruncate: 150
+    excerptTruncate: 150,
+    navTooltipOpenDelay: 800
   },
   api: {
     base: "https://content.icjia-api.cloud",

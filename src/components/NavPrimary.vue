@@ -36,10 +36,15 @@
     </v-navigation-drawer>
 
     <v-toolbar dark fixed color="primary">
-      <v-toolbar-side-icon
-        @click.stop="categoryDrawer = !categoryDrawer"
-        v-if="isLoggedIn && !hideCategoryDrawer"
-      ></v-toolbar-side-icon>
+      {{config.app.t}}
+      <v-tooltip bottom :open-delay="config.app.navTooltipOpenDelay">
+        <v-toolbar-side-icon
+          @click.stop="categoryDrawer = !categoryDrawer"
+          v-if="isLoggedIn && !hideCategoryDrawer"
+          slot="activator"
+        ></v-toolbar-side-icon>
+        <span>Categories</span>
+      </v-tooltip>
 
       <v-toolbar-title class="white--text">
         <router-link to="/">
@@ -52,136 +57,168 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon to="/" v-if="!isCondensed">
-        <v-icon>home</v-icon>
-      </v-btn>
+      <v-tooltip bottom :open-delay="config.app.navTooltipOpenDelay">
+        <v-btn icon to="/" v-if="!isCondensed" slot="activator">
+          <v-icon>home</v-icon>
+        </v-btn>
+        <span>Home</span>
+      </v-tooltip>
 
-      <v-btn icon to="/search" v-if="!isCondensed && isLoggedIn">
-        <v-icon>search</v-icon>
-      </v-btn>
+      <v-tooltip bottom :open-delay="config.app.navTooltipOpenDelay">
+        <v-btn icon to="/search" v-if="!isCondensed && isLoggedIn" slot="activator">
+          <v-icon>search</v-icon>
+        </v-btn>
+        <span>Search</span>
+      </v-tooltip>
 
-      <v-btn icon @click="refresh" v-if="!isCondensed && isLoggedIn">
-        <v-icon>refresh</v-icon>
-      </v-btn>
+      <v-tooltip bottom :open-delay="config.app.navTooltipOpenDelay">
+        <v-btn icon @click="refresh" v-if="!isCondensed && isLoggedIn" slot="activator">
+          <v-icon>refresh</v-icon>
+        </v-btn>
+        <span>Refresh events</span>
+      </v-tooltip>
 
       <!-- Settings Menu start -->
       <div v-if="isLoggedIn">
-        <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
-          <v-btn icon slot="activator">
-            <v-icon>apps</v-icon>
-          </v-btn>
-          <v-card>
-            <v-list dark>
-              <v-list-tile style>
-                <v-list-tile-content>
-                  <v-list-tile-title class="text-xs-center">ICJIA Calendar</v-list-tile-title>
-                  <v-list-tile-sub-title class="text-xs-center">Settings</v-list-tile-sub-title>
-                </v-list-tile-content>
-              </v-list-tile>
-            </v-list>
+        <v-tooltip bottom :open-delay="config.app.navTooltipOpenDelay">
+          <v-menu
+            v-model="menu"
+            :close-on-content-click="false"
+            :nudge-width="200"
+            offset-x
+            slot="activator"
+          >
+            <v-btn icon slot="activator">
+              <v-icon>apps</v-icon>
+            </v-btn>
+            <v-card>
+              <v-list dark>
+                <v-list-tile style>
+                  <v-list-tile-content>
+                    <v-list-tile-title class="text-xs-center">ICJIA Calendar</v-list-tile-title>
+                    <v-list-tile-sub-title class="text-xs-center">Settings</v-list-tile-sub-title>
+                  </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
 
-            <v-divider></v-divider>
+              <v-divider></v-divider>
 
-            <v-list dark>
-              <v-list-tile>
-                <v-list-tile-action>
-                  <v-switch v-model="condensedCalendarView" color="blue lighten-2"></v-switch>
-                </v-list-tile-action>
-                <v-list-tile-title>Condensed View</v-list-tile-title>
-              </v-list-tile>
+              <v-list dark>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-switch v-model="condensedCalendarView" color="blue lighten-2"></v-switch>
+                  </v-list-tile-action>
+                  <v-list-tile-title>Condensed View</v-list-tile-title>
+                </v-list-tile>
 
-              <v-list-tile>
-                <v-list-tile-action>
-                  <v-switch v-model="debug" color="blue lighten-2"></v-switch>
-                </v-list-tile-action>
-                <v-list-tile-title>Debug</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
+                <v-list-tile>
+                  <v-list-tile-action>
+                    <v-switch v-model="debug" color="blue lighten-2"></v-switch>
+                  </v-list-tile-action>
+                  <v-list-tile-title>Debug</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
 
-            <!-- <v-card-actions>
+              <!-- <v-card-actions>
             <v-spacer></v-spacer>
 
             <v-btn flat @click="menu = false">Cancel</v-btn>
             <v-btn color="primary" flat @click="menu = false">Save</v-btn>
-            </v-card-actions>-->
-          </v-card>
-        </v-menu>
+              </v-card-actions>-->
+            </v-card>
+          </v-menu>
+          <span>Settings</span>
+        </v-tooltip>
       </div>
 
-      <v-menu offset-y dark nudge-left="100" transition="slide-x-transition" style="z-index: 150;">
-        <v-btn icon slot="activator">
-          <v-icon>more_vert</v-icon>
-        </v-btn>
-        <v-list>
-          <v-list-tile v-if="this.$store.getters.isLoggedIn">
-            <v-icon left>today</v-icon>&nbsp;&nbsp;
-            <v-list-tile-title>
-              <router-link to="/" class="link">Home</router-link>
-            </v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile v-if="this.$store.getters.isLoggedIn">
-            <v-icon left>search</v-icon>&nbsp;&nbsp;
-            <v-list-tile-title>
-              <router-link to="/search" class="link">Search</router-link>
-            </v-list-tile-title>
-          </v-list-tile>
-          <v-divider class="mb-2 mt-2" v-if="this.$store.getters.isLoggedIn"></v-divider>
+      <v-tooltip bottom :open-delay="config.app.navTooltipOpenDelay">
+        <v-menu
+          offset-y
+          dark
+          nudge-left="100"
+          transition="slide-x-transition"
+          style="z-index: 150;"
+          slot="activator"
+        >
+          <v-btn icon slot="activator">
+            <v-icon>more_vert</v-icon>
+          </v-btn>
+          <v-list>
+            <v-list-tile v-if="this.$store.getters.isLoggedIn">
+              <v-icon left>today</v-icon>&nbsp;&nbsp;
+              <v-list-tile-title>
+                <router-link to="/" class="link">Home</router-link>
+              </v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-if="this.$store.getters.isLoggedIn">
+              <v-icon left>search</v-icon>&nbsp;&nbsp;
+              <v-list-tile-title>
+                <router-link to="/search" class="link">Search</router-link>
+              </v-list-tile-title>
+            </v-list-tile>
+            <v-divider class="mb-2 mt-2" v-if="this.$store.getters.isLoggedIn"></v-divider>
 
-          <v-list-tile v-if="this.$store.getters.isLoggedIn">
-            <v-icon left>add</v-icon>&nbsp;&nbsp;
-            <v-list-tile-title>
-              <a :href="getContentAdminURL" class="link" target="_blank">Add New Event</a>
-            </v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile v-if="this.$store.getters.isLoggedIn" @click="refresh">
-            <v-icon left>refresh</v-icon>&nbsp;&nbsp;
-            <v-list-tile-title>Refresh Events</v-list-tile-title>
-          </v-list-tile>
-          <v-divider class="mb-2 mt-2" v-if="this.$store.getters.isLoggedIn"></v-divider>
-          <v-list-tile>
-            <v-icon left>markunread</v-icon>&nbsp;&nbsp;
-            <v-list-tile-title @click="closeEventDrawer">
-              <router-link to="/contact" class="link">Contact Support</router-link>
-            </v-list-tile-title>
-          </v-list-tile>
+            <v-list-tile v-if="this.$store.getters.isLoggedIn">
+              <v-icon left>add</v-icon>&nbsp;&nbsp;
+              <v-list-tile-title>
+                <a :href="getContentAdminURL" class="link" target="_blank">Add New Event</a>
+              </v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-if="this.$store.getters.isLoggedIn" @click="refresh">
+              <v-icon left>refresh</v-icon>&nbsp;&nbsp;
+              <v-list-tile-title>Refresh Events</v-list-tile-title>
+            </v-list-tile>
+            <v-divider class="mb-2 mt-2" v-if="this.$store.getters.isLoggedIn"></v-divider>
+            <v-list-tile>
+              <v-icon left>markunread</v-icon>&nbsp;&nbsp;
+              <v-list-tile-title @click="closeEventDrawer">
+                <router-link to="/contact" class="link">Contact Support</router-link>
+              </v-list-tile-title>
+            </v-list-tile>
 
-          <v-list-tile>
-            <v-icon left>redo</v-icon>&nbsp;&nbsp;
-            <v-list-tile-title>
-              <router-link to="/forgot" class="link">Reset Password</router-link>
-            </v-list-tile-title>
-          </v-list-tile>
+            <v-list-tile>
+              <v-icon left>redo</v-icon>&nbsp;&nbsp;
+              <v-list-tile-title>
+                <router-link to="/forgot" class="link">Reset Password</router-link>
+              </v-list-tile-title>
+            </v-list-tile>
 
-          <v-list-tile v-if="this.$store.getters.isLoggedIn">
-            <v-icon left>lock_open</v-icon>&nbsp;&nbsp;
-            <v-list-tile-title>
-              <router-link to="/login" class="link">Log Out</router-link>
-            </v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile v-if="this.$store.getters.isLoggedIn">
-            <v-list-tile-title>
-              <router-link to="/login" class="link">
-                <span
-                  v-if="!isCondensed"
-                  style="color:#8C9EFF; font-size: 14px"
-                >&nbsp;&nbsp;{{this.$store.state.userMeta.email}}</span>
-              </router-link>
-            </v-list-tile-title>
-          </v-list-tile>
+            <v-list-tile v-if="this.$store.getters.isLoggedIn">
+              <v-icon left>lock_open</v-icon>&nbsp;&nbsp;
+              <v-list-tile-title>
+                <router-link to="/login" class="link">Log Out</router-link>
+              </v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile v-if="this.$store.getters.isLoggedIn">
+              <v-list-tile-title>
+                <router-link to="/login" class="link">
+                  <span
+                    v-if="!isCondensed"
+                    style="color:#8C9EFF; font-size: 14px"
+                  >&nbsp;&nbsp;{{this.$store.state.userMeta.email}}</span>
+                </router-link>
+              </v-list-tile-title>
+            </v-list-tile>
 
-          <v-list-tile v-else>
-            <v-icon left>lock</v-icon>&nbsp;&nbsp;
-            <v-list-tile-title>
-              <router-link to="/login" class="link">Log In</router-link>
-            </v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
+            <v-list-tile v-else>
+              <v-icon left>lock</v-icon>&nbsp;&nbsp;
+              <v-list-tile-title>
+                <router-link to="/login" class="link">Log In</router-link>
+              </v-list-tile-title>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+        <span>Menu</span>
+      </v-tooltip>
 
-      <v-toolbar-side-icon
-        @click.stop="eventDrawer = !eventDrawer"
-        v-if="isLoggedIn && !hideEventDrawer"
-      ></v-toolbar-side-icon>
+      <v-tooltip bottom>
+        <v-toolbar-side-icon
+          @click.stop="eventDrawer = !eventDrawer"
+          v-if="isLoggedIn && !hideEventDrawer"
+          slot="activator"
+        ></v-toolbar-side-icon>
+        <span>Events</span>
+      </v-tooltip>
     </v-toolbar>
   </div>
 </template>
@@ -274,6 +311,9 @@ export default {
       set(val) {
         this.$store.commit("TOGGLE_DEBUG");
       }
+    },
+    config() {
+      return config;
     }
   }
 };
