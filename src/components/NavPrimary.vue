@@ -65,46 +65,48 @@
       </v-btn>
 
       <!-- Settings Menu start -->
-      <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
-        <v-btn icon slot="activator" v-if="!isCondensed && isLoggedIn">
-          <v-icon>apps</v-icon>
-        </v-btn>
-        <v-card>
-          <v-list dark>
-            <v-list-tile style>
-              <v-list-tile-content>
-                <v-list-tile-title class="text-xs-center">ICJIA Calendar</v-list-tile-title>
-                <v-list-tile-sub-title class="text-xs-center">Settings</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
+      <div v-if="isLoggedIn">
+        <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
+          <v-btn icon slot="activator">
+            <v-icon>apps</v-icon>
+          </v-btn>
+          <v-card>
+            <v-list dark>
+              <v-list-tile style>
+                <v-list-tile-content>
+                  <v-list-tile-title class="text-xs-center">ICJIA Calendar</v-list-tile-title>
+                  <v-list-tile-sub-title class="text-xs-center">Settings</v-list-tile-sub-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
 
-          <v-divider></v-divider>
+            <v-divider></v-divider>
 
-          <v-list dark>
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-switch v-model="condensedCalendarView" color="blue lighten-2"></v-switch>
-              </v-list-tile-action>
-              <v-list-tile-title>Condensed View</v-list-tile-title>
-            </v-list-tile>
+            <v-list dark>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-switch v-model="condensedCalendarView" color="blue lighten-2"></v-switch>
+                </v-list-tile-action>
+                <v-list-tile-title>Condensed View</v-list-tile-title>
+              </v-list-tile>
 
-            <v-list-tile>
-              <v-list-tile-action>
-                <v-switch v-model="debug" color="blue lighten-2"></v-switch>
-              </v-list-tile-action>
-              <v-list-tile-title>Debug</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-switch v-model="debug" color="blue lighten-2"></v-switch>
+                </v-list-tile-action>
+                <v-list-tile-title>Debug</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
 
-          <!-- <v-card-actions>
+            <!-- <v-card-actions>
             <v-spacer></v-spacer>
 
             <v-btn flat @click="menu = false">Cancel</v-btn>
             <v-btn color="primary" flat @click="menu = false">Save</v-btn>
-          </v-card-actions>-->
-        </v-card>
-      </v-menu>
+            </v-card-actions>-->
+          </v-card>
+        </v-menu>
+      </div>
 
       <v-menu offset-y dark nudge-left="100" transition="slide-x-transition" style="z-index: 150;">
         <v-btn icon slot="activator">

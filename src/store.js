@@ -49,7 +49,6 @@ export default new Vuex.Store({
     jwt: localStorage.getItem("jwt") || "",
     userMeta: JSON.parse(localStorage.getItem("userMeta")) || "",
     status: "",
-    isLoggedIn: false,
     visibleEvents: colors.map(x => x),
     appColors: colors.map(x => x),
     debug: false,
@@ -411,7 +410,7 @@ export default new Vuex.Store({
           .then(resp => {
             commit(
               "AUTH_RESET",
-              `Success! Please check your email for your reset link. If you don't see the reset email, please also check inside your junk/spam folder.`
+              `Success! Please check your email for your reset link. If you don't see the verification email, please also check inside your junk/spam folder.`
             );
             commit("STOP_LOADER");
             commit("SET_ERROR", false);
