@@ -20,20 +20,6 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
+## History
 
-```
-npm run test
-```
-
-### Lints and fixes files
-
-```
-npm run lint
-```
-
-### Run your unit tests
-
-```
-npm run test:unit
-```
+See [CHANGELOG.md](./CHANGELOG.MD)
