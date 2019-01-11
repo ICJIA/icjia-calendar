@@ -14,7 +14,7 @@
               color="grey darken-1"
               style="font-size: 10px"
               dark
-              :href="info.repository"
+              href="https://github.com/ICJIA/icjia-calendar/blob/master/CHANGELOG.md"
               target="_blank"
             >
               <v-icon size="10px">fab fa-github</v-icon>
