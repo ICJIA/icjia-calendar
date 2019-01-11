@@ -22,4 +22,4 @@ npm run build
 
 ## History
 
-See [CHANGELOG.md](./CHANGELOG.MD)
+See [CHANGELOG.md](https://github.com/ICJIA/icjia-calendar/blob/master/CHANGELOG.md)
