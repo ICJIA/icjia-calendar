@@ -43,7 +43,7 @@ const config = {
     events: "/events",
     register: "/auth/local/register",
     login: "/auth/local",
-    timeout: "2000"
+    timeout: "4000"
   }
 };
 

@@ -300,6 +300,7 @@ export default {
       get() {
         return this.$store.getters.condensedCalendarView;
       },
+      // eslint-disable-next-line
       set(val) {
         this.$store.commit("TOGGLE_CONDENSED_CALENDAR_VIEW");
       }
@@ -308,6 +309,7 @@ export default {
       get() {
         return this.$store.getters.debug;
       },
+      // eslint-disable-next-line
       set(val) {
         this.$store.commit("TOGGLE_DEBUG");
       }
