@@ -80,6 +80,13 @@ const router = new Router({
       meta: {}
     },
     {
+      path: "/sandbox",
+      name: "sandbox",
+      component: () =>
+        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox.vue"),
+      meta: {}
+    },
+    {
       path: "/404",
       name: "error",
       component: () =>

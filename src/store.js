@@ -469,6 +469,7 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: state => !!state.jwt,
+    data: state => state.data,
     isLoading: state => state.isLoading,
     userMeta: state => state.userMeta,
     visibleEvents: state => state.visibleEvents,
