@@ -13,29 +13,41 @@
 
       <v-tab-item value="search">
         <v-card flat>
-          <search></search>
+          <search :events="events"></search>
         </v-card>
       </v-tab-item>
 
       <v-tab-item value="list">
         <v-card flat>
-          <event-list></event-list>
+          <event-list :events="events"></event-list>
         </v-card>
       </v-tab-item>
     </v-tabs>
   </div>
 </template>
 <script>
+import config from "@/config";
 import Search from "@/components/Search";
 import EventList from "@/components/MasterEventList";
+import { EventBus } from "@/event-bus.js";
 export default {
+  created() {
+    this.$store
+      .dispatch("getData")
+      .then(response => this.$store.dispatch("structureData", response))
+      .then(r => {
+        console.log(r);
+        this.events = this.$store.state.data.data;
+      });
+  },
+  mounted() {},
   components: {
     Search,
     EventList
   },
   data() {
     return {
-      data: null
+      events: null
     };
   }
 };

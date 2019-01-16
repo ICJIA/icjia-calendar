@@ -1,19 +1,52 @@
 const config = {
   app: {
     categories: [
-      { name: "NOFO Release Date", color: "#0D47A1" },
-      { name: "NOFO Close Date", color: "#9575CD" },
-      { name: "Grant start dates", color: "#4DB6AC" },
+      {
+        name: "NOFO Release Date",
+        color: "#0D47A1",
+        slug: "nofo-release-date"
+      },
+      { name: "NOFO Close Date", color: "#9575CD", slug: "nofo-close-date" },
+      {
+        name: "Grant start dates",
+        color: "#4DB6AC",
+        slug: "grant-start-dates"
+      },
       {
         name: "Federal application or award acceptance due date",
-        color: "#1B5E20"
+        color: "#1B5E20",
+        slug: "federal-application-or-award-acceptance-due-date"
       },
-      { name: "Federal reporting due dates", color: "#3E2723" },
-      { name: "Budget Committee dates", color: "#90A4AE" },
-      { name: "OFM Grantee Audits", color: "#C0CA33" },
-      { name: "Site Visits", color: "#6A1B9A" },
-      { name: "In House Meetings", color: "#F57F17" },
-      { name: "ICJIA General", color: "#E91E63" }
+      {
+        name: "Federal reporting due dates",
+        color: "#3E2723",
+        slug: "federal-reporting-due-dates"
+      },
+      {
+        name: "Budget Committee dates",
+        color: "#90A4AE",
+        slug: "federal-application-or-award-acceptance-due-date"
+      },
+      {
+        name: "OFM Grantee Audits",
+        color: "#C0CA33",
+        slug: "ofm-grantee-audits"
+      },
+      {
+        name: "Site Visits",
+        color: "#6A1B9A",
+        slug: "site-visits"
+      },
+      {
+        name: "In House Meetings",
+        color: "#F57F17",
+        slug: "in-house-meetings"
+      },
+      {
+        name: "ICJIA General",
+        color: "#E91E63",
+        slug: "icjia-general"
+      }
     ],
     smtp: "https://mail.icjia.cloud/icjia-calendar",
     search: {
