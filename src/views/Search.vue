@@ -12,12 +12,19 @@
       </v-tab>
 
       <v-tab-item value="search">
+        <div class="text-xs-center mt-5" v-if="!isReady">
+          <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </div>
+
         <v-card flat v-if="isReady">
           <search-events></search-events>
         </v-card>
       </v-tab-item>
 
       <v-tab-item value="list">
+        <div class="text-xs-center mt-5" v-if="!isReady">
+          <v-progress-circular indeterminate color="primary"></v-progress-circular>
+        </div>
         <v-card flat v-if="isReady">
           <filter-events></filter-events>
         </v-card>
