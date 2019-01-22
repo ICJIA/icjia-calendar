@@ -3,7 +3,7 @@
     <v-form class="pb-5">
       <v-container>
         <v-flex xs12 sm12 md10 offset-md1>
-          <h1 class="mt-5">Event Search</h1>
+          <h1 class="mt-5">Search Events</h1>
           <v-text-field
             v-model="query"
             @keyup="instantSearch"
