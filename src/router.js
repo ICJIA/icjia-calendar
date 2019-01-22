@@ -79,13 +79,13 @@ const router = new Router({
         import(/* webpackChunkName: "success" */ "./views/Success.vue"),
       meta: {}
     },
-    {
-      path: "/sandbox",
-      name: "sandbox",
-      component: () =>
-        import(/* webpackChunkName: "sandbox" */ "./views/Sandbox.vue"),
-      meta: {}
-    },
+    // {
+    //   path: "/sandbox",
+    //   name: "sandbox",
+    //   component: () =>
+    //     import(/* webpackChunkName: "sandbox" */ "./views/Sandbox.vue"),
+    //   meta: {}
+    // },
     {
       path: "/404",
       name: "error",
