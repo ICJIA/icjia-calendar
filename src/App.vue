@@ -39,7 +39,7 @@
 import NavPrimary from "@/components/NavPrimary.vue";
 import MyFooter from "@/components/MyFooter";
 import moment from "moment";
-
+import { EventBus } from "@/event-bus.js";
 export default {
   name: "App",
 
@@ -62,6 +62,12 @@ export default {
   mounted() {
     this.$store.dispatch("setSelectedDate", moment().startOf("day"));
     this.$store.dispatch("setCurrentDate", moment().startOf("day"));
+
+    EventBus.$on("setToday", () => {
+      this.$store.dispatch("setSelectedDate", moment().startOf("day"));
+      this.$store.dispatch("setCurrentDate", moment().startOf("day"));
+      console.log("Event: Set today");
+    });
   },
   computed: {
     isLoading() {

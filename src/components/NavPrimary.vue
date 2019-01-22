@@ -46,19 +46,17 @@
         <span>Categories</span>
       </v-tooltip>
 
-      <v-toolbar-title class="white--text">
-        <router-link to="/">
-          <span style="font-weight: bold">ILLINOIS</span> |
-          <span
-            style="color: #ccc; text-transform: uppercase;"
-          >Criminal Justice Information Authority</span>
-        </router-link>
+      <v-toolbar-title class="white--text" v-on:click="goHome">
+        <span style="font-weight: bold">ILLINOIS</span> |
+        <span
+          style="color: #ccc; text-transform: uppercase;"
+        >Criminal Justice Information Authority</span>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-tooltip bottom :open-delay="config.app.navTooltipOpenDelay">
-        <v-btn icon to="/" v-if="!isCondensed" slot="activator">
+        <v-btn icon v-on:click="goHome" v-if="!isCondensed" slot="activator">
           <v-icon>home</v-icon>
         </v-btn>
         <span>Home</span>
@@ -240,7 +238,8 @@ export default {
     };
   },
   methods: {
-    home() {
+    goHome() {
+      EventBus.$emit("setToday");
       this.$router.push("/");
     },
     refresh() {
