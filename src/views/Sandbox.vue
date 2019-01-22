@@ -1,4 +1,4 @@
-<template>
+<template >
   <div style="background: #fff; min-height: 100vh">
     <v-tabs centered color="grey lighten-2" icons-and-text style="margin-top: 64px">
       <v-tabs-slider color="accent"></v-tabs-slider>
@@ -7,19 +7,19 @@
         <v-icon>search</v-icon>
       </v-tab>
 
-      <v-tab href="#list">List All Events
+      <v-tab href="#list">Filter Events
         <v-icon>list</v-icon>
       </v-tab>
 
-      <v-tab-item value="search">
+      <v-tab-item value="search" v-if="isReady">
         <v-card flat>
-          <search :events="events"></search>
+          <search-events></search-events>
         </v-card>
       </v-tab-item>
 
-      <v-tab-item value="list">
+      <v-tab-item value="list" v-if="isReady">
         <v-card flat>
-          <event-list :events="events"></event-list>
+          <filter-events></filter-events>
         </v-card>
       </v-tab-item>
     </v-tabs>
@@ -27,27 +27,29 @@
 </template>
 <script>
 import config from "@/config";
-import Search from "@/components/Search";
-import EventList from "@/components/MasterEventList";
+import SearchEvents from "@/components/SearchEvents";
+import FilterEvents from "@/components/FilterEvents";
 import { EventBus } from "@/event-bus.js";
 export default {
   created() {
+    this.isReady = false;
     this.$store
       .dispatch("getData")
       .then(response => this.$store.dispatch("structureData", response))
       .then(r => {
         console.log(r);
-        this.events = this.$store.state.data.data;
+        this.isReady = true;
       });
   },
   mounted() {},
   components: {
-    Search,
-    EventList
+    SearchEvents,
+    FilterEvents
   },
   data() {
     return {
-      events: null
+      events: null,
+      isReady: false
     };
   }
 };
