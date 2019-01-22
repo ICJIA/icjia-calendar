@@ -46,7 +46,7 @@
         <span>Categories</span>
       </v-tooltip>
 
-      <v-toolbar-title class="white--text" v-on:click="goHome">
+      <v-toolbar-title class="white--text appTitle" v-on:click="goHome">
         <span style="font-weight: bold">ILLINOIS</span> |
         <span
           style="color: #ccc; text-transform: uppercase;"
@@ -324,5 +324,9 @@ export default {
 a {
   color: #fff;
   text-decoration: none;
+}
+
+.appTitle:hover {
+  cursor: pointer;
 }
 </style>
