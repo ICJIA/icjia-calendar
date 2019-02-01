@@ -196,7 +196,7 @@ export default new Vuex.Store({
         commit("START_LOADER");
 
         $http
-          .get(`${config.api.events}`)
+          .get(`${config.api.events}?_limit=${config.api.limit}`)
           .then(resp => {
             commit("STOP_LOADER");
             commit("SET_DATA", resp);
