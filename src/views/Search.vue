@@ -33,10 +33,10 @@
   </div>
 </template>
 <script>
-import config from "@/config";
+// import config from "@/config";
 import SearchEvents from "@/components/SearchEvents";
 import FilterEvents from "@/components/FilterEvents";
-import { EventBus } from "@/event-bus.js";
+// import { EventBus } from "@/event-bus.js";
 export default {
   created() {
     this.isReady = false;
