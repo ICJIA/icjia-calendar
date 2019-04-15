@@ -36,7 +36,7 @@
     </v-navigation-drawer>
 
     <v-toolbar dark fixed color="primary">
-      {{config.app.t}}
+     
       <v-tooltip bottom :open-delay="config.app.navTooltipOpenDelay">
         <v-toolbar-side-icon
           @click.stop="categoryDrawer = !categoryDrawer"
@@ -45,12 +45,12 @@
         ></v-toolbar-side-icon>
         <span>Categories</span>
       </v-tooltip>
-
+       <img src="../assets/img/logo-white.png" width="65" class="ml-4">
       <v-toolbar-title class="white--text appTitle" v-on:click="goHome">
-        <span style="font-weight: bold">ILLINOIS</span> |
+        <!-- <span style="font-weight: bold">FSGU</span> | -->
         <span
-          style="color: #ccc; text-transform: uppercase;"
-        >Criminal Justice Information Authority</span>
+          style="color: #eee; text-transform: uppercase; font-weight: 700;"
+        >FSGU Project Calendar</span>
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
